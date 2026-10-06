@@ -1,10 +1,54 @@
+# Dependencies and package manager caches
 node_modules/
+.pnpm-store/
+
+# Next.js builds, FC packages and generated assets
 .next/
 .next-dev/
-out/
-coverage/
-.env*.local
+/out/
+/dist/
+/build/
 *.tsbuildinfo
-spikes/m2-00/config.local.json
-.local-data/
-public/visual/generated/
+/public/visual/generated/
+
+# Test and browser automation output
+coverage/
+playwright-report/
+test-results/
+.nyc_output/
+
+# Environment variables and local service configuration
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.local.json
+/spikes/m2-00/config.local.json
+
+# Local databases and runtime data
+/.local-data/
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite-journal
+*.sqlite3-wal
+*.sqlite3-shm
+*.sqlite3-journal
+
+# Runtime logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local editor and operating system files
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
