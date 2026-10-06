@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-01T00:00:00.000Z",
+  "sourceMode": "fixture",
+  "inventoryComplete": false,
+  "blockers": [
+    "No connection to the real CMS database was used.",
+    "This sanitized fixture does not prove that the published CMS inventory is complete."
+  ],
+  "items": [
+    {
+      "id": "fixture-news-001",
+      "contentType": "news",
+      "slug": "sanitized-news-entry-a",
+      "title": "脱敏新闻条目 A",
+      "status": "published",
+      "publishedAt": "2026-07-01T02:00:00.000Z",
+      "oldBrandMatches": [
+        "legacy-brand-token"
+      ],
+      "decision": "pending",
+      "revisionId": null,
+      "auditId": null,
+      "authorizationStatus": "not-required"
+    },
+    {
+      "id": "fixture-case-001",
+      "contentType": "case",
+      "slug": "sanitized-case-entry-a",
+      "title": "脱敏案例条目 A",
+      "status": "published",
+      "publishedAt": "2026-07-02T02:00:00.000Z",
+      "oldBrandMatches": [
+        "legacy-brand-token"
+      ],
+      "decision": "pending",
+      "revisionId": null,
+      "auditId": null,
+      "authorizationStatus": "unknown"
+    }
+  ]
+}

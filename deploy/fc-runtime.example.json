@@ -1,0 +1,43 @@
+{
+  "runtime": "custom.debian10",
+  "nodeMajor": 20,
+  "nodePath": "/var/fc/lang/nodejs20/bin",
+  "artifact": ".next/standalone",
+  "entrypoint": "node server.js",
+  "handler": null,
+  "listenAddress": "0.0.0.0",
+  "listenPort": 9000,
+  "portEnvironmentVariable": "PORT",
+  "environment": {
+    "PATH": "/var/fc/lang/nodejs20/bin:/usr/local/bin:/usr/bin:/bin",
+    "NODE_ENV": "production",
+    "HOSTNAME": "0.0.0.0",
+    "PORT": "9000"
+  },
+  "runtimeEnvironmentContract": ".env.example",
+  "healthPath": "/api/health",
+  "minimumInstances": null,
+  "maximumInstances": null,
+  "concurrency": null,
+  "observability": {
+    "applicationLogs": {
+      "structured": true,
+      "redactSecrets": true
+    },
+    "alarms": [
+      {
+        "name": "fc-http-5xx-rate",
+        "metric": "http_5xx_rate",
+        "threshold": null,
+        "status": "M2-LEGACY-01-DEFERRED"
+      },
+      {
+        "name": "fc-http-p95-latency",
+        "metric": "http_p95_latency_ms",
+        "threshold": null,
+        "status": "M2-LEGACY-01-DEFERRED"
+      }
+    ]
+  },
+  "status": "M2-LEGACY-01-DEFERRED"
+}

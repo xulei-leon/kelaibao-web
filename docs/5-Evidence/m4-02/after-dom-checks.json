@@ -1,0 +1,662 @@
+[
+  {
+    "route": "/",
+    "width": 320,
+    "clientHeight": 844,
+    "clientWidth": 305,
+    "h1": [
+      "一站式拓客工具系统"
+    ],
+    "overflow": [],
+    "scrollHeight": 10368,
+    "scrollWidth": 305,
+    "sectionCount": 7
+  },
+  {
+    "route": "/features",
+    "width": 320,
+    "clientHeight": 844,
+    "clientWidth": 305,
+    "h1": [
+      "曝光 → 获客 → 信任 → 成交 → 沉淀"
+    ],
+    "overflow": [],
+    "scrollHeight": 13571,
+    "scrollWidth": 305,
+    "sectionCount": 5
+  },
+  {
+    "route": "/team",
+    "width": 320,
+    "clientHeight": 844,
+    "clientWidth": 305,
+    "h1": [
+      "突破团队管理瓶颈，构建可复制、可持续增长的团队体系"
+    ],
+    "overflow": [],
+    "scrollHeight": 7723,
+    "scrollWidth": 305,
+    "sectionCount": 6
+  },
+  {
+    "route": "/media",
+    "width": 320,
+    "clientHeight": 844,
+    "clientWidth": 305,
+    "h1": [
+      "朋友圈让人看见你，媒体新闻让人相信你"
+    ],
+    "overflow": [],
+    "scrollHeight": 9484,
+    "scrollWidth": 305,
+    "sectionCount": 9
+  },
+  {
+    "route": "/about",
+    "width": 320,
+    "clientHeight": 844,
+    "clientWidth": 305,
+    "h1": [
+      "公司介绍"
+    ],
+    "overflow": [],
+    "scrollHeight": 5688,
+    "scrollWidth": 305,
+    "sectionCount": 6
+  },
+  {
+    "route": "/contact",
+    "width": 320,
+    "clientHeight": 844,
+    "clientWidth": 305,
+    "h1": [
+      "选择产品体验或媒体咨询"
+    ],
+    "overflow": [
+      {
+        "className": "honeypot",
+        "left": -10000,
+        "right": -9999,
+        "tag": "DIV",
+        "width": 1
+      },
+      {
+        "className": "",
+        "left": -10000,
+        "right": -9984,
+        "tag": "LABEL",
+        "width": 16
+      },
+      {
+        "className": "",
+        "left": -10000,
+        "right": -9785,
+        "tag": "INPUT",
+        "width": 215
+      }
+    ],
+    "scrollHeight": 4278,
+    "scrollWidth": 305,
+    "sectionCount": 4
+  },
+  {
+    "route": "/news",
+    "width": 320,
+    "clientHeight": 844,
+    "clientWidth": 305,
+    "h1": [
+      "新闻"
+    ],
+    "overflow": [],
+    "scrollHeight": 1522,
+    "scrollWidth": 305,
+    "sectionCount": 1
+  },
+  {
+    "route": "/cases",
+    "width": 320,
+    "clientHeight": 844,
+    "clientWidth": 305,
+    "h1": [
+      "案例"
+    ],
+    "overflow": [],
+    "scrollHeight": 1554,
+    "scrollWidth": 305,
+    "sectionCount": 1
+  },
+  {
+    "route": "/privacy",
+    "width": 320,
+    "clientHeight": 844,
+    "clientWidth": 305,
+    "h1": [
+      "隐私政策"
+    ],
+    "overflow": [],
+    "scrollHeight": 4675,
+    "scrollWidth": 305,
+    "sectionCount": 7
+  },
+  {
+    "route": "/terms",
+    "width": 320,
+    "clientHeight": 844,
+    "clientWidth": 305,
+    "h1": [
+      "服务条款"
+    ],
+    "overflow": [],
+    "scrollHeight": 3908,
+    "scrollWidth": 305,
+    "sectionCount": 6
+  },
+  {
+    "route": "/disclaimer",
+    "width": 320,
+    "clientHeight": 844,
+    "clientWidth": 305,
+    "h1": [
+      "免责声明"
+    ],
+    "overflow": [],
+    "scrollHeight": 4016,
+    "scrollWidth": 305,
+    "sectionCount": 7
+  },
+  {
+    "route": "/",
+    "width": 390,
+    "clientHeight": 844,
+    "clientWidth": 375,
+    "h1": [
+      "一站式拓客工具系统"
+    ],
+    "overflow": [],
+    "scrollHeight": 9635,
+    "scrollWidth": 375,
+    "sectionCount": 7
+  },
+  {
+    "route": "/features",
+    "width": 390,
+    "clientHeight": 844,
+    "clientWidth": 375,
+    "h1": [
+      "曝光 → 获客 → 信任 → 成交 → 沉淀"
+    ],
+    "overflow": [],
+    "scrollHeight": 12591,
+    "scrollWidth": 375,
+    "sectionCount": 5
+  },
+  {
+    "route": "/team",
+    "width": 390,
+    "clientHeight": 844,
+    "clientWidth": 375,
+    "h1": [
+      "突破团队管理瓶颈，构建可复制、可持续增长的团队体系"
+    ],
+    "overflow": [],
+    "scrollHeight": 6986,
+    "scrollWidth": 375,
+    "sectionCount": 6
+  },
+  {
+    "route": "/media",
+    "width": 390,
+    "clientHeight": 844,
+    "clientWidth": 375,
+    "h1": [
+      "朋友圈让人看见你，媒体新闻让人相信你"
+    ],
+    "overflow": [],
+    "scrollHeight": 9120,
+    "scrollWidth": 375,
+    "sectionCount": 9
+  },
+  {
+    "route": "/about",
+    "width": 390,
+    "clientHeight": 844,
+    "clientWidth": 375,
+    "h1": [
+      "公司介绍"
+    ],
+    "overflow": [],
+    "scrollHeight": 5351,
+    "scrollWidth": 375,
+    "sectionCount": 6
+  },
+  {
+    "route": "/contact",
+    "width": 390,
+    "clientHeight": 844,
+    "clientWidth": 375,
+    "h1": [
+      "选择产品体验或媒体咨询"
+    ],
+    "overflow": [
+      {
+        "className": "honeypot",
+        "left": -10000,
+        "right": -9999,
+        "tag": "DIV",
+        "width": 1
+      },
+      {
+        "className": "",
+        "left": -10000,
+        "right": -9984,
+        "tag": "LABEL",
+        "width": 16
+      },
+      {
+        "className": "",
+        "left": -10000,
+        "right": -9785,
+        "tag": "INPUT",
+        "width": 215
+      }
+    ],
+    "scrollHeight": 3958,
+    "scrollWidth": 375,
+    "sectionCount": 4
+  },
+  {
+    "route": "/news",
+    "width": 390,
+    "clientHeight": 844,
+    "clientWidth": 375,
+    "h1": [
+      "新闻"
+    ],
+    "overflow": [],
+    "scrollHeight": 1317,
+    "scrollWidth": 375,
+    "sectionCount": 1
+  },
+  {
+    "route": "/cases",
+    "width": 390,
+    "clientHeight": 844,
+    "clientWidth": 375,
+    "h1": [
+      "案例"
+    ],
+    "overflow": [],
+    "scrollHeight": 1317,
+    "scrollWidth": 375,
+    "sectionCount": 1
+  },
+  {
+    "route": "/privacy",
+    "width": 390,
+    "clientHeight": 844,
+    "clientWidth": 375,
+    "h1": [
+      "隐私政策"
+    ],
+    "overflow": [],
+    "scrollHeight": 4111,
+    "scrollWidth": 375,
+    "sectionCount": 7
+  },
+  {
+    "route": "/terms",
+    "width": 390,
+    "clientHeight": 844,
+    "clientWidth": 375,
+    "h1": [
+      "服务条款"
+    ],
+    "overflow": [],
+    "scrollHeight": 3555,
+    "scrollWidth": 375,
+    "sectionCount": 6
+  },
+  {
+    "route": "/disclaimer",
+    "width": 390,
+    "clientHeight": 844,
+    "clientWidth": 375,
+    "h1": [
+      "免责声明"
+    ],
+    "overflow": [],
+    "scrollHeight": 3605,
+    "scrollWidth": 375,
+    "sectionCount": 7
+  },
+  {
+    "route": "/",
+    "width": 768,
+    "clientHeight": 1024,
+    "clientWidth": 753,
+    "h1": [
+      "一站式拓客工具系统"
+    ],
+    "overflow": [],
+    "scrollHeight": 7509,
+    "scrollWidth": 753,
+    "sectionCount": 7
+  },
+  {
+    "route": "/features",
+    "width": 768,
+    "clientHeight": 1024,
+    "clientWidth": 753,
+    "h1": [
+      "曝光 → 获客 → 信任 → 成交 → 沉淀"
+    ],
+    "overflow": [],
+    "scrollHeight": 11511,
+    "scrollWidth": 753,
+    "sectionCount": 5
+  },
+  {
+    "route": "/team",
+    "width": 768,
+    "clientHeight": 1024,
+    "clientWidth": 753,
+    "h1": [
+      "突破团队管理瓶颈，构建可复制、可持续增长的团队体系"
+    ],
+    "overflow": [],
+    "scrollHeight": 5268,
+    "scrollWidth": 753,
+    "sectionCount": 6
+  },
+  {
+    "route": "/media",
+    "width": 768,
+    "clientHeight": 1024,
+    "clientWidth": 753,
+    "h1": [
+      "朋友圈让人看见你，媒体新闻让人相信你"
+    ],
+    "overflow": [],
+    "scrollHeight": 7560,
+    "scrollWidth": 753,
+    "sectionCount": 9
+  },
+  {
+    "route": "/about",
+    "width": 768,
+    "clientHeight": 1024,
+    "clientWidth": 753,
+    "h1": [
+      "公司介绍"
+    ],
+    "overflow": [],
+    "scrollHeight": 4751,
+    "scrollWidth": 753,
+    "sectionCount": 6
+  },
+  {
+    "route": "/contact",
+    "width": 768,
+    "clientHeight": 1024,
+    "clientWidth": 753,
+    "h1": [
+      "选择产品体验或媒体咨询"
+    ],
+    "overflow": [
+      {
+        "className": "honeypot",
+        "left": -10000,
+        "right": -9999,
+        "tag": "DIV",
+        "width": 1
+      },
+      {
+        "className": "",
+        "left": -10000,
+        "right": -9984,
+        "tag": "LABEL",
+        "width": 16
+      },
+      {
+        "className": "",
+        "left": -10000,
+        "right": -9785,
+        "tag": "INPUT",
+        "width": 215
+      }
+    ],
+    "scrollHeight": 3444,
+    "scrollWidth": 753,
+    "sectionCount": 4
+  },
+  {
+    "route": "/news",
+    "width": 768,
+    "clientHeight": 1024,
+    "clientWidth": 753,
+    "h1": [
+      "新闻"
+    ],
+    "overflow": [],
+    "scrollHeight": 1144,
+    "scrollWidth": 753,
+    "sectionCount": 1
+  },
+  {
+    "route": "/cases",
+    "width": 768,
+    "clientHeight": 1024,
+    "clientWidth": 753,
+    "h1": [
+      "案例"
+    ],
+    "overflow": [],
+    "scrollHeight": 1144,
+    "scrollWidth": 753,
+    "sectionCount": 1
+  },
+  {
+    "route": "/privacy",
+    "width": 768,
+    "clientHeight": 1024,
+    "clientWidth": 753,
+    "h1": [
+      "隐私政策"
+    ],
+    "overflow": [],
+    "scrollHeight": 3369,
+    "scrollWidth": 753,
+    "sectionCount": 7
+  },
+  {
+    "route": "/terms",
+    "width": 768,
+    "clientHeight": 1024,
+    "clientWidth": 753,
+    "h1": [
+      "服务条款"
+    ],
+    "overflow": [],
+    "scrollHeight": 2868,
+    "scrollWidth": 753,
+    "sectionCount": 6
+  },
+  {
+    "route": "/disclaimer",
+    "width": 768,
+    "clientHeight": 1024,
+    "clientWidth": 753,
+    "h1": [
+      "免责声明"
+    ],
+    "overflow": [],
+    "scrollHeight": 2983,
+    "scrollWidth": 753,
+    "sectionCount": 7
+  },
+  {
+    "route": "/",
+    "width": 1440,
+    "clientHeight": 1000,
+    "clientWidth": 1425,
+    "h1": [
+      "一站式拓客工具系统"
+    ],
+    "overflow": [],
+    "scrollHeight": 5168,
+    "scrollWidth": 1425,
+    "sectionCount": 7
+  },
+  {
+    "route": "/features",
+    "width": 1440,
+    "clientHeight": 1000,
+    "clientWidth": 1425,
+    "h1": [
+      "曝光 → 获客 → 信任 → 成交 → 沉淀"
+    ],
+    "overflow": [],
+    "scrollHeight": 7688,
+    "scrollWidth": 1425,
+    "sectionCount": 5
+  },
+  {
+    "route": "/team",
+    "width": 1440,
+    "clientHeight": 1000,
+    "clientWidth": 1425,
+    "h1": [
+      "突破团队管理瓶颈，构建可复制、可持续增长的团队体系"
+    ],
+    "overflow": [],
+    "scrollHeight": 4487,
+    "scrollWidth": 1425,
+    "sectionCount": 6
+  },
+  {
+    "route": "/media",
+    "width": 1440,
+    "clientHeight": 1000,
+    "clientWidth": 1425,
+    "h1": [
+      "朋友圈让人看见你，媒体新闻让人相信你"
+    ],
+    "overflow": [],
+    "scrollHeight": 5328,
+    "scrollWidth": 1425,
+    "sectionCount": 9
+  },
+  {
+    "route": "/about",
+    "width": 1440,
+    "clientHeight": 1000,
+    "clientWidth": 1425,
+    "h1": [
+      "公司介绍"
+    ],
+    "overflow": [],
+    "scrollHeight": 3579,
+    "scrollWidth": 1425,
+    "sectionCount": 6
+  },
+  {
+    "route": "/contact",
+    "width": 1440,
+    "clientHeight": 1000,
+    "clientWidth": 1425,
+    "h1": [
+      "选择产品体验或媒体咨询"
+    ],
+    "overflow": [
+      {
+        "className": "honeypot",
+        "left": -10000,
+        "right": -9999,
+        "tag": "DIV",
+        "width": 1
+      },
+      {
+        "className": "",
+        "left": -10000,
+        "right": -9984,
+        "tag": "LABEL",
+        "width": 16
+      },
+      {
+        "className": "",
+        "left": -10000,
+        "right": -9785,
+        "tag": "INPUT",
+        "width": 215
+      }
+    ],
+    "scrollHeight": 2394,
+    "scrollWidth": 1425,
+    "sectionCount": 4
+  },
+  {
+    "route": "/news",
+    "width": 1440,
+    "clientHeight": 1000,
+    "clientWidth": 1440,
+    "h1": [
+      "新闻"
+    ],
+    "overflow": [],
+    "scrollHeight": 1000,
+    "scrollWidth": 1440,
+    "sectionCount": 1
+  },
+  {
+    "route": "/cases",
+    "width": 1440,
+    "clientHeight": 1000,
+    "clientWidth": 1440,
+    "h1": [
+      "案例"
+    ],
+    "overflow": [],
+    "scrollHeight": 1000,
+    "scrollWidth": 1440,
+    "sectionCount": 1
+  },
+  {
+    "route": "/privacy",
+    "width": 1440,
+    "clientHeight": 1000,
+    "clientWidth": 1425,
+    "h1": [
+      "隐私政策"
+    ],
+    "overflow": [],
+    "scrollHeight": 2878,
+    "scrollWidth": 1425,
+    "sectionCount": 7
+  },
+  {
+    "route": "/terms",
+    "width": 1440,
+    "clientHeight": 1000,
+    "clientWidth": 1425,
+    "h1": [
+      "服务条款"
+    ],
+    "overflow": [],
+    "scrollHeight": 2360,
+    "scrollWidth": 1425,
+    "sectionCount": 6
+  },
+  {
+    "route": "/disclaimer",
+    "width": 1440,
+    "clientHeight": 1000,
+    "clientWidth": 1425,
+    "h1": [
+      "免责声明"
+    ],
+    "overflow": [],
+    "scrollHeight": 2463,
+    "scrollWidth": 1425,
+    "sectionCount": 7
+  }
+]

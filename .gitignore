@@ -1,0 +1,10 @@
+node_modules/
+.next/
+.next-dev/
+out/
+coverage/
+.env*.local
+*.tsbuildinfo
+spikes/m2-00/config.local.json
+.local-data/
+public/visual/generated/

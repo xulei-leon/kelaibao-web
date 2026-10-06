@@ -1,0 +1,344 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-30T04:20:00+08:00",
+  "localChecks": [
+    {
+      "id": "inquiry_route_contract",
+      "status": "LOCAL_PASS",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "pnpm test -- tests/m2-inquiry-api.test.ts tests/m2-inquiry-guard.test.ts tests/submit-inquiry.test.ts tests/inquiry-form.test.tsx",
+        "expectedResult": "same-origin validation, bounded abuse controls, duplicate suppression and WeCom degradation pass",
+        "actualResult": "targeted inquiry contract tests passed",
+        "evidencePath": "tests/m2-inquiry-api.test.ts",
+        "sensitiveDataCheck": "test responses and telemetry excluded inquiry canaries"
+      }
+    },
+    {
+      "id": "directmail_fake_contract",
+      "status": "LOCAL_PASS",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "pnpm test -- tests/m2-directmail.test.ts",
+        "expectedResult": "deterministic HTTPS signed form POST, timeout and zero automatic retry",
+        "actualResult": "fake provider contract tests passed without real network access",
+        "evidencePath": "tests/m2-directmail.test.ts",
+        "sensitiveDataCheck": "fixture secrets remain test-only and provider response bodies are not read"
+      }
+    },
+    {
+      "id": "pii_canary_scan",
+      "status": "LOCAL_PASS",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "pnpm test -- tests/m2-inquiry-api.test.ts",
+        "expectedResult": "responses and telemetry contain no name, city, contact, needs or hostile upstream canary",
+        "actualResult": "PII canary assertions passed",
+        "evidencePath": "tests/m2-inquiry-api.test.ts",
+        "sensitiveDataCheck": "only synthetic canaries were used"
+      }
+    },
+    {
+      "id": "release_validator_contract",
+      "status": "LOCAL_PASS",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "pnpm test -- tests/m2-release-validator.test.ts",
+        "expectedResult": "local and production statuses remain separate and missing/placeholder gates fail closed",
+        "actualResult": "validator fixture tests passed",
+        "evidencePath": "tests/m2-release-validator.test.ts",
+        "sensitiveDataCheck": "fixtures contain only redacted or synthetic identifiers"
+      }
+    },
+    {
+      "id": "runbook_contract",
+      "status": "LOCAL_PASS",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "review M2-05 sections in Admin-Security-and-Media-Runbook.md and FC-Deployment-Runbook.md",
+        "expectedResult": "DirectMail, PII telemetry, release validator and compatibility matrix instructions are documented",
+        "actualResult": "runbooks document the inquiry boundary, server-only configuration, telemetry allowlist, validator semantics and compatibility matrix",
+        "evidencePath": "docs/2-Design/Admin-Security-and-Media-Runbook.md",
+        "sensitiveDataCheck": "runbook examples must not contain secrets or PII"
+      }
+    }
+  ],
+  "productionGates": [
+    {
+      "id": "directmail_live_send",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "legacyId": "M2-LEGACY-01",
+      "region": "cn-shenzhen (planned)",
+      "resourceRef": "not-provided",
+      "reason": "Missing isolated DirectMail endpoint, approved sender domain/inbox and probe identity.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing isolated DirectMail inputs",
+        "expectedResult": "one controlled live notification reaches the approved company inbox",
+        "actualResult": "BLOCKED: no real DirectMail evidence",
+        "evidencePath": "docs/3-Plan/sprint-m2-05.md",
+        "sensitiveDataCheck": "no AccessKey, address or message body recorded"
+      }
+    },
+    {
+      "id": "esa_waf_rate_limit",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "legacyId": "M2-LEGACY-01",
+      "region": "cn-shenzhen (planned)",
+      "resourceRef": "not-provided",
+      "reason": "Missing isolated ESA site and probe identity/token.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing ESA endpoint and identity",
+        "expectedResult": "admin and inquiry path WAF/rate-limit rules trigger with trusted client header overwrite",
+        "actualResult": "BLOCKED: no real ESA WAF evidence",
+        "evidencePath": "docs/3-Plan/sprint-m2-05.md",
+        "sensitiveDataCheck": "no token or raw client address recorded"
+      }
+    },
+    {
+      "id": "esa_cache_purge",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "legacyId": "M2-LEGACY-01",
+      "region": "cn-shenzhen (planned)",
+      "resourceRef": "not-provided",
+      "reason": "Missing isolated ESA endpoint and purge identity/token.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing ESA purge inputs",
+        "expectedResult": "exact URL purge and at-most-60-second convergence are observed",
+        "actualResult": "BLOCKED: no real purge/cache evidence",
+        "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+        "sensitiveDataCheck": "no Authorization header or token recorded"
+      }
+    },
+    {
+      "id": "fc_observability_limits",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "legacyId": "M2-LEGACY-01",
+      "region": "cn-shenzhen (planned)",
+      "resourceRef": "not-provided",
+      "reason": "Missing isolated FC service, alarm channels and approved concurrency/instance limits.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing FC resource and probe identity",
+        "expectedResult": "5xx/latency alarms and bounded concurrency/instances are triggered and observed",
+        "actualResult": "BLOCKED: no real FC alarm or limit evidence",
+        "evidencePath": "docs/3-Plan/sprint-m2-05.md",
+        "sensitiveDataCheck": "no service credential or alarm recipient recorded"
+      }
+    },
+    {
+      "id": "fc_rollback",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "legacyId": "M2-LEGACY-01",
+      "region": "cn-shenzhen (planned)",
+      "resourceRef": "not-provided",
+      "reason": "Missing versioned FC service and previous healthy artifact.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing FC versions and alias",
+        "expectedResult": "test alias rolls back to the previous healthy FC version and health/routes pass",
+        "actualResult": "BLOCKED: no real FC rollback evidence",
+        "evidencePath": "docs/2-Design/FC-Deployment-Runbook.md",
+        "sensitiveDataCheck": "no FC token or resource ID recorded"
+      }
+    },
+    {
+      "id": "fc_previous_app_new_schema_compatibility",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "legacyId": "M2-LEGACY-01",
+      "region": "cn-shenzhen (planned)",
+      "resourceRef": "not-provided",
+      "reason": "Missing FC previous artifact and isolated RDS schema probe.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing previous FC artifact and RDS input",
+        "expectedResult": "previous application remains functional against the migrated schema",
+        "actualResult": "BLOCKED: compatibility matrix not executed",
+        "evidencePath": "docs/2-Design/FC-Deployment-Runbook.md",
+        "sensitiveDataCheck": "no database URL or credential recorded"
+      },
+      "compatibility": {
+        "previousAppVersion": "not-provided",
+        "migrationVersion": "003",
+        "schemaState": "not-probed",
+        "commandOrProbe": "not run: missing FC/RDS inputs",
+        "expectedResult": "previous application route and query smoke passes against migrated schema",
+        "actualResult": "BLOCKED",
+        "evidencePath": "docs/2-Design/FC-Deployment-Runbook.md"
+      }
+    },
+    {
+      "id": "rds_connectivity_capacity",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "legacyId": "M2-LEGACY-01",
+      "region": "cn-shenzhen (planned)",
+      "resourceRef": "not-provided",
+      "reason": "Missing isolated RDS endpoint, database identity and capacity evidence.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing RDS endpoint and identity",
+        "expectedResult": "FC private SELECT 1, connection reuse and capacity alarms pass",
+        "actualResult": "BLOCKED: no real RDS evidence",
+        "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+        "sensitiveDataCheck": "no DATABASE_URL or query result containing data recorded"
+      }
+    },
+    {
+      "id": "rds_backup_restore",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "legacyId": "M2-LEGACY-01",
+      "region": "cn-shenzhen (planned)",
+      "resourceRef": "not-provided",
+      "reason": "Missing isolated RDS instance and backup/restore execution identity.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing RDS instance",
+        "expectedResult": "automatic backup is verified and a restore drill passes with stated RTO/RPO",
+        "actualResult": "BLOCKED: no real backup/restore evidence",
+        "evidencePath": "docs/3-Plan/sprint-m2-05.md",
+        "sensitiveDataCheck": "no database credential or restored content recorded"
+      }
+    },
+    {
+      "id": "oss_private_delivery_alerts",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "legacyId": "M2-LEGACY-01",
+      "region": "cn-shenzhen (planned)",
+      "resourceRef": "not-provided",
+      "reason": "Missing isolated private OSS bucket, ESA assets origin and probe token.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing OSS/ESA inputs",
+        "expectedResult": "private origin, short-lived authorization, controlled delivery and failure alarm pass",
+        "actualResult": "BLOCKED: no real OSS delivery/alarm evidence",
+        "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+        "sensitiveDataCheck": "no AccessKey, security token or signed URL recorded"
+      }
+    },
+    {
+      "id": "directmail_failure_alert",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "legacyId": "M2-LEGACY-01",
+      "region": "cn-shenzhen (planned)",
+      "resourceRef": "not-provided",
+      "reason": "Missing real DirectMail/FC monitoring resources and alarm channel.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing DirectMail and alarm inputs",
+        "expectedResult": "controlled DirectMail failure emits a no-PII alert",
+        "actualResult": "BLOCKED: no real failure alarm evidence",
+        "evidencePath": "docs/3-Plan/sprint-m2-05.md",
+        "sensitiveDataCheck": "no email address, body, signature or recipient recorded"
+      }
+    },
+    {
+      "id": "production_domain_icp",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "region": "China mainland",
+      "resourceRef": "not-provided",
+      "reason": "Formal business entity, production domain and ICP evidence have not been provided.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing formal domain and ICP evidence",
+        "expectedResult": "entity, domain, HTTPS and applicable filing are verified",
+        "actualResult": "BLOCKED",
+        "evidencePath": "docs/1-Requirement/Mainland-Website-FR/FR-08-mainland-production-readiness.md",
+        "sensitiveDataCheck": "no personal registration record stored"
+      }
+    },
+    {
+      "id": "production_policies_professional_review_authorization",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "region": "China mainland",
+      "resourceRef": "not-provided",
+      "reason": "Final policy, professional review and public authorization evidence have not been provided.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing approved review records",
+        "expectedResult": "policies match real data flow and all regulated content/authorization checks pass",
+        "actualResult": "BLOCKED",
+        "evidencePath": "docs/1-Requirement/Mainland-Website-FR/FR-08-mainland-production-readiness.md",
+        "sensitiveDataCheck": "no reviewer personal data or authorization document stored"
+      }
+    },
+    {
+      "id": "production_wecom",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "region": "China mainland",
+      "resourceRef": "not-provided",
+      "reason": "Approved production WeCom contact QR and service identity have not been provided.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: preview placeholder remains",
+        "expectedResult": "approved WeCom QR works and no personal test QR is present",
+        "actualResult": "BLOCKED",
+        "evidencePath": "docs/1-Requirement/Mainland-Website-FR/FR-08-mainland-production-readiness.md",
+        "sensitiveDataCheck": "no personal WeChat identity stored"
+      }
+    },
+    {
+      "id": "production_mini_program",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "region": "China mainland",
+      "resourceRef": "/wechat/k-link-mini-program-qr-placeholder.svg",
+      "reason": "Only the version-controlled Preview placeholder exists; an approved production K-Link mini-program QR and verification record have not been provided.",
+      "evidence": {
+        "date": "2026-07-31",
+        "commandOrRequest": "not run: formal K-Link mini-program QR and production verification inputs are unavailable",
+        "expectedResult": "approved production-mini-program QR opens the intended K-Link mini-program and passes mainland WeChat verification",
+        "actualResult": "BLOCKED: preview-placeholder remains and cannot satisfy Production readiness",
+        "evidencePath": "docs/3-Plan/sprint-m3-02.md",
+        "sensitiveDataCheck": "no personal WeChat identity, mini-program credential or private verification record stored"
+      }
+    },
+    {
+      "id": "production_mainland_wechat_browser",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "region": "China mainland",
+      "resourceRef": "not-provided",
+      "reason": "Formal domain and mainland/WeChat browser probe environment are unavailable.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing formal domain and mainland probe",
+        "expectedResult": "service-to-WeCom-or-form path works on mainland network and WeChat browser",
+        "actualResult": "BLOCKED",
+        "evidencePath": "docs/1-Requirement/Mainland-Website-FR/FR-08-mainland-production-readiness.md",
+        "sensitiveDataCheck": "no real inquiry payload used"
+      }
+    },
+    {
+      "id": "production_cost_budget",
+      "status": "BLOCKED",
+      "mandatory": true,
+      "legacyId": "M2-LEGACY-02",
+      "region": "cn-shenzhen (planned)",
+      "resourceRef": "not-provided",
+      "reason": "Missing real quotations, versioned traffic assumptions and budget hard ceiling.",
+      "evidence": {
+        "date": "2026-07-30",
+        "commandOrRequest": "not run: missing quote and budget inputs",
+        "expectedResult": "computed production total does not exceed the approved hard ceiling",
+        "actualResult": "BLOCKED: cost cannot be calculated from real evidence",
+        "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+        "sensitiveDataCheck": "no billing account or procurement contact stored"
+      }
+    }
+  ]
+}

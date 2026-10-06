@@ -1,0 +1,29 @@
+{
+  "bucketAccess": {
+    "publicRead": false,
+    "browserLongTermCredential": false,
+    "uploadMode": "server-issued-short-lived-sts-signed-put",
+    "stagingPrefix": "pending/",
+    "confirmedPrefix": "media/"
+  },
+  "confirmation": {
+    "serverDirectHttpsInspection": true,
+    "checks": [
+      "intent-owner",
+      "intent-expiry",
+      "content-length",
+      "content-type",
+      "jpeg-png-webp-magic",
+      "sha256",
+      "immutable-promotion",
+      "idempotent-consume"
+    ]
+  },
+  "publicDelivery": {
+    "origin": "private-oss",
+    "browserBaseUrlEnvironment": "OSS_ASSETS_BASE_URL",
+    "directOssPublicUrlAllowed": false
+  },
+  "localStatus": "LOCAL_PASS_CONTRACT_ONLY",
+  "realCloudStatus": "M2-LEGACY-01-DEFERRED"
+}

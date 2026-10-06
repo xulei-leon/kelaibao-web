@@ -1,0 +1,26 @@
+# Sprint M4-02 公开站视觉风格升级 - Document Review by GPT-5.5
+
+Reviewed file: `products/kelaibao/docs/3-Plan/sprint-m4-02-public-site-visual-style-upgrade.md`
+
+Review scope: document correctness, requirement alignment, implementation risk, regression evidence coverage, and clarity. Checked against FR-20, the visual design proposal v0.2, the sprint index, the current route/test surface, and Next.js routing/CSS loading rules.
+
+| Severity | Type | Location | Issue | Evidence | Recommendation |
+| --- | --- | --- | --- | --- | --- |
+| High | Correctness | `sprint-m4-02-public-site-visual-style-upgrade.md:56`, `:81`, `:156`, `:214` | The plan scopes `/news` and `/cases` into the visual upgrade, but its only explicit global CSS import change is `src/app/layout.tsx`. In this codebase, those public content routes are implemented with the Pages Router, so importing `visual-refresh.css` only from App Router layout risks leaving `/news` and `/cases` outside the visual refresh or creating inconsistent styling between App Router and Pages Router public pages. | The reviewed plan includes news/cases in scope and route matrix (`:56`, `:156`, `:214`) but says `src/app/layout.tsx` will be the file that imports the new CSS after `globals.css` (`:81`). Current code imports global CSS for Pages Router in `src/pages/_app.tsx:4`, and public route files exist at `src/pages/news/index.tsx:7` and `src/pages/cases/index.tsx:7`. Next.js documents global CSS for Pages Router through `pages/_app`, while App Router global CSS is imported from the root layout. | Add `src/pages/_app.tsx` to the planned modification boundary and require it to import `visual-refresh.css` immediately after `@/app/globals.css`, or document another verified mechanism that makes the overlay load for both routers. Add a specific acceptance check that `/news`, `/cases`, and their detail pages receive the same overlay and no duplicate/conflicting CSS order. |
+| Medium | Test | `sprint-m4-02-public-site-visual-style-upgrade.md:56`, `:63`, `:94-98`, `:156`, `:214-215`, `:221` | WP0 freezes fixtures only for `/`, `/features`, `/team`, `/media`, `/about`, and `/contact`, even though the sprint explicitly includes `/news`, `/cases`, and policy pages and forbids visible text/content changes there. Those routes can regress in text, headings, content hierarchy, tables, links, or list/detail surfaces without being covered by the pre-change semantic fixture. | Scope includes "新闻/案例与政策页面" (`:56`) and WP4 includes `/news`, `/cases`, `/contact` and policy pages (`:156`). The route matrix includes `/news`/`/cases` and policy pages (`:214-215`). However, WP0 fixture creation lists only six routes (`:94`) and the automated fixture description later remains generic (`:221`). FR-20 also requires the semantic baseline to record CTA label and target interaction type, and visual evidence to include news/cases list states plus a representative policy page. | Extend the WP0 fixture and acceptance checklist to include at minimum `/news`, `/cases`, one representative news detail, one representative case detail when data is available, and representative policy pages such as `/privacy`, `/terms`, and `/disclaimer`. Record H1/H2, content/list/detail state, links, table structure where present, CTA label plus target interaction type, and route-specific empty/published states. |
+| Low | Clarity | `sprint-m4-02-public-site-visual-style-upgrade.md:152` | The phrase "统一四类工具、五步路径、价值卡和最终 CTA 的产品语言" can be read as copy/content work, which conflicts with the document's stronger content-freeze rules. The intended meaning appears to be visual language, but the wording leaves room for implementers to "polish" visible copy. | The same document freezes all user-visible text (`:15`, `:63`) and says no text, CTA, or component content may be added or changed (`:161`). | Change "产品语言" to "产品视觉语言" or "产品化视觉语言", and explicitly restate that no CTA label, heading, body copy, or list text may be edited in WP4. |
+
+## Summary
+
+No Critical issues found. The sprint is broadly aligned with FR-20 and the visual proposal: it preserves brand boundaries, blocks layout/content changes, uses a reversible overlay strategy, and defines useful visual, accessibility, and evidence gates.
+
+The main corrections needed before review-confirm are to make the CSS loading plan cover both App Router and Pages Router public routes, and to expand the frozen regression fixture/evidence matrix so every scoped route family is protected.
+
+## Sources Checked
+
+- Reviewed sprint plan: `products/kelaibao/docs/3-Plan/sprint-m4-02-public-site-visual-style-upgrade.md`
+- Requirement: `products/kelaibao/docs/1-Requirement/Mainland-Website-FR/FR-20-visual-style-upgrade-and-regression-protection.md`
+- Design proposal: `products/kelaibao/docs/2-Design/Kelaibao-Website-Design-Proposal.md`
+- Sprint index: `products/kelaibao/docs/3-Plan/Mainland-Website-Sprint-Index.md`
+- Current route/CSS entry points: `src/app/layout.tsx`, `src/pages/_app.tsx`, `src/pages/news/index.tsx`, `src/pages/cases/index.tsx`, policy route files under `src/app/`
+- Next.js official docs: [Pages Router global CSS](https://nextjs.org/docs/messages/css-global), [App Router CSS](https://nextjs.org/docs/app/getting-started/css)

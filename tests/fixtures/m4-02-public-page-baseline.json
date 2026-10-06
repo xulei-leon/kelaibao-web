@@ -1,0 +1,389 @@
+{
+  "staticRoutes": {
+    "/": {
+      "moduleId": "@/app/page",
+      "h1": "一站式拓客与团队数智化工具系统",
+      "sectionCount": 6,
+      "markers": [
+        "熟人名单总会用完，陌生人才是下一站",
+        "全套工具",
+        "重构你的展业效率",
+        "开启你的社群获客助手"
+      ],
+      "ctaLabels": [
+        "体验K-Link小程序"
+      ],
+      "textDigest": "96dc3fcb77a027e0dec14c9e4c06965ad55700d2c9a9d87eb3b84411e0c19680",
+      "h2": [
+        "熟人名单总会用完，陌生人才是下一站",
+        "全套工具",
+        "专为营销人，打造的轻社交经营系统",
+        "重构你的展业效率",
+        "媒体服务，一篇能用很久",
+        "开启你的社群获客助手"
+      ],
+      "h3": [
+        "内容工具",
+        "展示工具",
+        "效率工具",
+        "团队工具",
+        "查找",
+        "转发",
+        "信任",
+        "实时",
+        "复制",
+        "价值内容",
+        "社交传播",
+        "建立信任",
+        "识别意向",
+        "团队复制",
+        "持续曝光",
+        "精准获客",
+        "团队复制",
+        "私域增长",
+        "专业撰稿",
+        "权威背书",
+        "舆情管理",
+        "团队凝聚",
+        "K-Link 小程序"
+      ],
+      "sectionLabels": [
+        "一站式拓客与团队数智化工具系统",
+        "全套工具",
+        "专为营销人，打造的轻社交经营系统",
+        "重构你的展业效率",
+        "媒体服务，一篇能用很久",
+        "开启你的社群获客助手"
+      ],
+      "keyCounts": {
+        ".home-tool-groups > article": 4,
+        ".home-process > li": 5,
+        ".home-value-grid > article": 4
+      },
+      "hero": {
+        "actions": 1,
+        "aside": true,
+        "boundary": false
+      }
+    },
+    "/features": {
+      "moduleId": "@/app/features/page",
+      "h1": "从被看见，到被找到",
+      "sectionCount": 5,
+      "markers": [
+        "曝光",
+        "获客",
+        "信任",
+        "成交",
+        "沉淀",
+        "扫码可见所有工具，可体验",
+        "免费升级"
+      ],
+      "ctaLabels": [
+        "免费体验"
+      ],
+      "textDigest": "66ecb9ac59883c3101d529e8faa539533b205fc7c7e34a9ab5eccf07efed4144",
+      "h2": [
+        "扫码可见所有工具，可体验",
+        "客来宝(K-Link Future)会员能获得什么",
+        "内容 · 展示 · 高效 · 团队"
+      ],
+      "h3": [
+        "K-Link 小程序"
+      ],
+      "sectionLabels": [
+        "从被看见，到被找到",
+        "",
+        "扫码可见所有工具，可体验",
+        "客来宝(K-Link Future)会员能获得什么",
+        "内容 · 展示 · 高效 · 团队"
+      ],
+      "keyCounts": {
+        ".product-journey > li": 5,
+        ".feature-showcase": 0,
+        ".membership-benefits-table tbody tr": 9
+      },
+      "hero": {
+        "actions": 1,
+        "aside": false,
+        "boundary": false
+      }
+    },
+    "/team": {
+      "moduleId": "@/app/team/page",
+      "h1": "为团队提供省时间、提效率、高复制的专属团队小程序",
+      "sectionCount": 5,
+      "markers": [
+        "经验复制难",
+        "K-Link赋能体系",
+        "交付与服务保障"
+      ],
+      "ctaLabels": [
+        "免费体验"
+      ],
+      "textDigest": "ae5a1e87b82a38e0906d9682ea20321cae0f5c603b5cb759447ef5c1f71055e4",
+      "h2": [
+        "从“个人精英”到“系统赋能”",
+        "K-Link赋能体系",
+        "交付与服务保障"
+      ],
+      "h3": [
+        "经验复制难",
+        "品牌宣发乱",
+        "团队留存低",
+        "团队管理差",
+        "形象塑造，重塑团队IP价值",
+        "定制化小程序，新人极速启动",
+        "无痕链接，激活沉寂的人脉",
+        "追踪访客轨迹，精准找到客户",
+        "搭建可复制的团队小程序",
+        "谁分享，客户就是谁的",
+        "需求诊断与系统搭建",
+        "内容全面策划设计",
+        "团队启动"
+      ],
+      "sectionLabels": [
+        "为团队提供省时间、提效率、高复制的专属团队小程序",
+        "从“个人精英”到“系统赋能”",
+        "K-Link赋能体系",
+        "搭建可复制的团队小程序",
+        "交付与服务保障"
+      ],
+      "keyCounts": {
+        ".team-challenge-grid article": 4,
+        ".team-capability-grid article": 4,
+        ".team-mechanism-list article": 2,
+        ".delivery-guarantee-grid li": 3
+      },
+      "hero": {
+        "actions": 1,
+        "aside": false,
+        "boundary": false
+      }
+    },
+    "/media": {
+      "moduleId": "@/app/media/page",
+      "h1": "发一篇，能用很久",
+      "sectionCount": 8,
+      "markers": [
+        "你为什么需要媒体背书？",
+        "为什么带团队的人需要媒体发稿",
+        "一站式发稿服务",
+        "开启你的媒体背书之路"
+      ],
+      "ctaLabels": [
+        "咨询媒体报道"
+      ],
+      "textDigest": "5f3ccf408c5443720d411e46297cd3141871b46b3b2f2256d17d2f77b0c96450",
+      "h2": [
+        "你为什么需要媒体背书？",
+        "为什么带团队的人需要媒体发稿",
+        "让个人和团队一起被看见",
+        "一站式发稿服务",
+        "百家主流媒体全覆盖",
+        "四套会员专享套餐",
+        "开启你的媒体背书之路"
+      ],
+      "h3": [
+        "1.领导者持续发声",
+        "2.成员成果被看见",
+        "3.团队故事被传播",
+        "企业微信"
+      ],
+      "sectionLabels": [
+        "发一篇，能用很久",
+        "你为什么需要媒体背书？",
+        "为什么带团队的人需要媒体发稿",
+        "让个人和团队一起被看见",
+        "一站式发稿服务",
+        "百家主流媒体全覆盖",
+        "四套会员专享套餐",
+        "开启你的媒体背书之路"
+      ],
+      "keyCounts": {
+        ".media-problem-grid article": 4,
+        ".media-impact-grid article": 3,
+        ".media-publication-flow li": 6,
+        ".cta--wechat-primary": 2
+      },
+      "hero": {
+        "actions": 1,
+        "aside": false,
+        "boundary": true
+      }
+    },
+    "/about": {
+      "moduleId": "@/app/about/page",
+      "h1": "关于我们",
+      "sectionCount": 7,
+      "markers": [
+        "公司介绍",
+        "企业文化",
+        "安全与合规保障",
+        "新闻动态",
+        "公司实景",
+        "联系我们"
+      ],
+      "ctaLabels": [],
+      "textDigest": "e66338964760a056975b60f5b045e782742b75f099978182f14db91d1bfb22ae",
+      "h2": [
+        "公司介绍",
+        "企业文化",
+        "安全与合规保障",
+        "新闻动态",
+        "公司实景",
+        "联系我们"
+      ],
+      "h3": [
+        "服务团队",
+        "赋能一线人员",
+        "内容传播触达",
+        "品牌愿景",
+        "核心理念",
+        "团队使命",
+        "0隐私采集",
+        "0业务干预",
+        "100%私域归属",
+        "实景展示",
+        "到访指引",
+        "小程序",
+        "公众号",
+        "视频号",
+        "企业微信"
+      ],
+      "sectionLabels": [
+        "关于我们",
+        "公司介绍",
+        "企业文化",
+        "安全与合规保障",
+        "新闻动态",
+        "公司实景",
+        "联系我们"
+      ],
+      "keyCounts": {
+        ".about-metrics-grid article": 3,
+        ".about-culture-grid article": 3,
+        ".about-security-grid article": 3,
+        ".about-office-grid article": 2
+      },
+      "hero": {
+        "actions": 0,
+        "aside": false,
+        "boundary": false
+      }
+    },
+    "/privacy": {
+      "moduleId": "@/app/privacy/page",
+      "h1": "隐私保护原则",
+      "sectionCount": 0,
+      "markers": [
+        "小未来商务服务（深圳）有限公司",
+        "我们不会获取、读取或建立用户手机通讯录",
+        "安心、透明、可信赖的数字化工具环境"
+      ],
+      "ctaLabels": [],
+      "textDigest": "097bab665bc8edb9c6834d8641ec16bca203e78c201812cca8c9a53101f18892",
+      "h2": [],
+      "h3": [],
+      "sectionLabels": [],
+      "keyCounts": {},
+      "hero": {
+        "actions": 0,
+        "aside": false,
+        "boundary": false
+      }
+    },
+    "/terms": {
+      "moduleId": "@/app/terms/page",
+      "h1": "技术中立原则",
+      "sectionCount": 0,
+      "markers": [
+        "面向自雇创业者及个人经营者",
+        "不组织、不管理、不发展任何用户团队",
+        "连接价值，不控制关系"
+      ],
+      "ctaLabels": [],
+      "textDigest": "b02f5d9a8c02a6e3907d2fa6d387223fa4ee1d575a004b4a3bc72060e313628a",
+      "h2": [],
+      "h3": [],
+      "sectionLabels": [],
+      "keyCounts": {},
+      "hero": {
+        "actions": 0,
+        "aside": false,
+        "boundary": false
+      }
+    },
+    "/disclaimer": {
+      "moduleId": "@/app/disclaimer/page",
+      "h1": "用户行为规范",
+      "sectionCount": 0,
+      "markers": [
+        "真实、健康、有价值的数字化表达方式",
+        "进行违法违规宣传",
+        "限制功能使用、下架相关内容"
+      ],
+      "ctaLabels": [],
+      "textDigest": "2edd9089583f415d5a13a8c69c8343dc673b86c561a22b6f71bf58f8168b4b15",
+      "h2": [],
+      "h3": [],
+      "sectionLabels": [],
+      "keyCounts": {},
+      "hero": {
+        "actions": 0,
+        "aside": false,
+        "boundary": false
+      }
+    },
+    "/results": {
+      "moduleId": "@/app/results/page",
+      "h1": "效果与责任说明",
+      "sectionCount": 0,
+      "markers": [
+        "客来宝提供数字化工具和技术支持",
+        "个人投入程度、行业环境、市场变化、执行方式",
+        "用户应根据自身情况合理使用平台工具"
+      ],
+      "ctaLabels": [],
+      "textDigest": "3bce6d1b6b8c6ff8c9ef348735b5a4b4142f9fcc25ef288da999154b6466b0ee",
+      "h2": [],
+      "h3": [],
+      "sectionLabels": [],
+      "keyCounts": {},
+      "hero": {
+        "actions": 0,
+        "aside": false,
+        "boundary": false
+      }
+    }
+  },
+  "contentRoutes": {
+    "/news": {
+      "contentType": "news",
+      "h1": "新闻动态",
+      "emptyState": "当前没有已公开的新闻。"
+    },
+    "/cases": {
+      "contentType": "case",
+      "h1": "案例",
+      "emptyState": "当前没有已公开的案例。"
+    }
+  },
+  "global": {
+    "navigation": [
+      "首页",
+      "核心工具",
+      "团队方案",
+      "媒体服务",
+      "新闻动态",
+      "关于我们"
+    ],
+    "forbiddenCopy": [
+      "Dashboard",
+      "保证被 AI 推荐",
+      "Production Live",
+      "内容发布门禁",
+      "媒体发布边界"
+    ]
+  }
+}

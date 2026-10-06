@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "region": "cn-shenzhen",
+  "isolatedOrigin": "https://m2-isolated.example.cn",
+  "probeIdentity": "replace-with-non-sensitive-fc-deployment-id",
+  "probeTokenEnv": "M2_00_PROBE_TOKEN",
+  "esaFc": {
+    "originProbeUrl": "https://m2-isolated.example.cn/api/m2-00/origin"
+  },
+  "fcNext": {
+    "ssrUrl": "https://m2-isolated.example.cn/",
+    "ssrMarker": "m2-00-next-ssr-marker",
+    "routeHandlerUrl": "https://m2-isolated.example.cn/api/m2-00/runtime",
+    "streamUrl": "https://m2-isolated.example.cn/api/m2-00/stream"
+  },
+  "rds": {
+    "probeUrl": "https://m2-isolated.example.cn/api/m2-00/rds"
+  },
+  "oss": {
+    "securityProbeUrl": "https://m2-isolated.example.cn/api/m2-00/oss"
+  },
+  "session": {
+    "setUrl": "https://m2-isolated.example.cn/api/m2-00/session/set",
+    "echoUrl": "https://m2-isolated.example.cn/api/m2-00/session/echo"
+  },
+  "directMail": {
+    "probeUrl": "https://m2-isolated.example.cn/api/m2-00/directmail"
+  },
+  "esaPurge": {
+    "probeUrl": "https://m2-isolated.example.cn/api/m2-00/esa-purge"
+  },
+  "cost": {
+    "currency": "CNY",
+    "trafficAssumptions": null,
+    "quoteCapturedAt": null,
+    "quoteSource": null,
+    "monthlyHardLimit": null,
+    "estimatedMonthlyTotal": null
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-28T17:51:42.304Z",
+  "overallStatus": "BLOCKED",
+  "missingGateIds": [],
+  "blockedGateIds": [
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "G6",
+    "G7",
+    "G8"
+  ],
+  "gates": [
+    {
+      "id": "G1",
+      "title": "ESA origin to Function Compute",
+      "verifiedAt": "2026-07-28T17:51:42.304Z",
+      "isolatedResource": "Missing isolated resource configuration.",
+      "execution": "Preflight validation; no network request was sent.",
+      "expected": "ESA must preserve Host, HTTPS, and client address information while using FC as the origin.",
+      "actual": "Missing required configuration: isolatedOrigin, probeIdentity, originProbeUrl.",
+      "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+      "sensitiveDataCheck": "Only allowlisted booleans and non-sensitive runtime labels are recorded; credentials, cookies, response bodies, and PII are excluded.",
+      "status": "BLOCKED",
+      "nextAction": "Provide isolatedOrigin, probeIdentity, originProbeUrl using isolated Alibaba Cloud resources and rerun."
+    },
+    {
+      "id": "G2",
+      "title": "Function Compute Next.js runtime",
+      "verifiedAt": "2026-07-28T17:51:42.304Z",
+      "isolatedResource": "Missing isolated resource configuration.",
+      "execution": "Preflight validation; no network request was sent.",
+      "expected": "FC must run Next.js SSR, Route Handlers, and streaming/non-streaming responses.",
+      "actual": "Missing required configuration: isolatedOrigin, probeIdentity, ssrUrl, ssrMarker, routeHandlerUrl, streamUrl.",
+      "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+      "sensitiveDataCheck": "Only allowlisted booleans and non-sensitive runtime labels are recorded; credentials, cookies, response bodies, and PII are excluded.",
+      "status": "BLOCKED",
+      "nextAction": "Provide isolatedOrigin, probeIdentity, ssrUrl, ssrMarker, routeHandlerUrl, streamUrl using isolated Alibaba Cloud resources and rerun."
+    },
+    {
+      "id": "G3",
+      "title": "Function Compute private VPC to RDS MySQL",
+      "verifiedAt": "2026-07-28T17:51:42.304Z",
+      "isolatedResource": "Missing isolated resource configuration.",
+      "execution": "Preflight validation; no network request was sent.",
+      "expected": "An FC-hosted probe must prove private VPC connectivity, SELECT 1, bounded connection reuse, and no public RDS endpoint.",
+      "actual": "Missing required configuration: isolatedOrigin, probeIdentity, probeUrl.",
+      "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+      "sensitiveDataCheck": "Only allowlisted booleans and non-sensitive runtime labels are recorded; credentials, cookies, response bodies, and PII are excluded.",
+      "status": "BLOCKED",
+      "nextAction": "Provide isolatedOrigin, probeIdentity, probeUrl using isolated Alibaba Cloud resources and rerun."
+    },
+    {
+      "id": "G4",
+      "title": "Private OSS upload and ESA distribution",
+      "verifiedAt": "2026-07-28T17:51:42.304Z",
+      "isolatedResource": "Missing isolated resource configuration.",
+      "execution": "Preflight validation; no network request was sent.",
+      "expected": "Private Bucket, rejected direct read, controlled ESA origin, expiring upload, cross-key rejection, and no long-term browser credentials.",
+      "actual": "Missing required configuration: isolatedOrigin, probeIdentity, securityProbeUrl.",
+      "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+      "sensitiveDataCheck": "Only allowlisted booleans and non-sensitive runtime labels are recorded; credentials, cookies, response bodies, and PII are excluded.",
+      "status": "BLOCKED",
+      "nextAction": "Provide isolatedOrigin, probeIdentity, securityProbeUrl using isolated Alibaba Cloud resources and rerun."
+    },
+    {
+      "id": "G5",
+      "title": "Same-domain session cookie through ESA",
+      "verifiedAt": "2026-07-28T17:51:42.304Z",
+      "isolatedResource": "Missing isolated resource configuration.",
+      "execution": "Preflight validation; no network request was sent.",
+      "expected": "A Secure, HttpOnly, SameSite=Strict cookie must round-trip through ESA to FC.",
+      "actual": "Missing required configuration: isolatedOrigin, probeIdentity, setUrl, echoUrl.",
+      "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+      "sensitiveDataCheck": "Only allowlisted booleans and non-sensitive runtime labels are recorded; credentials, cookies, response bodies, and PII are excluded.",
+      "status": "BLOCKED",
+      "nextAction": "Provide isolatedOrigin, probeIdentity, setUrl, echoUrl using isolated Alibaba Cloud resources and rerun."
+    },
+    {
+      "id": "G6",
+      "title": "DirectMail controlled test delivery",
+      "verifiedAt": "2026-07-28T17:51:42.304Z",
+      "isolatedResource": "Missing isolated resource configuration.",
+      "execution": "Preflight validation; no network request was sent.",
+      "expected": "A provider-specific HTTPS call must deliver through an approved test domain without logging PII.",
+      "actual": "Missing required configuration: isolatedOrigin, probeIdentity, probeUrl.",
+      "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+      "sensitiveDataCheck": "Only allowlisted booleans and non-sensitive runtime labels are recorded; credentials, cookies, response bodies, and PII are excluded.",
+      "status": "BLOCKED",
+      "nextAction": "Provide isolatedOrigin, probeIdentity, probeUrl using isolated Alibaba Cloud resources and rerun."
+    },
+    {
+      "id": "G7",
+      "title": "ESA exact URL purge",
+      "verifiedAt": "2026-07-28T17:51:42.304Z",
+      "isolatedResource": "Missing isolated resource configuration.",
+      "execution": "Preflight validation; no network request was sent.",
+      "expected": "A provider-specific HTTPS purge must invalidate only the recorded exact URLs.",
+      "actual": "Missing required configuration: isolatedOrigin, probeIdentity, probeUrl.",
+      "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+      "sensitiveDataCheck": "Only allowlisted booleans and non-sensitive runtime labels are recorded; credentials, cookies, response bodies, and PII are excluded.",
+      "status": "BLOCKED",
+      "nextAction": "Provide isolatedOrigin, probeIdentity, probeUrl using isolated Alibaba Cloud resources and rerun."
+    },
+    {
+      "id": "G8",
+      "title": "Versioned resource cost",
+      "verifiedAt": "2026-07-28T17:51:42.304Z",
+      "isolatedResource": "unknown-region development/test/production candidate pricing",
+      "execution": "Offline comparison of a versioned real quote against a versioned hard limit.",
+      "expected": "A versioned quote and estimated monthly total at or below the budget hard limit.",
+      "actual": "Missing cost inputs: currency, trafficAssumptions, quoteCapturedAt, quoteSource, monthlyHardLimit, estimatedMonthlyTotal.",
+      "evidencePath": "docs/5-Evidence/m2-00/gate-report.md",
+      "sensitiveDataCheck": "Only allowlisted booleans and non-sensitive runtime labels are recorded; credentials, cookies, response bodies, and PII are excluded.",
+      "status": "BLOCKED",
+      "nextAction": "Provide a real quote, traffic assumptions, and a budget hard limit without inventing values."
+    }
+  ]
+}

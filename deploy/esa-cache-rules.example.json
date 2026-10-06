@@ -1,0 +1,18 @@
+{
+  "origin": "function-compute",
+  "rules": [
+    {
+      "paths": ["/admin/*", "/api/*", "/health"],
+      "sharedCache": false
+    },
+    {
+      "paths": ["/news", "/news/*", "/cases", "/cases/*", "/feed.xml", "/sitemap.xml", "/llms.txt"],
+      "maxAgeSeconds": 60
+    },
+    {
+      "paths": ["/*"],
+      "strategy": "versioned-static-or-origin-policy"
+    }
+  ],
+  "status": "M2-LEGACY-01-DEFERRED"
+}
