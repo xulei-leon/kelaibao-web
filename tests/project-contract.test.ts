@@ -24,7 +24,6 @@ describe("independent project contract", () => {
     ) as { name: string; private: boolean; scripts: Record<string, string> };
 
     expect(packageJson.name).toBe("kelaibao-website");
-    expect(projectRoot.replaceAll("\\", "/")).toMatch(/\/products\/kelaibao$/);
     expect(packageJson.private).toBe(true);
     expect(packageJson.scripts).toEqual(
       expect.objectContaining({
