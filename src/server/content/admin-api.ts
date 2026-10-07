@@ -76,7 +76,7 @@ export function contentApiError(error: unknown) {
       message: "Case authorization confirmation is required before first publication.",
     };
   }
-  if (/transition|immutable/i.test(message)) {
+  if (/transition|immutable|only news deletion/i.test(message)) {
     return {
       status: 409,
       code: "invalid_transition",

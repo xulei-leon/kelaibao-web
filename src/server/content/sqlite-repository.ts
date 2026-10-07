@@ -252,6 +252,7 @@ function publicCoverImage(
 }
 
 function auditAction(plan: ContentActionPlan) {
+  if (plan.action === "delete") return "content_deleted" as const;
   if (plan.action === "save_draft") return "content_draft_saved" as const;
   if (plan.action === "publish") return "content_published" as const;
   if (plan.action === "offline") return "content_offlined" as const;
@@ -371,17 +372,19 @@ export class SqliteContentRepository implements ContentRepository {
     plan: (context: ContentMutationContext) => ContentActionPlan;
   }) {
     return withSqliteWriteTransaction(this.path, this.database, async () => {
-      const row = this.database.prepare(`SELECT ${ITEM_COLUMNS} FROM content_items WHERE id = ? LIMIT 1`).get(itemId);
+      const row = this.database.prepare(`SELECT ${ITEM_COLUMNS} FROM content_items WHERE id = ? AND deleted_at IS NULL LIMIT 1`).get(itemId);
       if (!row) throw new Error("content_not_found");
       const item = itemFromRow(row);
       if (item.version !== expectedVersion) throw new Error("content_version_conflict");
       const draftRevision = loadRevision(this.database, item.draftRevisionId, item.contentType);
       const publishedRevision = loadRevision(this.database, item.publishedRevisionId, item.contentType);
       const plan = buildPlan({ item, draftRevision, publishedRevision });
-      assertConfirmedMedia(this.database, plan.revision.sanitizedHtml);
-      assertCoverMedia(this.database, plan.revision);
+      if (plan.action !== "delete") {
+        assertConfirmedMedia(this.database, plan.revision.sanitizedHtml);
+        assertCoverMedia(this.database, plan.revision);
+      }
       const revisionId = insertRevision(this.database, item.id, plan.revision);
-      const working = plan.action === "offline" ? item : { ...item, ...plan.revision };
+      const working = plan.action === "offline" || plan.action === "delete" ? item : { ...item, ...plan.revision };
       const draftRevisionId = plan.pointer === "draft"
         ? revisionId
         : plan.clearDraftPointer ? null : item.draftRevisionId;
@@ -397,15 +400,15 @@ export class SqliteContentRepository implements ContentRepository {
           draft_revision_id = ?, published_revision_id = ?, first_published_at = ?,
           published_at = ?, offline_at = ?, case_authorization_confirmed_at = ?,
           case_authorization_admin_id = ?, case_authorization_revision_id = ?,
-          updated_by = ?, updated_at = ?
-         WHERE id = ? AND version = ?`,
+          updated_by = ?, updated_at = ?, deleted_at = COALESCE(?, deleted_at)
+         WHERE id = ? AND version = ? AND deleted_at IS NULL`,
       ).run(
         plan.nextPublicStatus, working.slug, working.title, working.summary,
         working.sourceHtml, working.sanitizedHtml, working.sanitizerPolicyVersion,
         plan.nextVersion, draftRevisionId, publishedRevisionId,
         sqliteIso(plan.firstPublishedAt), sqliteIso(plan.publishedAt), sqliteIso(plan.offlineAt),
         sqliteIso(authorizationConfirmedAt), authorizationAdminId, authorizationRevisionId,
-        actorAdminId, now.toISOString(), item.id, expectedVersion,
+        actorAdminId, now.toISOString(), sqliteIso(plan.deletedAt ?? null), item.id, expectedVersion,
       );
       if (update.changes !== 1) throw new Error("content_version_conflict");
       if (plan.authorization) {
@@ -465,12 +468,12 @@ export class SqliteContentRepository implements ContentRepository {
   async listByType(contentType: ContentType) {
     return this.database.prepare(
       `SELECT ${ITEM_COLUMNS} FROM content_items
-        WHERE content_type = ? ORDER BY updated_at DESC, id DESC LIMIT 200`,
+        WHERE content_type = ? AND deleted_at IS NULL ORDER BY updated_at DESC, id DESC LIMIT 200`,
     ).all(contentType).map(itemFromRow);
   }
 
   async getAdminItem(itemId: number) {
-    const row = this.database.prepare(`SELECT ${ITEM_COLUMNS} FROM content_items WHERE id = ? LIMIT 1`).get(itemId);
+    const row = this.database.prepare(`SELECT ${ITEM_COLUMNS} FROM content_items WHERE id = ? AND deleted_at IS NULL LIMIT 1`).get(itemId);
     if (!row) return null;
     const item = itemFromRow(row);
     return {
@@ -481,7 +484,7 @@ export class SqliteContentRepository implements ContentRepository {
   }
 
   async listRevisions(itemId: number) {
-    const item = this.database.prepare("SELECT content_type FROM content_items WHERE id = ? LIMIT 1").get(itemId);
+    const item = this.database.prepare("SELECT content_type FROM content_items WHERE id = ? AND deleted_at IS NULL LIMIT 1").get(itemId);
     if (!item) return [];
     const contentType = String(item.content_type) as ContentType;
     return this.database.prepare(
@@ -493,7 +496,7 @@ export class SqliteContentRepository implements ContentRepository {
   async listPublishedByType(contentType: ContentType) {
     const items = this.database.prepare(
       `SELECT ${ITEM_COLUMNS} FROM content_items
-        WHERE content_type = ? AND status = 'published'
+        WHERE content_type = ? AND status = 'published' AND deleted_at IS NULL
         ORDER BY published_at DESC, id DESC LIMIT 100`,
     ).all(contentType);
     return items.map((item) => {

@@ -206,3 +206,16 @@ pnpm test -- tests/m2-inquiry-api.test.ts tests/m2-inquiry-guard.test.ts \
 - 封面授权仍是显式服务端操作；上传成功不等于授权。已有草稿与公开 revision 分离，图片绑定随文章版本保存/发布。
 - 支持 Navigation API 的浏览器可编辑，并在同文档后退/前进前确认离开。不支持的旧引擎只读，避免依赖无法可靠阻断 App Router 的 popstate 补偿。
 - 本次无 schema 变更；SQLite 运行时/管理员初始化的版本检查对齐既有迁移版本 2。测试使用真实迁移流程，生产仍为 MySQL。
+
+
+## 2026-10-07 新闻删除
+
+- 新闻列表的删除需标题确认、当前 Session/CSRF 和 expectedVersion；仅 news 可删除。
+- 删除在原事务中写 deleted_at、version、修订、content_deleted 审计与曾发布内容的 offline purge job。记录、图片、slug 和旧 outbox 保留，后台不支持恢复。
+- 删除后后台读取/变更排除该项，公开草稿 404、曾发布内容 410，公开列表和发现文件排除。ESA 失败保持 outbox 重试，不回滚已提交删除。
+- MySQL 上线前显式应用 005 migration；SQLite 通过既有迁移命令升级 schema 1/2 到 3，runtime/bootstrap 同步版本检查。迁移不能自动在请求中执行。
+- 本机升级前保存 SQLite 一致性备份；浏览器验证只创建并删除本次测试文章，用户已有文章保留。真实 MySQL/ESA 删除发布链路仍需外部验收。
+
+## 2026-10-07 HTML 编辑入口
+
+新建和编辑新闻/案例仅提供“HTML 正文”textarea，不再提供可视化或格式工具栏。加载旧文稿保持原 HTML 字符串；输入不会在编辑页执行。图片上传确认后追加转义后的 img 标签，封面上传/授权流程继续保留。安全预览使用服务端 sanitizer 与 sandbox；保存和发布的服务端校验、Session/CSRF 与版本冲突规则不变。

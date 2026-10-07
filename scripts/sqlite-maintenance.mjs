@@ -8,7 +8,7 @@ import {
   SQLITE_SIDECAR_SUFFIXES,
 } from "./lib/sqlite-local-test.mjs";
 
-const CURRENT_SCHEMA_VERSION = 2;
+const CURRENT_SCHEMA_VERSION = 3;
 
 function statements(source) {
   return source
@@ -85,6 +85,13 @@ function migrate() {
     const version = Number(before?.version);
     if (existingVersion === 0 && version === 1) {
       applySqliteUpgrade(database, seoImagesUpgrade);
+    }
+    const currentVersion = Number(database
+      .prepare("SELECT MAX(version) AS version FROM schema_versions").get()?.version);
+    if (currentVersion === 2) {
+      applySqliteUpgrade(database, readFileSync(
+        join(process.cwd(), "migrations", "sqlite", "003_news_soft_delete.sql"), "utf8",
+      ));
     }
     const after = database
       .prepare("SELECT MAX(version) AS version FROM schema_versions")

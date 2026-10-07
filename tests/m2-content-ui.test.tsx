@@ -6,8 +6,6 @@ import { describe, expect, it, vi } from "vitest";
 
 import { ContentEditor } from "@/components/admin/content-editor";
 
-vi.mock("next/dynamic", () => ({ default: () => () => <div role="textbox" aria-label="正文" /> }));
-
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace: vi.fn() }),
 }));
@@ -21,8 +19,9 @@ describe("M2-03 content administration UI", () => {
     ).toBeInTheDocument();
     expect(screen.getByLabelText(/标题/)).toBeRequired();
     expect(screen.getByLabelText(/摘要/)).toBeRequired();
-    expect(screen.getByLabelText(/Slug/)).toBeRequired();
-    expect(screen.getByRole("textbox", { name: "正文" })).toBeInTheDocument();
+    expect(screen.queryByLabelText(/Slug/)).not.toBeInTheDocument();
+    expect(screen.getByText("链接将在保存草稿后自动生成")).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "HTML 正文" })).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "安全预览" }),
     ).toBeInTheDocument();

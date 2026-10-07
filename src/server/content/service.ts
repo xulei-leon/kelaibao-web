@@ -1,3 +1,5 @@
+import { randomBytes } from "node:crypto";
+
 import {
   applyContentAction,
   normalizeContentDraft,
@@ -11,6 +13,11 @@ import type {
   PublicContentResult,
   PublicContentSnapshot,
 } from "@/server/content/public-contract";
+
+type ContentDraftInput = Omit<
+  Parameters<typeof normalizeContentDraft>[0],
+  "slug"
+> & { slug?: unknown };
 
 export interface ContentMutationContext {
   item: ContentItemState;
@@ -75,19 +82,27 @@ export async function createContentDraft({
   now = new Date(),
   requestId,
 }: {
-  input: Parameters<typeof normalizeContentDraft>[0];
+  input: ContentDraftInput;
   actorAdminId: number;
   repository: ContentRepository;
   now?: Date;
   requestId: string;
 }) {
-  const draft = normalizeContentDraft(input);
-  return repository.createDraft({
-    draft,
-    actorAdminId,
-    now,
-    requestId,
+  const automatic = input.slug === undefined;
+  let draft = normalizeContentDraft({
+    ...input,
+    slug: automatic ? `${input.contentType}-${randomBytes(8).toString("hex")}` : input.slug,
   });
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await repository.createDraft({ draft, actorAdminId, now, requestId });
+    } catch (error) {
+      if (!automatic || attempt >= 3 || !(error instanceof Error) || error.message !== "duplicate_slug") {
+        throw error;
+      }
+      draft = { ...draft, slug: `${draft.contentType}-${randomBytes(8).toString("hex")}` };
+    }
+  }
 }
 
 export async function saveContentDraft({
@@ -102,14 +117,13 @@ export async function saveContentDraft({
 }: {
   itemId: number;
   expectedVersion: number;
-  input: Parameters<typeof normalizeContentDraft>[0];
+  input: ContentDraftInput;
   actorAdminId: number;
   repository: ContentRepository;
   now?: Date;
   requestId: string;
   publicOrigin: string;
 }) {
-  const draft = normalizeContentDraft(input);
   return repository.mutate({
     itemId,
     expectedVersion,
@@ -124,7 +138,10 @@ export async function saveContentDraft({
         expectedVersion,
         actorAdminId,
         now,
-        draft,
+        draft: normalizeContentDraft({
+          ...input,
+          slug: input.slug === undefined ? item.slug : input.slug,
+        }),
       }),
   });
 }
@@ -238,5 +255,27 @@ export async function republishContent({
         draftRevision: draftRevision ?? undefined,
         publishedRevision: publishedRevision ?? undefined,
       }),
+  });
+}
+
+export async function deleteNews({
+  itemId, expectedVersion, actorAdminId, repository,
+  now = new Date(), requestId, publicOrigin,
+}: {
+  itemId: number;
+  expectedVersion: number;
+  actorAdminId: number;
+  repository: ContentRepository;
+  now?: Date;
+  requestId: string;
+  publicOrigin: string;
+}) {
+  return repository.mutate({
+    itemId, expectedVersion, actorAdminId, now, requestId, publicOrigin,
+    plan: ({ item, draftRevision, publishedRevision }) => applyContentAction({
+      action: "delete", item, expectedVersion, actorAdminId, now,
+      draftRevision: draftRevision ?? undefined,
+      publishedRevision: publishedRevision ?? undefined,
+    }),
   });
 }

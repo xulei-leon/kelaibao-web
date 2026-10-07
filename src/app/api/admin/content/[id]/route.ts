@@ -16,10 +16,12 @@ import {
   createContentRepository,
 } from "@/server/db/repository-factory";
 import {
+  deleteNews,
   parseExpectedVersion,
   parseItemId,
   saveContentDraft,
 } from "@/server/content/service";
+import { attemptPostCommitPurge } from "@/server/content/purge-runtime";
 import { redactServerError } from "@/server/config";
 
 export const runtime = "nodejs";
@@ -71,6 +73,32 @@ export async function PUT(request: Request, context: RouteContext) {
     console.error(
       `Content save rejected [${requestId}]: ${redactServerError(error)}`,
     );
+    return NextResponse.json(
+      { ok: false, code: failure.code, message: failure.message, requestId },
+      { status: failure.status },
+    );
+  }
+}
+
+export async function DELETE(request: Request, context: RouteContext) {
+  const requestId = requestIdFromRequest(request);
+  try {
+    const session = await requireAdminMutation(request);
+    const body = await readContentJson(request);
+    const result = await deleteNews({
+      itemId: parseItemId((await context.params).id),
+      expectedVersion: parseExpectedVersion(body.expectedVersion),
+      actorAdminId: session.adminId,
+      repository: createContentRepository(), requestId,
+      publicOrigin: resolveSiteUrl(),
+    });
+    const purge = result.purgeJobId === null ? null : await attemptPostCommitPurge(
+      result.purgeJobId, `${requestId}-purge`,
+    );
+    return NextResponse.json({ ok: true, ...result, purge, requestId });
+  } catch (error) {
+    const failure = contentApiError(error);
+    console.error(`Content delete rejected [${requestId}]: ${redactServerError(error)}`);
     return NextResponse.json(
       { ok: false, code: failure.code, message: failure.message, requestId },
       { status: failure.status },

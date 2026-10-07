@@ -14,7 +14,7 @@ export default function AdminHomePage() {
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
-            className="inline-flex min-h-11 items-center rounded-md bg-black px-5 text-white"
+            className="inline-flex min-h-11 items-center rounded-md cta--product-primary px-5 text-white"
             href="/admin/news"
           >
             管理新闻

@@ -57,7 +57,7 @@ export function openLocalSqlite(path: string): LocalSqliteDatabase {
   const version = database
     .prepare("SELECT MAX(version) AS version FROM schema_versions")
     .get();
-  if (Number(version?.version) !== 2) {
+  if (Number(version?.version) !== 3) {
     database.close();
     throw new Error(
       "SQLite schema is not initialized; run pnpm db:sqlite:migrate.",

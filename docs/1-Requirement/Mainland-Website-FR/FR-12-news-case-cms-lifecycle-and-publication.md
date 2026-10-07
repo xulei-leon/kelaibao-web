@@ -32,7 +32,7 @@
 2. 支持列表、创建、编辑、保存草稿、预览、发布、下线和查看修订历史。
 3. `content_items` 保存工作副本和公开状态，`content_revisions` 保存不可变快照；新增 `draft_revision_id` 与 `published_revision_id` 指针。编辑已发布/下线内容只推进 draft pointer，不改变 public pointer；M2-04 公开查询只读取 `published_revision_id`。
 4. 每次 create/save/publish/offline/republish 都生成可追溯 revision；`revision_number` 等于该事务提交后的 item `version`。写操作记录管理员、时间、动作和资源。
-5. slug 先规范化为小写 kebab-case，在同一内容类型内唯一；首次发布前可编辑，`first_published_at` 非空后不可变。唯一性最终由 `(content_type, slug)` 数据库约束保证。
+5. 后台无需人工输入 slug。首次创建草稿时，服务端使用 Node.js crypto 生成 `news-` 或 `case-` 加 16 位小写十六进制随机编号；创建后改标题不改变链接，旧内容保留原 slug。保存省略 slug 时在现有事务中沿用 item.slug。兼容旧 API 显式 slug：先规范化为小写 kebab-case，首次发布前可编辑，`first_published_at` 非空后不可变。唯一性最终由 `(content_type, slug)` 数据库约束保证；自动生成仅遇到 duplicate_slug 重试，总尝试次数最多 3 次，其他错误直接返回。
 6. 新闻和案例发布都必须具备标题、摘要、经当前 FR-11 policy 重净化后非空的正文；发布时间由服务端发布动作生成。M2-04 从 title/summary 派生 metadata/Open Graph，从 canonical public origin、类型和 immutable slug 派生 canonical，并使用站点组织配置作为 author/publisher；M2-03 不增加自由 SEO 字段或提前实现公开 metadata。
 7. 案例首次发布还需勾选授权确认，记录确认时间、管理员与首次公开 revision；未确认则拒绝发布。该确认是 item-level 的本阶段最小人工门禁：offline 不清除，后续 republish 可复用；它不代表法律意见，也不等于逐 revision 授权审批。
 8. 公开内容查询契约只返回 `published` item 的 published revision；draft/未知为 `not_found`，offline 为 `gone`，republish 恢复 `published`。实际 HTTP `404/410`、列表、sitemap、RSS 与 `llms.txt` 输出由 FR-13/M2-04 实现。
@@ -57,7 +57,7 @@
 
 - `title`: trim 后 1～160 字符。
 - `summary`: trim 后 1～320 字符。
-- `slug`: 1～191 个 ASCII 字符，格式 `^[a-z0-9]+(?:-[a-z0-9]+)*$`。
+- `slug`: 创建/保存请求可省略；显式提交仍要求 1～191 个 ASCII 字符，格式 `^[a-z0-9]+(?:-[a-z0-9]+)*$`。只有 undefined（JSON 未提供）触发生成/沿用；空串、null 或其他非法值仍拒绝。响应和持久化记录仍包含 slug。
 - `source_html`: 最大 500,000 字符；保存、预览和发布都调用 FR-11 当前 sanitizer policy，公开 pointer 永远不得引用旧 policy 或空 sanitized HTML。
 - 内容类型、状态、管理员、revision、sanitizer policy/version、媒体 URL 和授权字段均由服务端白名单校验；客户端不得直接提交 pointer、审计或 purge job 状态。
 
@@ -112,3 +112,5 @@
 ## 备注
 
 案例授权勾选是本阶段经确认的最小门禁，不代表法律意见或授权文件托管。
+
+2026-10-07 新闻删除补充：新闻列表在“编辑”旁提供“删除”，确认后通过鉴权/CSRF/expectedVersion 服务端事务逻辑删除。deleted_at 标记删除并保留修订、审计、媒体与 slug；后台不可读取或修改，曾发布内容返回 410 并触发精确 purge，草稿返回 404。案例不提供删除。契约与验收见 `docs/3-Plan/cms-news-delete.md` 和对应 review-confirm。

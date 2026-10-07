@@ -121,6 +121,7 @@ const REVISION_COLUMNS = `
 
 const PUBLIC_CONTENT_COLUMNS = `
   i.status AS item_status,
+  i.deleted_at AS item_deleted_at,
   i.first_published_at,
   i.published_at,
   r.id AS revision_id,
@@ -309,6 +310,7 @@ async function insertRevision(
 }
 
 function auditAction(plan: ContentActionPlan) {
+  if (plan.action === "delete") return "content_deleted" as const;
   if (plan.action === "save_draft") return "content_draft_saved" as const;
   if (plan.action === "publish") return "content_published" as const;
   if (plan.action === "offline") return "content_offlined" as const;
@@ -446,7 +448,7 @@ export class MySqlContentRepository implements ContentRepository {
         const [itemResult] = await connection.query(
           `SELECT ${ITEM_COLUMNS}
              FROM content_items
-            WHERE id = ?
+            WHERE id = ? AND deleted_at IS NULL
             FOR UPDATE`,
           [itemId],
         );
@@ -471,18 +473,17 @@ export class MySqlContentRepository implements ContentRepository {
           draftRevision,
           publishedRevision,
         });
-        await assertConfirmedMediaReferences(
-          connection,
-          plan.revision.sanitizedHtml,
-        );
-        await assertCoverMedia(connection, plan.revision);
+        if (plan.action !== "delete") {
+          await assertConfirmedMediaReferences(connection, plan.revision.sanitizedHtml);
+          await assertCoverMedia(connection, plan.revision);
+        }
         const revisionId = await insertRevision(
           connection,
           item.id,
           plan.revision,
         );
         const working =
-          plan.action === "offline"
+          plan.action === "offline" || plan.action === "delete"
             ? item
             : {
                 ...item,
@@ -517,8 +518,9 @@ export class MySqlContentRepository implements ContentRepository {
                   case_authorization_confirmed_at = ?,
                   case_authorization_admin_id = ?,
                   case_authorization_revision_id = ?,
-                  updated_by = ?, updated_at = ?
-            WHERE id = ? AND version = ?`,
+                  updated_by = ?, updated_at = ?,
+                  deleted_at = COALESCE(?, deleted_at)
+            WHERE id = ? AND version = ? AND deleted_at IS NULL`,
           [
             plan.nextPublicStatus,
             working.slug,
@@ -538,6 +540,7 @@ export class MySqlContentRepository implements ContentRepository {
             authorizationRevisionId,
             actorAdminId,
             now,
+            plan.deletedAt ?? null,
             item.id,
             expectedVersion,
           ],
@@ -654,7 +657,7 @@ export class MySqlContentRepository implements ContentRepository {
       const [result] = await connection.query(
         `SELECT ${ITEM_COLUMNS}
            FROM content_items
-          WHERE content_type = ?
+          WHERE content_type = ? AND deleted_at IS NULL
           ORDER BY updated_at DESC, id DESC
           LIMIT 200`,
         [contentType],
@@ -668,7 +671,7 @@ export class MySqlContentRepository implements ContentRepository {
       const [result] = await connection.query(
         `SELECT ${ITEM_COLUMNS}
            FROM content_items
-          WHERE id = ?
+          WHERE id = ? AND deleted_at IS NULL
           LIMIT 1`,
         [itemId],
       );
@@ -694,7 +697,7 @@ export class MySqlContentRepository implements ContentRepository {
   async listRevisions(itemId: number) {
     return this.database(async (connection) => {
       const [itemResult] = await connection.query(
-        "SELECT content_type FROM content_items WHERE id = ? LIMIT 1",
+        "SELECT content_type FROM content_items WHERE id = ? AND deleted_at IS NULL LIMIT 1",
         [itemId],
       );
       const item = rows(itemResult)[0];
@@ -725,6 +728,7 @@ export class MySqlContentRepository implements ContentRepository {
            LEFT JOIN media_assets m ON m.id = r.cover_media_asset_id
           WHERE i.content_type = ?
             AND i.status = 'published'
+            AND i.deleted_at IS NULL
             AND i.published_revision_id IS NOT NULL
           ORDER BY i.published_at DESC, i.id DESC
           LIMIT 100`,
@@ -752,6 +756,9 @@ export class MySqlContentRepository implements ContentRepository {
       );
       const row = rows(result)[0];
       if (!row) return { status: "not_found" as const };
+      if (row.item_deleted_at) {
+        return { status: row.first_published_at ? "gone" as const : "not_found" as const };
+      }
       if (row.item_status === "draft") {
         return { status: "not_found" as const };
       }

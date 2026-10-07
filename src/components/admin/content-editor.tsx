@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import {
   useCallback,
@@ -15,7 +14,7 @@ import { SafeHtmlPreview } from "@/components/admin/safe-html-preview";
 import { ImageUpload } from "@/components/admin/image-upload";
 import { confirmedAsset, mediaJson } from "@/lib/admin/media-upload";
 import type { AdminMediaAsset } from "@/lib/admin/media-types";
-import { htmlImageSources, imageHtml } from "@/lib/admin/editor-html";
+import { imageHtml } from "@/lib/admin/editor-html";
 import { useLeaveGuard } from "@/lib/admin/use-leave-guard";
 import type {
   ContentItemState,
@@ -23,12 +22,7 @@ import type {
   ContentType,
 } from "@/server/content/domain";
 
-const RichTextEditor = dynamic(() => import("@/components/admin/rich-text-editor"), {
-  ssr: false, loading: () => <p role="status">正在载入正文编辑器…</p>,
-});
-
 type EditableFields = {
-  slug: string;
   title: string;
   summary: string;
   sourceHtml: string;
@@ -43,7 +37,6 @@ type ContentEditorDetail = {
 };
 
 const emptyFields: EditableFields = {
-  slug: "",
   title: "",
   summary: "",
   sourceHtml: "",
@@ -59,7 +52,6 @@ const configuration = {
 function editable(detail: ContentEditorDetail): EditableFields {
   const source = detail.draftRevision ?? detail.publishedRevision ?? detail.item;
   return {
-    slug: source.slug,
     title: source.title,
     summary: source.summary,
     sourceHtml: source.sourceHtml,
@@ -88,7 +80,6 @@ export function ContentEditor({
   const [savedFields, setSavedFields] = useState<EditableFields>(emptyFields);
   const [loading, setLoading] = useState(Boolean(itemId));
   const [coverAsset, setCoverAsset] = useState<AdminMediaAsset | null>(null);
-  const [approvedImages, setApprovedImages] = useState<string[]>([]);
   const [bodyPending, setBodyPending] = useState(false);
   const [coverPending, setCoverPending] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(false);
@@ -126,8 +117,6 @@ export function ContentEditor({
     setSavedFields(nextFields);
     setCoverAsset(asset);
     navigationAllowed.current = false;
-    const snapshot = result.draftRevision ?? result.publishedRevision ?? result.item;
-    setApprovedImages(htmlImageSources(snapshot.sanitizedHtml));
     setConflict(false);
   }, [contentType, itemId]);
 
@@ -155,7 +144,6 @@ export function ContentEditor({
     const order: Array<keyof EditableFields> = [
       "title",
       "summary",
-      "slug",
       "sourceHtml",
     ];
     const first = order.find((name) => !fields[name].trim());
@@ -450,23 +438,31 @@ export function ContentEditor({
                 value={fields.summary}
               />
             </label>
-            <label className="grid min-w-0 gap-2" htmlFor="content-slug">
-              <span>Slug（首次发布后不可修改）</span>
-              <input
-                className="w-full min-w-0 rounded-md border border-black/20 bg-white px-4 py-3 font-mono"
-                disabled={item?.firstPublishedAt != null}
-                id="content-slug"
-                maxLength={191}
-                onChange={(event) => update("slug", event.target.value)}
-                pattern="[A-Za-z0-9 _-]+"
+            <div className="grid min-w-0 gap-2">
+              <span>链接路径（自动生成）</span>
+              {item ? (
+                <p className="min-w-0 break-all rounded-md border border-black/20 bg-white px-4 py-3 font-mono">
+                  /{config.publicRoute}/{item.slug}
+                </p>
+              ) : (
+                <p className="text-sm text-black/65">链接将在保存草稿后自动生成</p>
+              )}
+            </div>
+            <label className="grid min-w-0 gap-2" htmlFor="content-sourceHtml">
+              <span>HTML 正文</span>
+              <textarea
+                className="min-h-80 w-full min-w-0 rounded-md border border-black/20 bg-white p-4 font-mono text-sm"
+                disabled={editingDisabled}
+                id="content-sourceHtml"
+                maxLength={500000}
+                onChange={(event) => update("sourceHtml", event.target.value)}
                 required
-                value={fields.slug}
+                value={fields.sourceHtml}
               />
             </label>
-            <RichTextEditor value={fields.sourceHtml} onChange={value => update("sourceHtml", value)} approvedImages={approvedImages} disabled={editingDisabled} />
+            <p className="text-sm text-black/60">直接编辑 HTML 源码；安全预览、保存和发布时会进行服务端净化。图片通过下方上传添加。</p>
             <ImageUpload purpose="body" onPendingChange={setBodyPending} disabled={editingDisabled} csrf={csrf} onBusy={setBusy} onUploaded={(asset, alt) => {
               setPreviewHtml("");
-              setApprovedImages(current => [...current, asset.publicUrl]);
               setFields(current => ({ ...current, sourceHtml: `${current.sourceHtml}${imageHtml(asset.publicUrl, alt, asset.width, asset.height)}` }));
             }} />
 
@@ -527,7 +523,7 @@ export function ContentEditor({
 
             <div className="flex flex-wrap gap-3">
               <button
-                className="min-h-11 rounded-md bg-black px-5 py-2 text-white disabled:opacity-55"
+                className="min-h-11 rounded-md cta--product-primary px-5 py-2 text-white disabled:opacity-55"
                 disabled={busy}
                 type="submit"
               >

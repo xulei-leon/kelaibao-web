@@ -60,7 +60,7 @@ export function AdminLoginForm() {
         />
       </label>
       <button
-        className="w-full min-w-0 rounded-md bg-black px-5 py-3 text-white disabled:opacity-60"
+        className="w-full min-w-0 rounded-md cta--product-primary px-5 py-3 text-white disabled:opacity-60"
         disabled={busy}
         type="submit"
       >

@@ -46,6 +46,7 @@ export type ContentAction =
   | "save_draft"
   | "publish"
   | "offline"
+  | "delete"
   | "republish";
 
 export interface ContentActionPlan {
@@ -65,6 +66,7 @@ export interface ContentActionPlan {
     bindToNewRevision: true;
   } | null;
   purgeAction: "publish" | "offline" | "republish" | null;
+  deletedAt?: Date;
 }
 
 function text(value: unknown, name: string, maximum: number) {
@@ -226,6 +228,30 @@ export function applyContentAction(input: {
   } = input;
   assertExpectedVersion(item, expectedVersion);
   const nextVersion = item.version + 1;
+
+  if (action === "delete") {
+    if (item.contentType !== "news") throw new Error("Only news deletion is allowed.");
+    const publishedBefore = item.firstPublishedAt !== null;
+    const status = publishedBefore ? "offline" : "draft";
+    const source = draftRevision ?? publishedRevision ?? item;
+    return {
+      action, nextVersion, nextPublicStatus: status,
+      revision: {
+        contentType: item.contentType, slug: item.slug,
+        title: source.title, summary: source.summary,
+        sourceHtml: source.sourceHtml, sanitizedHtml: source.sanitizedHtml,
+        sanitizerPolicyVersion: source.sanitizerPolicyVersion,
+        coverMediaAssetId: source.coverMediaAssetId, coverAlt: source.coverAlt,
+        revisionNumber: nextVersion, status, actorAdminId, createdAt: now,
+      },
+      pointer: "none", clearDraftPointer: false,
+      keepPublishedRevisionId: item.publishedRevisionId,
+      firstPublishedAt: item.firstPublishedAt, publishedAt: item.publishedAt,
+      offlineAt: publishedBefore ? now : null,
+      authorization: null, purgeAction: publishedBefore ? "offline" : null,
+      deletedAt: now,
+    };
+  }
 
   if (action === "save_draft") {
     if (!draft) throw new Error("Draft fields are required.");

@@ -36,6 +36,7 @@ export interface SecurityAuditEvent {
     | "content_draft_saved"
     | "content_published"
     | "content_offlined"
+    | "content_deleted"
     | "content_republished"
     | "case_authorization_confirmed"
     | "cache_purge_enqueued"

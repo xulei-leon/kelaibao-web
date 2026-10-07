@@ -1,4 +1,5 @@
 import { MySqlContentRepository } from "@/server/content/mysql-repository";
+import { createContentDraft } from "@/server/content/service";
 import type { DatabaseConnection } from "@/server/db/pool";
 import { SANITIZER_POLICY_VERSION } from "@/server/security/html/sanitizer";
 import { describe, expect, it } from "vitest";
@@ -58,6 +59,37 @@ function database(
 }
 
 describe("M2-03 MySQL content repository", () => {
+  it("rolls back an automatic slug collision before creating the next candidate", async () => {
+    const insertedSlugs: unknown[] = [];
+    const revisionSlugs: unknown[] = [];
+    const db = database(async (sql, values) => {
+      if (/INSERT INTO content_items/.test(sql)) {
+        insertedSlugs.push(values[1]);
+        if (insertedSlugs.length === 1) {
+          throw Object.assign(new Error("duplicate"), { code: "ER_DUP_ENTRY" });
+        }
+        return [{ insertId: 12 }, []];
+      }
+      if (/INSERT INTO content_revisions/.test(sql)) {
+        revisionSlugs.push(values[2]);
+        return [{ insertId: 101 }, []];
+      }
+      return [{ affectedRows: 1 }, []];
+    });
+    const { slug: _legacySlug, ...input } = draft;
+    const created = await createContentDraft({
+      input, repository: new MySqlContentRepository(db.run),
+      actorAdminId: 1, now, requestId: "auto-create",
+    });
+    expect(created.item.slug).toMatch(/^news-[a-f0-9]{16}$/);
+    expect(insertedSlugs).toHaveLength(2);
+    expect(insertedSlugs[0]).not.toBe(insertedSlugs[1]);
+    expect(revisionSlugs).toEqual([created.item.slug]);
+    expect(db.rolledBack).toBe(1);
+    expect(db.committed).toBe(1);
+    expect(db.calls.filter(sql => /INSERT INTO audit_logs/.test(sql))).toHaveLength(1);
+  });
+
   it("commits item, immutable revision, pointer, and audit as one create transaction", async () => {
     const db = database(async (sql) => {
       if (/INSERT INTO content_items/.test(sql)) {

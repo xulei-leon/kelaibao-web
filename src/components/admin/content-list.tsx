@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type {
   ContentItemState,
@@ -17,6 +17,43 @@ export function ContentList({ contentType }: { contentType: ContentType }) {
   const [items, setItems] = useState<ContentItemState[]>([]);
   const [message, setMessage] = useState("正在读取内容…");
   const label = labels[contentType];
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const deleting = useRef(false);
+
+  async function removeNews(item: ContentItemState) {
+    if (contentType !== "news" || deleting.current) return;
+    if (!window.confirm(`确定删除新闻“${item.title}”？删除后将从管理列表移除，已发布内容也会下线。此操作无法在后台撤销。`)) return;
+    deleting.current = true;
+    setDeletingId(item.id);
+    setMessage("");
+    try {
+      const session = await fetch("/api/admin/auth/session", {
+        cache: "no-store", signal: AbortSignal.timeout(15000),
+      });
+      const credentials = await session.json() as { csrfToken?: string };
+      if (!session.ok || !credentials.csrfToken) throw new Error("登录已失效，请重新登录后再删除。");
+      const response = await fetch(`/api/admin/content/${item.id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", "X-CSRF-Token": credentials.csrfToken },
+        body: JSON.stringify({ expectedVersion: item.version }),
+        signal: AbortSignal.timeout(30000),
+      });
+      const result = await response.json() as { ok?: boolean; code?: string };
+      if (!response.ok || !result.ok) {
+        if (result.code === "version_conflict") throw new Error("新闻已被修改，请刷新列表后再删除。");
+        if (response.status === 401 || response.status === 403) throw new Error("会话校验失败，请重新登录后再删除。");
+        if (response.status === 404) throw new Error("新闻已不存在，请刷新列表。");
+        throw new Error("删除失败，请稍后重试。新闻列表已保留。");
+      }
+      setItems(current => current.filter(currentItem => currentItem.id !== item.id));
+      setMessage("新闻已删除。");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "删除失败，请稍后重试。新闻列表已保留。");
+    } finally {
+      deleting.current = false;
+      setDeletingId(null);
+    }
+  }
 
   useEffect(() => {
     let active = true;
@@ -53,7 +90,7 @@ export function ContentList({ contentType }: { contentType: ContentType }) {
             <h1 className="mt-2 text-3xl font-semibold">{label.plural}管理</h1>
           </div>
           <Link
-            className="inline-flex min-h-11 items-center rounded-md bg-black px-5 py-2 text-white"
+            className="inline-flex min-h-11 items-center rounded-md cta--product-primary px-5 py-2 text-white"
             href={`/admin/${label.route}/new`}
           >
             新建{label.singular}
@@ -91,12 +128,23 @@ export function ContentList({ contentType }: { contentType: ContentType }) {
                       {item.publishedRevisionId ?? "—"}
                     </td>
                     <td className="px-4 py-4">
+                      <div className="flex items-center gap-4 whitespace-nowrap">
                       <Link
                         className="underline underline-offset-4"
                         href={`/admin/${label.route}/${item.id}`}
                       >
                         编辑
                       </Link>
+                      {contentType === "news" ? <button
+                        type="button"
+                        aria-label={`删除新闻：${item.title}`}
+                        disabled={deletingId !== null}
+                        onClick={() => void removeNews(item)}
+                        className="min-h-11 text-red-800 underline underline-offset-4 disabled:opacity-50"
+                      >
+                        {deletingId === item.id ? "删除中…" : "删除"}
+                      </button> : null}
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -81,3 +81,7 @@ FR/Sprint → 独立文档评审 → review-confirm 与修订 → 媒体读取�
 全量测试 76 文件 / 416 项通过；lint 通过。浏览器在独立 SQLite 完成发布 200、草稿隔离、下线 410、重新发布 200；图片 presign/PUT/confirm 采用受控 HTTP fixture，授权、保存与重开使用真实本地接口。四视口无横向溢出。最终 pnpm build 与 pnpm smoke:standalone 均通过，详见验收记录。
 
 证据：`docs/5-Evidence/m5-04/README.md`。代码复核输入与逐项裁决：`docs/4-Reviews/sprint-m5-04-code-review-*`。真实云部署不在本 Sprint 范围，Production 门禁不变。
+
+## 2026-10-07 后续替代
+
+用户要求移除可视化编辑。当前新建/编辑统一为 HTML textarea，Tiptap、可视化导入校验与专用测试已由 `docs/3-Plan/cms-html-only-editor.md` 计划移除；本文件上述检查数和可视化证据仅代表当时历史实现，当前验收另行记录。

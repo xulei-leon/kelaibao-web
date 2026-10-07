@@ -61,6 +61,36 @@ function runAdmin(extra = {}) {
 }
 
 describe("M4-01 SQLite maintenance path boundary", () => {
+  it("upgrades schema 2 without losing content and can be run twice", () => {
+    const directory = join(process.cwd(), ".local-data", `delete-upgrade-${Date.now()}`);
+    created.push(directory);
+    const relativePath = `.local-data/${directory.split(/[\\/]/).pop()}/database.sqlite`;
+    expect(run("migrate", relativePath).status).toBe(0);
+    const target = join(directory, "database.sqlite");
+    const database = new DatabaseSync(target);
+    database.exec(`
+      INSERT INTO admins (username, password_hash, password_changed_at, singleton_key, created_at, updated_at)
+      VALUES ('upgrade@example.test', '$argon2id$test', '2026-10-07', 1, '2026-10-07', '2026-10-07');
+      INSERT INTO content_items (content_type, status, slug, title, summary, source_html, sanitized_html,
+        sanitizer_policy_version, version, created_by, updated_by, created_at, updated_at)
+      VALUES ('news', 'draft', 'preserved-news', '保留的新闻', '摘要', '<p>正文</p>', '<p>正文</p>',
+        'm2-html-v1', 1, 1, 1, '2026-10-07', '2026-10-07');
+    `);
+    database.exec("ALTER TABLE content_items DROP COLUMN deleted_at; DELETE FROM schema_versions WHERE version = 3");
+    database.close();
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const migration = run("migrate", relativePath);
+      expect(migration.status, migration.stderr).toBe(0);
+    }
+    const upgraded = new DatabaseSync(target);
+    try {
+      expect(upgraded.prepare("SELECT MAX(version) AS v FROM schema_versions").get()?.v).toBe(3);
+      expect(upgraded.prepare("PRAGMA table_info(content_items)").all().map(row => row.name)).toContain("deleted_at");
+      expect(upgraded.prepare("SELECT title, deleted_at FROM content_items WHERE slug = 'preserved-news'").get())
+        .toMatchObject({ title: "保留的新闻", deleted_at: null });
+    } finally { upgraded.close(); }
+  });
+
   it("bootstraps an administrator after the current migration", () => {
     const directory = join(process.cwd(), ".local-data", `bootstrap-${Date.now()}`);
     created.push(directory);
@@ -144,7 +174,7 @@ describe("M4-01 SQLite maintenance path boundary", () => {
     try {
       expect(
         database.prepare("SELECT MAX(version) AS version FROM schema_versions").get()?.version,
-      ).toBe(2);
+      ).toBe(3);
       expect(
         database.prepare("PRAGMA table_info(media_assets)").all().map((row) => row.name),
       ).toEqual(

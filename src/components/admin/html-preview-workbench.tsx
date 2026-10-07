@@ -60,7 +60,7 @@ export function HtmlPreviewWorkbench() {
           />
         </label>
         <button
-          className="rounded-md bg-black px-5 py-3 text-white"
+          className="rounded-md cta--product-primary px-5 py-3 text-white"
           type="submit"
         >
           生成安全预览

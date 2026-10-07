@@ -31,13 +31,7 @@
     "m2:00:gate": "node spikes/m2-00/run.mjs"
   },
   "dependencies": {
-    "@tiptap/core": "3.31.3",
-    "@tiptap/extension-image": "3.31.3",
-    "@tiptap/pm": "3.31.3",
-    "@tiptap/react": "3.31.3",
-    "@tiptap/starter-kit": "3.31.3",
     "argon2": "^0.45.1",
-    "htmlparser2": "10.1.0",
     "lucide-react": "^0.468.0",
     "mysql2": "^3.15.3",
     "next": "^15.5.7",
