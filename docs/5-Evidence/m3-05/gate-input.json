@@ -203,7 +203,7 @@
         "commandOrRequest": "not run: missing FC versions and alias",
         "expectedResult": "test alias rolls back to the previous healthy FC version and health/routes pass",
         "actualResult": "BLOCKED: no real FC rollback evidence",
-        "evidencePath": "docs/2-Design/FC-Deployment-Runbook.md",
+        "evidencePath": "FC部署指南.md",
         "sensitiveDataCheck": "no FC token or resource ID recorded"
       }
     },
@@ -220,7 +220,7 @@
         "commandOrRequest": "not run: missing previous FC artifact and RDS input",
         "expectedResult": "previous application remains functional against the migrated schema",
         "actualResult": "BLOCKED: compatibility matrix not executed",
-        "evidencePath": "docs/2-Design/FC-Deployment-Runbook.md",
+        "evidencePath": "FC部署指南.md",
         "sensitiveDataCheck": "no database URL or credential recorded"
       },
       "compatibility": {
@@ -230,7 +230,7 @@
         "commandOrProbe": "not run: missing FC/RDS inputs",
         "expectedResult": "previous application route and query smoke passes against migrated schema",
         "actualResult": "BLOCKED",
-        "evidencePath": "docs/2-Design/FC-Deployment-Runbook.md"
+        "evidencePath": "FC部署指南.md"
       }
     },
     {

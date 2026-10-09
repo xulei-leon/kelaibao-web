@@ -14,7 +14,7 @@
 本文用于指导客来宝统一中文官网从本地代码到阿里云生产环境的资源准备、配置、发布、验证和回退。本文是实施指南，不替代以下约束文档：
 
 - [阿里云全栈架构规格](./Alibaba-Cloud-Fullstack-Architecture-Spec.md)
-- [FC Standalone 部署与回退 Runbook](./FC-Deployment-Runbook.md)
+- [FC部署指南](../../FC部署指南.md)
 - [管理员安全与媒体 Runbook](./Admin-Security-and-Media-Runbook.md)
 - [M2-05 生产上线 Sprint](../3-Plan/sprint-m2-05.md)
 

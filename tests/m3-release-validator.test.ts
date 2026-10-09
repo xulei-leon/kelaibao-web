@@ -61,7 +61,7 @@ function productionGate(id: string) {
             commandOrProbe: "not run: missing FC/RDS inputs",
             expectedResult: "previous app works with migrated schema",
             actualResult: "BLOCKED",
-            evidencePath: "docs/2-Design/FC-Deployment-Runbook.md",
+            evidencePath: "FC部署指南.md",
           },
         }
       : {}),

@@ -165,7 +165,7 @@ RDS MySQL 和开发机本地 MySQL 继续使用同一个 `mysql` adapter 与既�
 - CMS 只维护新闻和获授权案例；首页、功能、团队、媒体、关于和政策页面继续由代码维护。
 - Preview 默认阻止索引；只有真实主体、备案、二维码、DirectMail、云链路、专业审查、授权与恢复门禁全部通过后，才能配置 Production。
 
-当前需求见 [Kelaibao-Unified-Website-SRS.md](docs/1-Requirement/Kelaibao-Unified-Website-SRS.md)，视觉基线见 [Kelaibao-Unified-Website-Visual-Design-Spec.md](docs/2-Design/Kelaibao-Unified-Website-Visual-Design-Spec.md)，技术基线见 [Alibaba-Cloud-Fullstack-Architecture-Spec.md](docs/2-Design/Alibaba-Cloud-Fullstack-Architecture-Spec.md)，完整云资源与发布流程见 [Alibaba-Cloud-Deployment-Guide.md](docs/2-Design/Alibaba-Cloud-Deployment-Guide.md)，控制台上传 ZIP 的逐步操作见 [FC-Console-ZIP-Deployment-Manual.md](docs/2-Design/FC-Console-ZIP-Deployment-Manual.md)，实施顺序见 [Mainland-Website-Sprint-Index.md](docs/3-Plan/Mainland-Website-Sprint-Index.md)。
+当前需求见 [Kelaibao-Unified-Website-SRS.md](docs/1-Requirement/Kelaibao-Unified-Website-SRS.md)，视觉基线见 [Kelaibao-Unified-Website-Visual-Design-Spec.md](docs/2-Design/Kelaibao-Unified-Website-Visual-Design-Spec.md)，技术基线见 [Alibaba-Cloud-Fullstack-Architecture-Spec.md](docs/2-Design/Alibaba-Cloud-Fullstack-Architecture-Spec.md)，完整云资源与发布流程见 [Alibaba-Cloud-Deployment-Guide.md](docs/2-Design/Alibaba-Cloud-Deployment-Guide.md)，控制台上传 ZIP 的逐步操作见 [FC部署指南](FC部署指南.md)，实施顺序见 [Mainland-Website-Sprint-Index.md](docs/3-Plan/Mainland-Website-Sprint-Index.md)。
 
 ## 新闻 CMS 图文操作（M5-04）
 

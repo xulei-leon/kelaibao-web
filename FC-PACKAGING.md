@@ -156,4 +156,4 @@ curl -i 'https://<FC测试地址>/api/health'
 
 确认 `/api/health` 返回 HTTP 200 后，再验证首页、`/admin` 和 `/opengraph-image`。
 
-更完整的控制台部署、环境变量、网络和回退说明见：[FC-Console-ZIP-Deployment-Manual.md](docs/2-Design/FC-Console-ZIP-Deployment-Manual.md)。
+更完整的控制台部署、环境变量、网络和回退说明见：[FC部署指南](FC部署指南.md)。
