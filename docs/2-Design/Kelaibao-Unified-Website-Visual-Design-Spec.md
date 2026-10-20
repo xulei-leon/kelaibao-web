@@ -1,5 +1,7 @@
 # 客来宝统一中文官网视觉设计规格
 
+> **2026-10-20 规格覆盖：** 新闻/案例沿用公开视觉，改为代码维护的普通静态页面；本文后台按钮等补充仅为旧实现记录。 现行依据为 [FR-25](../1-Requirement/Mainland-Website-FR/FR-25-static-news-and-cases.md)；M5-05 已完成静态代码与本地验证，真实内容迁移和 Production 证据仍待补齐。
+
 | 字段 | 内容 |
 | --- | --- |
 | 文档版本 | `v0.4` |
@@ -299,7 +301,7 @@ Hero 桌面建议 `7 + 5` 列：左侧标题、说明、主/次 CTA 和边界；
 - Header、Footer、Section、ActionLink、PageHero、Dialog 和内容卡片优先复用现有 UI 原语。
 - 小程序与企业微信复用可访问行为，但配置、文案、资源、事件与失败状态分别建模。
 - 页面级内容集中维护，避免在 Header、Footer、页面和 metadata 中重复写品牌名与二维码配置。
-- News/Case 的 CMS HTML 必须使用允许的正文样式，不得绕过 sanitizer 注入页面级脚本或主题。
+- News/Case 静态正文复用允许的正文样式；迁入旧 HTML 先清理审查，不注入页面级脚本或主题，不提供 CMS 编辑器。
 
 ---
 
@@ -341,7 +343,7 @@ Hero 桌面建议 `7 + 5` 列：左侧标题、说明、主/次 CTA 和边界；
 4. M3-04：切换统一 Header/Footer、首页和全站免费体验入口。
 5. M3-05：收口政策、口径、CMS 内容、邮件、发现文件与发布门禁。
 
-每个阶段都复用 M2 安全、CMS、DirectMail、SSR 和发布能力；真实云、授权、备案、口径与恢复证据未齐时 Production 保持 `BLOCKED`。
+上述 M3 阶段记录为历史实施路径；当前以 FR-25 替代 CMS，保留 DirectMail、首响应 HTML、安全和发布门禁；真实云、授权、备案、口径与恢复证据未齐时 Production 保持 `BLOCKED`。
 
 ---
 

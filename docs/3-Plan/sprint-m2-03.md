@@ -1,5 +1,7 @@
 # Sprint M2-03 新闻与案例 CMS
 
+> **2026-10-20 规格覆盖：** 本文中 CMS 登录、编辑、上传与生命周期交付要求已被替代；保留旧实施事实，不作为后续开发任务。 现行依据为 [FR-25](../1-Requirement/Mainland-Website-FR/FR-25-static-news-and-cases.md)；M5-05 已完成静态代码与本地验证，真实内容迁移和 Production 证据仍待补齐。
+
 > **状态：** `CODE_READY_WITH_EXTERNAL_LEGACY`；M2-02 已以提交 `da7c729` 完成，本 Sprint 的 GPT-5.5-only 文档与代码 review-confirm、接受项修复和最终验证均已完成，等待独立提交。
 
 ## 1. Sprint 目标

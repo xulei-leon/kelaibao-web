@@ -5,8 +5,8 @@ import {
   type PublicRoute,
 } from "@/lib/route-metadata";
 import { PUBLIC_LIST_CONTENT } from "@/lib/public-list-content";
-import type { ContentType } from "@/server/content/domain";
-import type { PublicContentSnapshot } from "@/server/content/public-contract";
+import type { ContentType } from "@/content/article-types";
+import type { PublicArticle } from "@/content/article-types";
 
 const ORGANIZATION_NAME = "客来宝";
 export type StructuredDataNode = Record<string, unknown> & {
@@ -14,7 +14,7 @@ export type StructuredDataNode = Record<string, unknown> & {
   "@type": string;
 };
 
-function contentPath(item: PublicContentSnapshot) {
+function contentPath(item: PublicArticle) {
   const segment = item.contentType === "news" ? "news" : "cases";
   return `/${segment}/${encodeURIComponent(item.slug)}`;
 }
@@ -24,7 +24,7 @@ function absoluteUrl(siteUrl: string, path: string) {
 }
 
 export function buildPublicContentMetadata(
-  item: PublicContentSnapshot,
+  item: PublicArticle,
   siteUrl: string,
   crawlEnabled: boolean,
 ): Metadata {
@@ -39,8 +39,8 @@ export function buildPublicContentMetadata(
   };
   const images = [
     {
-      url: socialImage.url,
-      secureUrl: socialImage.url,
+      url: absoluteUrl(siteUrl, socialImage.url),
+      secureUrl: absoluteUrl(siteUrl, socialImage.url),
       width: socialImage.width,
       height: socialImage.height,
       alt: socialImage.alt,
@@ -69,7 +69,7 @@ export function buildPublicContentMetadata(
       card: "summary_large_image",
       title,
       description: item.summary,
-      images: [socialImage.url],
+      images: [absoluteUrl(siteUrl, socialImage.url)],
     },
   };
 }
@@ -194,7 +194,7 @@ export function buildPublicListStructuredData(
 }
 
 export function buildPublicContentStructuredData(
-  item: PublicContentSnapshot,
+  item: PublicArticle,
   siteUrl: string,
 ): StructuredDataNode[] {
   const organizationId = absoluteUrl(siteUrl, "/#organization");
@@ -246,9 +246,9 @@ export function buildPublicContentStructuredData(
         ? {
             image: {
               "@type": "ImageObject",
-              "@id": `${item.coverImage.url}#imageobject`,
-              url: item.coverImage.url,
-              contentUrl: item.coverImage.url,
+              "@id": `${absoluteUrl(siteUrl, item.coverImage.url)}#imageobject`,
+              url: absoluteUrl(siteUrl, item.coverImage.url),
+              contentUrl: absoluteUrl(siteUrl, item.coverImage.url),
               width: item.coverImage.width,
               height: item.coverImage.height,
               encodingFormat: item.coverImage.mimeType,

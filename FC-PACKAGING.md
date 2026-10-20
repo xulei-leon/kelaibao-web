@@ -4,7 +4,7 @@
 
 ## 一、构建环境
 
-必须在 Linux x86_64 环境执行，Windows 用户请使用 WSL2。项目包含 `argon2`、`sharp` 等原生依赖，不能直接使用 Windows 生成的依赖和 `.next` 目录。
+必须在 Linux x86_64 环境执行，Windows 用户请使用 WSL2。项目包含 `sharp` 原生依赖，不能直接使用 Windows 生成的依赖和 `.next` 目录。
 
 要求：
 
@@ -103,6 +103,7 @@ node_modules/
 .next/server/
 .next/static/
 public/
+static-content-manifest.json
 ```
 
 不能多包一层 `standalone/` 目录。
@@ -142,7 +143,7 @@ public/
 }
 ```
 
-数据库、Session、OSS、邮件和其他服务端秘密只配置在 FC 运行时环境变量中，不要写入代码、构建环境或 ZIP。
+新 FC 只注入实际使用的邮件、询盘限频等秘密；不再注入 CMS 数据库、管理员、Session、OSS 上传或 worker 密钥。旧资源和凭据的保管/退役另行处理，不能写入代码、构建环境或 ZIP。
 
 ## 五、上传和验证
 
@@ -154,6 +155,6 @@ public/
 curl -i 'https://<FC测试地址>/api/health'
 ```
 
-确认 `/api/health` 返回 HTTP 200 后，再验证首页、`/admin` 和 `/opengraph-image`。
+确认 `/api/health` 返回 HTTP 200 后，再验证首页、静态新闻/案例、发现文件和 `/opengraph-image`；旧 `/admin` 与 `/api/admin/*` 必须返回 404。
 
 更完整的控制台部署、环境变量、网络和回退说明见：[FC部署指南](FC部署指南.md)。

@@ -3,7 +3,7 @@ import { buildRssXml } from "@/server/discovery/files";
 import { createDiscoveryHandler } from "@/server/discovery/runtime";
 
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 export const GET = createDiscoveryHandler({
   contentType: "application/rss+xml; charset=utf-8",

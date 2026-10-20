@@ -1,31 +1,33 @@
 # 客来宝统一中文官网 FR 索引
 
+> **当前内容维护决策（2026-10-20）：** [FR-25](FR-25-static-news-and-cases.md) 是新闻/案例的现行需求，替代 FR-12/FR-24 及 CMS 补充；FR-10/FR-11/FR-19 仅服务 CMS 的能力不再是目标要求。下列旧顺序与完成状态保留历史含义，新任务为 M5-05；首响应 HTML、询盘、授权及 Production 门禁继续有效。
+
 | 字段 | 内容 |
 | --- | --- |
-| 文档版本 | `v1.0` |
-| 文档状态 | FR-24 Local Code Ready |
+| 文档版本 | `v1.1` |
+| 文档状态 | FR-25 Local Code Ready；真实历史内容迁移及 Production BLOCKED |
 | 实现状态 | M1/M2/M3/M4-01～M4-04 Local Code Ready；Production 外部门禁仍 `BLOCKED` |
-| 更新日期 | `2026-09-24` |
+| 更新日期 | `2026-10-20` |
 | 上游 SRS | `../Kelaibao-Unified-Website-SRS.md` |
 | 上游变更设计 | `../../../../../docs/superpowers/specs/2026-07-31-kelaibao-unified-website-design.md` |
 
 ## 1. 路径与验证基线
 
 ```text
-FR_DIR=products/kelaibao/docs/1-Requirement/Mainland-Website-FR
-FR_BACKLOG_DIR=products/kelaibao/docs/1-Requirement/Mainland-Website-FR/backlog
-FR_DONE_DIR=products/kelaibao/docs/1-Requirement/Mainland-Website-FR/Done
-DESIGN_DIR=products/kelaibao/docs/2-Design
-SPRINT_DIR=products/kelaibao/docs/3-Plan
-SPRINT_DONE_DIR=products/kelaibao/docs/3-Plan/Done
-REVIEW_DIR=products/kelaibao/docs/4-Reviews
-REVIEW_DONE_DIR=products/kelaibao/docs/4-Reviews/Done
+FR_DIR=docs/1-Requirement/Mainland-Website-FR
+FR_BACKLOG_DIR=docs/1-Requirement/Mainland-Website-FR/backlog
+FR_DONE_DIR=docs/1-Requirement/Mainland-Website-FR/Done
+DESIGN_DIR=docs/2-Design
+SPRINT_DIR=docs/3-Plan
+SPRINT_DONE_DIR=docs/3-Plan/Done
+REVIEW_DIR=docs/4-Reviews
+REVIEW_DONE_DIR=docs/4-Reviews/Done
 VERIFICATION_COMMANDS=pnpm test && pnpm lint && pnpm build
 ```
 
 文档编写阶段使用 `git diff --check`、链接/编号检查和 SRS 覆盖检查作为最小验证。代码实施仍使用项目声明的全部命令，不得因为本次文档工作跳过未来的 `build` 门禁。
 
-M3-01 已将工程和文档迁移到 `products/kelaibao/`，当前及后续 Sprint 统一使用以上路径。M1/M2 FR 继续保留改版前的已实现需求事实；其当前品牌、信息架构和发布迁移由 FR-15～FR-18 覆盖，不对 FR-01～FR-14 正文做批量改写。
+当前工程为独立仓库 `D:/code/kelaibao-web`，以上路径相对于仓库根目录；旧文档中的 `products/kelaibao/` 是历史位置。M1/M2 FR 继续保留改版前的已实现需求事实；其当前品牌、信息架构和发布迁移由 FR-15～FR-18 覆盖，不对 FR-01～FR-14 正文做批量改写。
 
 ## 2. 拆分原则
 
@@ -34,12 +36,12 @@ M3-01 已将工程和文档迁移到 `products/kelaibao/`，当前及后续 Spri
 3. 职业表达、隐私与效果声明是产品边界，不作为发布后的补充文案处理。
 4. 中文站独立建设，不依赖或修改 `products/sino-en/`。
 5. M2 固定采用 ESA + FC 全栈 Next.js + RDS MySQL + 私有 OSS + DirectMail；MySQL 为成本优先选择，实际总成本在 M2-00 验证；不使用 ESA Pages 或 Vercel。
-6. 只增加一个预创建管理员和新闻/案例 CMS，不增加公众账号、支付、CRM、小程序或通用页面 CMS。
+6. FR-25 撤销新闻/案例 CMS 及专用后台要求；公开内容均由代码维护，不增加公众账号、支付、CRM、小程序或页面编辑系统。
 7. 所有外部集成直接使用明确 HTTP(S) API，不使用通用 webservice。
 8. SEO/GEO 只实现技术基线，不承诺排名、推荐、AI 引用、收录或流量。
 9. M3 只保留一个客来宝官网应用；K-Link 是产品名，客来宝媒体是 `/media` 单页子业务。
 10. 小程序只通过二维码引导体验；官网不实现小程序业务、公众账号、登录或 Dashboard。
-11. M3 复用 M2 的 CMS、询盘、媒体与发现能力，不增加 `site_key`、第二数据库或跨应用内容 API。
+11. M3 曾复用 M2 的 CMS；FR-25 改为静态新闻/案例，询盘、媒体安全与发现基线保留，不增加 `site_key`、第二数据库或跨应用内容 API。
 12. M4 可增加 repository adapter 和 SQLite 本地测试实现；Production 仍只允许 RDS MySQL，SQLite 不构成第二个生产数据库或云门禁证据。
 13. M4-02 只升级现有公开站视觉；当前 layout、用户可见文字、业务交互、CMS、发现与生产架构全部冻结。
 14. M4-03 在 M4-02 基础上补齐完整视觉系统、字体与可替换本地素材；文案、结构、路由和功能继续冻结，概念图中的生成文字与数据不得进入实现。
@@ -57,10 +59,10 @@ M3-01 已将工程和文档迁移到 `products/kelaibao/`，当前及后续 Spri
 | 7 | [FR-07](FR-07-metadata-accessibility-and-quality.md) | Metadata、可访问性与发布质量 | P1 | `sprint-m1-04` | M1 Preview 基线 |
 | 8 | [FR-08](FR-08-mainland-production-readiness.md) | 中国大陆生产配置与上线门禁 | P0 | `sprint-m1-05`、`sprint-m2-05` | Production BLOCKED |
 | 9 | [FR-09](FR-09-alibaba-cloud-fullstack-runtime-and-infrastructure-gate.md) | 阿里云全栈运行时与基础设施门禁 | P0 | `sprint-m2-00`、`sprint-m2-01` | Code Ready / External Legacy |
-| 10 | [FR-10](FR-10-single-admin-authentication-session-and-audit.md) | 单管理员认证、会话与审计 | P0 | `sprint-m2-02` | 已实现 |
-| 11 | [FR-11](FR-11-private-oss-media-and-html-sanitization.md) | 私有 OSS 媒体与 HTML 安全净化 | P0 | `sprint-m2-02` | 已实现 |
-| 12 | [FR-12](FR-12-news-case-cms-lifecycle-and-publication.md) | 新闻与案例 CMS 生命周期 | P0 | `sprint-m2-03` | 已实现 |
-| 13 | [FR-13](FR-13-public-ssr-seo-geo-technical-baseline.md) | 公开 SSR 与 SEO/GEO 技术基线 | P0 | `sprint-m2-04` | 已实现 |
+| 10 | [FR-10](FR-10-single-admin-authentication-session-and-audit.md) | 单管理员认证、会话与审计（历史） | P0 | `sprint-m2-02` | 旧版已实现；CMS 专用要求撤销 |
+| 11 | [FR-11](FR-11-private-oss-media-and-html-sanitization.md) | 私有 OSS 媒体与 HTML 安全净化 | P0 | `sprint-m2-02` | 旧版已实现；CMS 专用要求由 FR-25 替代 |
+| 12 | [FR-12](FR-12-news-case-cms-lifecycle-and-publication.md) | 新闻与案例 CMS 生命周期（历史） | P0 | `sprint-m2-03` | 旧版已实现；目标要求由 FR-25 替代 |
+| 13 | [FR-13](FR-13-public-ssr-seo-geo-technical-baseline.md) | 首响应 HTML 与 SEO/GEO 技术基线 | P0 | `sprint-m2-04`、`sprint-m5-05` | 静态内容来源已实现 / Local Code Ready |
 | 14 | [FR-14](FR-14-inquiry-observability-security-production-readiness.md) | 询盘、可观测性、安全与生产就绪 | P0 | `sprint-m2-05` | Code Ready / External Legacy |
 | 15 | [FR-15](Done/FR-15-kelaibao-brand-and-project-migration.md) | 客来宝品牌与项目迁移 | P0 | `sprint-m3-01` | 完成 / Code Ready |
 | 16 | [FR-16](Done/FR-16-kelaibao-product-site-and-mini-program-trial.md) | 客来宝产品官网与小程序体验入口 | P0 | `sprint-m3-02`、`sprint-m3-04` | 完成 / Code Ready |
@@ -71,7 +73,8 @@ M3-01 已将工程和文档迁移到 `products/kelaibao/`，当前及后续 Spri
 | 21 | [FR-21](Done/FR-21-public-site-complete-visual-system-and-replaceable-assets.md) | 公开站完整视觉系统与可替换素材 | P1 | `sprint-m4-03` | 完成 / Local Code Ready / Production BLOCKED |
 | 22 | [FR-22](Done/FR-22-owner-approved-public-site-content-and-experience-update.md) | 产品负责人确认的公开站内容与体验调整 | P0 | `sprint-m4-04` | 完成 / Local Code Ready / Production BLOCKED |
 | 23 | [FR-23](FR-23-v3-3-public-content-and-media-packages.md) | V3.3 公开内容与媒体套餐 | P0 | `sprint-m5-03` | 完成 / Local Code Ready / Production BLOCKED |
-| 24 | [FR-24](Done/FR-24-news-cms-authoring.md) | 新闻 CMS 自主图文编辑 | P0 | `sprint-m5-04` | 完成 / Local Code Ready / Production BLOCKED |
+| 24 | [FR-24](Done/FR-24-news-cms-authoring.md) | 新闻 CMS 自主图文编辑（历史） | P0 | `sprint-m5-04` | 旧版已实现；目标要求由 FR-25 替代 |
+| 25 | [FR-25](FR-25-static-news-and-cases.md) | 新闻与案例普通静态页面 | P0 | `sprint-m5-05` | Local Code Ready / 真实内容迁移及 Production BLOCKED |
 
 ## 4. 依赖与建议实施顺序
 
@@ -117,15 +120,15 @@ FR-20 与 FR-19 没有技术依赖，但项目一次只实施一个 Sprint；M4-
 | Metadata、SEO、响应式、可访问性与质量测试 | `FR-07` |
 | 大陆托管、备案、生产配置与正式推广门禁 | `FR-08` |
 | ESA、FC、RDS、OSS 运行时与可行性门禁 | `FR-09` |
-| 单管理员、Session、锁定、重置与审计 | `FR-10` |
-| 私有媒体、预签名上传与 HTML 净化 | `FR-11` |
-| 新闻/案例状态、修订、授权与发布 | `FR-12` |
+| 单管理员、Session、锁定、重置与审计（历史，CMS 专用要求撤销） | `FR-10`；退场见 `FR-25` |
+| 旧 CMS 私有媒体、预签名上传与净化（历史） | `FR-11`；静态素材/正文见 `FR-25` |
+| 新闻/案例静态页面、代码发布、授权与历史 URL 迁移 | `FR-25`（替代 FR-12/FR-24） |
 | 公开 SSR、JSON-LD、RSS、sitemap、`llms.txt` | `FR-13` |
 | DirectMail、监控、安全、恢复与生产收口 | `FR-14`、`FR-08` |
 | 工程目录、包名与主品牌迁移 | `FR-15` |
 | 首页、功能、团队、关于与小程序体验 | `FR-16` |
 | 客来宝媒体单页、职业边界和旧路由 | `FR-17` |
-| 宣传口径、政策、CMS 内容、发现与发布收口 | `FR-18` |
+| 宣传口径、政策、发现与发布收口 | `FR-18`；内容维护方式由 `FR-25` 覆盖 |
 | RDS/本地 MySQL 适配与 SQLite 本地后台集成测试 | `FR-19` |
 | 已有公开站的视觉风格升级、layout/文案冻结与视觉回归 | `FR-20` |
 | 完整品牌视觉、中文字体、可替换本地素材与概念图 fidelity QA | `FR-21` |
@@ -133,7 +136,7 @@ FR-20 与 FR-19 没有技术依赖，但项目一次只实施一个 Sprint；M4-
 
 ## 6. 评审与状态规则
 
-1. FR 文件当前均位于 active FR 目录；已有代码状态不替代 review-confirm 和验收回填。
+1. 当前 FR 与已完成历史 FR 分别位于本目录及 Done；FR-25 的规格完成不替代代码迁移、review-confirm 和验收回填。
 2. 实施前应为目标 FR 编写 Sprint，并完成文档 review-confirm；M4-04 的文档评审由用户于 2026-08-05 明确跳过，不作为 PASS 先例。
 3. 未经人工确认，不启动多个 reviewer agents。
 4. 只有代码验收完成后，才能将 FR 移入 `Done/`；文档编写完成不等于功能完成。

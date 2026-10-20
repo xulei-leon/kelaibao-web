@@ -187,9 +187,6 @@ export function resolveServerConfig(
   }
 
   if (!databaseUrl) {
-    if (runtimeMode === "production") {
-      throw new Error("DATABASE_URL is required at production runtime.");
-    }
     return { runtimeMode, appVersion };
   }
 
@@ -257,4 +254,12 @@ export function redactServerError(error: unknown) {
       "[REDACTED_EMAIL]",
     )
     .replace(/\b1[3-9]\d{9}\b/g, "[REDACTED_PHONE]");
+}
+
+export function resolveApplicationConfig(env: Environment = process.env) {
+  return {
+    runtimeMode: env.SINO_RUNTIME_MODE === "production" ? "production" : "preview",
+    appVersion: env.SINO_APP_VERSION?.trim() || "local",
+    contentSource: "static" as const,
+  };
 }

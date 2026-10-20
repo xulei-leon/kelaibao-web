@@ -46,13 +46,11 @@ describe("M2 server runtime configuration", () => {
     expect(config.database?.password).toBe("super-secret");
   });
 
-  it("allows a database-free preview build but requires DATABASE_URL at production runtime", () => {
+  it("allows database-free static content in preview and production", () => {
     expect(resolveServerConfig({ SINO_RUNTIME_MODE: "preview" }).database).toBe(
       undefined,
     );
-    expect(() =>
-      resolveServerConfig({ SINO_RUNTIME_MODE: "production" }),
-    ).toThrow(/DATABASE_URL/);
+    expect(resolveServerConfig({ SINO_RUNTIME_MODE: "production" }).database).toBeUndefined();
   });
 
   it("rejects non-MySQL URLs and a pool budget that can exhaust RDS", () => {

@@ -1,5 +1,7 @@
 # 新闻管理现状核查与操作体验补齐方案
 
+> **2026-10-20 规格覆盖：** 本文 CMS 设计/操作仅适用于迁移前版本，不再指导新增编辑能力；本文仅供旧版本回退维护，新版本的迁移与维护按 M5-05 和 README 执行。 现行依据为 [FR-25](../1-Requirement/Mainland-Website-FR/FR-25-static-news-and-cases.md)；M5-05 已完成静态代码与本地验证，真实内容迁移和 Production 证据仍待补齐。
+
 - 核查日期：2026-09-23。
 - 代码基线：`843ceb2`，`products/kelaibao/` 当前工作区。
 - 状态：2026-09-24 已完成 FR-24 / Sprint M5-04 的文档与代码评审、实现及本地验收；本文现状章节保留 2026-09-23 的核查基线。当前交付见 [Sprint M5-04](../3-Plan/Done/sprint-m5-04.md) 与 [验收记录](../5-Evidence/m5-04/README.md)。

@@ -1,5 +1,7 @@
 # 管理员安全与私有媒体 Runbook
 
+> **2026-10-20 规格覆盖：** 本文 CMS 设计/操作仅适用于迁移前版本，不再指导新增编辑能力；本文仅供旧版本回退维护，新版本的迁移与维护按 M5-05 和 README 执行。 现行依据为 [FR-25](../1-Requirement/Mainland-Website-FR/FR-25-static-news-and-cases.md)；M5-05 已完成静态代码与本地验证，真实内容迁移和 Production 证据仍待补齐。
+
 ## 状态边界
 
 - M2-02 本地认证、净化、upload intent、直接 HTTPS provider 和客户端秘密扫描：`LOCAL_PASS` 候选。

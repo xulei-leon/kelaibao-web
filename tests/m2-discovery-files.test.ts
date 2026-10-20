@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import type { PublicContentSnapshot } from "@/server/content/public-contract";
+import type { PublicArticle } from "@/content/article-types";
 import {
   buildLlmsText,
   buildRssXml,
@@ -15,17 +15,14 @@ import { createDiscoveryHandler } from "@/server/discovery/runtime";
 function item(
   id: number,
   contentType: "news" | "case" = "news",
-): PublicContentSnapshot {
+): PublicArticle {
   return {
-    id: 1000 + id,
-    contentItemId: id,
-    revisionNumber: 1,
     contentType,
     slug: `entry-${String(id).padStart(3, "0")}`,
     title: id === 1 ? "公开 & 更新 <一>" : `公开内容 ${id}`,
     summary: `公开摘要 ${id}`,
-    sanitizedHtml: `<p>公开正文 ${id}</p>`,
-    sanitizerPolicyVersion: "m2-html-v1",
+
+    body: [{ type: "paragraph", text: "公开正文" }],
     firstPublishedAt: new Date(`2026-07-20T02:${String(id % 60).padStart(2, "0")}:00.000Z`),
     publishedAt: new Date(
       Date.parse("2026-07-30T02:00:00.000Z") - id * 1000,
@@ -121,14 +118,14 @@ describe("M2-04 discovery files", () => {
     }
   });
 
-  it("caps the merged CMS set at 100 while retaining every core route", () => {
+  it("includes every static article and core route", () => {
     const contents = Array.from({ length: 105 }, (_, index) =>
       item(index + 1, index % 2 ? "case" : "news"),
     );
     const sitemap = buildSitemapXml({ siteUrl, coreRoutes, contents });
     const cmsMatches = sitemap.match(/\/(?:news|cases)\/entry-/g) ?? [];
 
-    expect(cmsMatches).toHaveLength(100);
+    expect(cmsMatches).toHaveLength(105);
     for (const route of coreRoutes) {
       expect(sitemap).toContain(
         `<loc>${new URL(route, siteUrl).toString()}</loc>`,
@@ -136,48 +133,13 @@ describe("M2-04 discovery files", () => {
     }
   });
 
-  it("isolates a failed discovery builder with a redacted 503 response", async () => {
-    const warning = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const repository = {
-      async listPublishedByType(contentType: "news" | "case") {
-        return contentType === "news" ? [item(1)] : [item(2, "case")];
-      },
-    };
-    const failedHandler = createDiscoveryHandler({
-      contentType: "text/plain; charset=utf-8",
-      repositoryFactory: () => repository,
-      build() {
-        throw new Error("DATABASE_URL=mysql://secret private-body");
-      },
-    });
-    const healthyHandler = createDiscoveryHandler({
-      contentType: "application/rss+xml; charset=utf-8",
-      repositoryFactory: () => repository,
-      build({ contents }) {
-        return buildRssXml({ siteUrl, contents });
-      },
-    });
-
-    const failed = await failedHandler();
-    const healthy = await healthyHandler();
-
-    expect(failed.status).toBe(503);
-    expect(failed.headers.get("cache-control")).toBe(
-      "private, no-store, max-age=0",
-    );
-    expect(await failed.text()).toBe("Discovery output is unavailable.");
-    expect(healthy.status).toBe(200);
-    expect(healthy.headers.get("cache-control")).toContain("s-maxage=60");
-    expect(healthy.headers.get("cache-control")).not.toContain(
-      "stale-while-revalidate",
-    );
-    expect(healthy.headers.get("content-type")).toContain(
-      "application/rss+xml",
-    );
-    expect(await healthy.text()).toContain("entry-001");
-    const logged = warning.mock.calls.flat().join(" ");
-    expect(logged).toContain("public_discovery_failed");
-    expect(logged).not.toContain("DATABASE_URL");
-    expect(logged).not.toContain("private-body");
+  it("builds discovery from the static catalogue without a repository", async () => {
+    const handler = createDiscoveryHandler({ contentType: "text/plain", build: ({ contents }) => JSON.stringify(contents) });
+    const response = handler();
+    expect(response.status).toBe(200);
+    expect(response.headers.get("cache-control")).toContain("s-maxage=86400");
+    expect(await response.json()).toEqual([]);
+    const broken = createDiscoveryHandler({ contentType: "text/plain", build() { throw new Error("invalid content"); } });
+    expect(broken).toThrow("invalid content");
   });
 });

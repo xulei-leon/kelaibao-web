@@ -1,3 +1,4 @@
+import { ContentTeasers } from "@/components/content-teasers";
 import { QrCodeCard } from "@/components/qr-code-card";
 import { ImageLightbox } from "@/components/image-lightbox";
 import { ActionLink } from "@/components/ui/action-link";
@@ -123,6 +124,8 @@ export default function AboutPage() {
         <div className="about-news-entry">
           <p>查看客来宝已经公开发布的新闻内容。</p>
           <ActionLink href="/news">查看新闻动态</ActionLink>
+          <ContentTeasers contentType="news" />
+          <ContentTeasers contentType="case" />
         </div>
       </Section>
 

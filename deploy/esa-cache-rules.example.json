@@ -2,17 +2,42 @@
   "origin": "function-compute",
   "rules": [
     {
-      "paths": ["/admin/*", "/api/*", "/health"],
+      "paths": [
+        "/admin/*",
+        "/api/*",
+        "/health"
+      ],
       "sharedCache": false
     },
     {
-      "paths": ["/news", "/news/*", "/cases", "/cases/*", "/feed.xml", "/sitemap.xml", "/llms.txt"],
-      "maxAgeSeconds": 60
+      "paths": [
+        "/news",
+        "/news/*",
+        "/cases",
+        "/cases/*",
+        "/feed.xml",
+        "/sitemap.xml",
+        "/llms.txt"
+      ],
+      "strategy": "versioned-static-or-origin-policy",
+      "refreshOnRelease": true
     },
     {
-      "paths": ["/*"],
+      "paths": [
+        "/*"
+      ],
       "strategy": "versioned-static-or-origin-policy"
     }
   ],
-  "status": "M2-LEGACY-01-DEFERRED"
+  "status": "M2-LEGACY-01-DEFERRED",
+  "releaseRefreshPaths": [
+    "/",
+    "/about",
+    "/news",
+    "/cases",
+    "/feed.xml",
+    "/sitemap.xml",
+    "/llms.txt",
+    "<all changed/new/withdrawn/redirected article paths>"
+  ]
 }

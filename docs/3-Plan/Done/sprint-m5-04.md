@@ -1,5 +1,7 @@
 # Sprint M5-04 新闻 CMS 自主图文编辑
 
+> **2026-10-20 规格覆盖：** 本文新闻 CMS 自主编辑及补充为历史交付，目标版本不再要求保留此能力。 现行依据为 [FR-25](../../1-Requirement/Mainland-Website-FR/FR-25-static-news-and-cases.md)；M5-05 已完成静态代码与本地验证，真实内容迁移和 Production 证据仍待补齐。
+
 ## 1. Sprint 目标
 
 完成 [FR-24](../../1-Requirement/Mainland-Website-FR/Done/FR-24-news-cms-authoring.md)，把已有 MySQL/OSS 新闻 CMS 补齐为可自主使用的图文后台。

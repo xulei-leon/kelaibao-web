@@ -1,31 +1,33 @@
 # 客来宝统一中文官网
 
-客来宝面向中国大陆市场提供统一中文官网：客来宝是唯一主品牌，K-Link 是一站式拓客工具系统和小程序产品，客来宝媒体是站内的专业表达与内容顾问业务。
+独立的 Next.js 全栈工程。新闻与案例已按 [FR-25](docs/1-Requirement/Mainland-Website-FR/FR-25-static-news-and-cases.md) 改为代码维护的静态页面；后台编辑、登录、上传、修订与内容 API 已移除。生产平台继续采用 ESA → Function Compute，询盘经同域 `/api/inquiry` 由 DirectMail 发送。
 
-当前 M1/M2 已形成公开站、阿里云全栈 Next.js、单管理员新闻/案例 CMS、私有媒体、DirectMail 询盘和 SEO/GEO 发现基线。M3-01～M3-05 在不改变这些安全与数据边界的前提下，依次完成品牌与目录迁移、产品页面、媒体单页、统一首页和发布收口。真实云、备案、授权、口径、恢复和回退证据未齐时，Production 仍为 `BLOCKED`。
-
-目标生产架构：
-
-```text
-Alibaba Cloud ESA
-  -> Function Compute（全栈 Next.js：公开 SSR、/admin、/api）
-      -> RDS MySQL
-      -> 私有 OSS
-      -> DirectMail
-```
+当前本地内容清单为空；未读取真实 CMS 数据库，不代表线上没有文章。历史内容、URL、图片和授权的核对记录在 [M5-05 验收记录](docs/5-Evidence/m5-05/README.md)，Production 继续受真实外部门禁约束。
 
 ## 本地运行
 
-```bash
-pnpm install
+使用 Node.js >=20 <25 和 pnpm 10.34.5。FC ZIP 仍须在 Linux x86_64、Node.js 20.x 构建。
+
+```sh
+pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-打开 `http://localhost:3000`。环境变量可从 `.env.example` 复制到 `.env.local`；不要提交真实联系人、二维码、数据库、OSS、ESA 或 DirectMail 凭据。
+打开 `http://localhost:3000`。从 `.env.example` 配置本地环境；不提交真实联系人或云凭据。新闻、案例和发现文件不需要数据库、管理员密钥或 OSS 上传配置。询盘配置缺失时服务端安全失败，不发送邮件。
 
-## 验证
+## 维护新闻与案例
 
-```bash
+在 [src/content/articles.ts](src/content/articles.ts) 维护 `ARTICLES`。条目包括类型（`news` / `case`）、稳定 slug、标题、摘要、首次发布日期、当前发布日期、修改日期、正文内容块和可选图片。日期必须包含时区；案例必须填写公开的授权复核日期，私人证明留在发布记录，不放进内容模块。
+
+正文支持段落、二级标题、引述、列表和图片，由 React 作为内容渲染，不执行 HTML。图片使用已授权静态文件或稳定 HTTPS URL，需要 alt 与宽高，不接受临时签名参数。沿用现有图片格式、体积与构建预算。不要导入待审材料、私人草稿、测试文章或授权证明。
+
+新闻与案例保留 `/news/[slug]`、`/cases/[slug]`。修改标题不改 slug；撤回已公开文章时从 `ARTICLES` 移除并将原路径加入 `WITHDRAWN_CONTENT`（真实 410）；路径迁移加入 `CONTENT_REDIRECTS`（308，目标必须是当前公开文章）。未知路径为 404。不能同时公开、撤回或重定向同一路径。
+
+列表、详情、首页/关于页摘要、metadata、结构化数据、sitemap、RSS 和实验性 llms 使用同一静态内容源，构建部署后才更新。没有文章时保留空状态。Preview 继续禁止索引。
+
+## 质量与制品
+
+```sh
 pnpm test
 pnpm lint
 pnpm build
@@ -33,153 +35,16 @@ pnpm smoke:standalone
 pnpm validate:release
 ```
 
-`lint` 与 `typecheck` 都使用 TypeScript 无输出检查。`build` 生成可由 Function Compute 运行的 Next.js standalone 制品；本地发布校验通过不代表 Production 外部门禁已通过。
+`pnpm build` 生成响应式图片、Next.js standalone 和 `.next/static-content-manifest.json`；manifest 随制品打包为 `static-content-manifest.json`。构建输出的新闻/案例列表和详情必须为静态生成，发现文件为静态路由。完整 FC 打包与部署见 [FC-PACKAGING.md](FC-PACKAGING.md) 和 [FC部署指南](FC部署指南.md)。
 
-## 无 MySQL 的本地后台调试
+`validate:release` 保留旧证据 schema 兼容，并以静态内容迁移证据替代旧 CMS 品牌迁移 gate。其余云、备案、口径、授权、恢复和预算门禁仍保留。`--require-production-live` 在生产证据不足时返回非零，不以本地通过冒充上线许可。
 
-本地可使用 Node 22.13+ 内置 SQLite 调试管理员登录、Session、新闻/案例 CMS、修订、发布/下线、审计和本地 purge job。SQLite 只允许 local-test，不用于 FC、Production 或真实发布证据。
+## 迁移、缓存与回退
 
-`.env.local` 至少配置：
+旧 SQL migration 保留。不要删除数据库、修订、审计或 OSS 对象，不擅自注销云资源。原 CMS 版本需要的数据库和媒体须保留供回退；新应用运行时不连接内容数据库。
 
-```env
-SINO_RUNTIME_MODE=preview
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-DATABASE_ADAPTER=sqlite
-DATABASE_RUNTIME_SCOPE=local-test
-DATABASE_URL=
-SQLITE_DATABASE_PATH=.local-data/kelaibao.local-test.sqlite
-ADMIN_DUMMY_PASSWORD_HASH=<pnpm admin:dummy-hash 的输出>
-ADMIN_CSRF_SECRET=<至少32字节的base64url随机值>
-```
+在受控环境临时注入只读 MySQL 身份，执行 `pnpm content:inventory` 可将旧内容和已发布快照盘点到被忽略的 `.local-data/legacy-content-inventory.json`。脚本仅 SELECT，只读事务，不导出工作草稿正文，不覆盖旧文件，不记录凭据或内容。导出文件须私下逐条审查后手工转成受控内容块，并填写迁移清单；导出成功不代表授权或迁移完成。
 
-SQLite 模式下删除或留空 `MYSQL_POOL_LIMIT`、`MYSQL_QUEUE_LIMIT`、`MYSQL_ACQUIRE_TIMEOUT_MS`、`MYSQL_MAX_APP_INSTANCES` 和 `MYSQL_CONNECTION_BUDGET`，避免产生不确定配置。
+发布时保留上版制品/URL manifest，停用旧 CMS 写入口，核对最终公开内容、撤回/跳转清单、原始日期和图片。`pnpm cache:refresh --previous-manifest <上版manifest路径>` 默认只打印精确 URL 计划；`--apply` 才使用发布环境独立 ESA 身份直接 HTTPS 提交刷新（该动作不在开发验证中执行）。旧 CMS 首次切换需按核实的旧 URL 清单制作上版 manifest，不能用空文件替代。必须验证 ESA 任务完成和实际首响应，再开放流量；失败停止发布或回退。
 
-### Windows PowerShell 初始化
-
-```powershell
-cd D:\code\tokengate\products\kelaibao
-
-node --version
-pnpm install
-
-$env:SINO_RUNTIME_MODE='preview'
-$env:NEXT_PUBLIC_SITE_URL='http://localhost:3000'
-$env:DATABASE_ADAPTER='sqlite'
-$env:DATABASE_RUNTIME_SCOPE='local-test'
-$env:DATABASE_URL=''
-$env:SQLITE_DATABASE_PATH='.local-data/kelaibao.local-test.sqlite'
-
-Remove-Item Env:MYSQL_POOL_LIMIT -ErrorAction SilentlyContinue
-Remove-Item Env:MYSQL_QUEUE_LIMIT -ErrorAction SilentlyContinue
-Remove-Item Env:MYSQL_ACQUIRE_TIMEOUT_MS -ErrorAction SilentlyContinue
-Remove-Item Env:MYSQL_MAX_APP_INSTANCES -ErrorAction SilentlyContinue
-Remove-Item Env:MYSQL_CONNECTION_BUDGET -ErrorAction SilentlyContinue
-
-$env:ADMIN_DUMMY_PASSWORD_HASH=(node scripts/generate-admin-dummy-hash.mjs).Trim()
-$env:ADMIN_CSRF_SECRET=(node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))").Trim()
-$env:ADMIN_USERNAME='admin@example.test'
-$env:ADMIN_PASSWORD=Read-Host '请输入本地管理员密码（至少14字符）'
-$env:ADMIN_OPERATION_REASON_CODE='LOCAL_SQLITE_BOOTSTRAP'
-
-pnpm db:sqlite:migrate
-pnpm admin:bootstrap
-Remove-Item Env:ADMIN_PASSWORD
-pnpm dev
-```
-
-`node --version` 必须为 `22.13+`。打开 `http://localhost:3000/admin/login`，使用 `admin@example.test` 和刚才输入的密码登录。本地 HTTP Cookie 不设置 `Secure`；HTTPS/Production Cookie 继续强制 `Secure`。
-
-### 手工验证后台编辑功能
-
-登录后选择“管理新闻”→“新建新闻”，可以使用以下测试数据：
-
-```text
-标题：SQLite 手工验证新闻
-摘要：用于验证本地后台编辑、发布和下线流程
-```
-
-Slug 无需填写，首次创建草稿时自动生成；保存后只读显示链接路径。修改标题不会改变链接，已有内容继续使用原链接。
-
-HTML 正文示例：
-
-```html
-<h2>本地 SQLite 测试</h2>
-<p>这是一条后台编辑测试内容。</p>
-<script>alert("should be removed")</script>
-```
-
-按以下顺序检查：
-
-1. 点击“安全预览”：普通 HTML 正常显示，`script` 不执行并被 sanitizer 移除。
-2. 点击“创建草稿”：进入编辑页，公开状态为 `draft`，页面显示 Draft revision 编号。
-3. 点击“发布”：公开状态变为 `published`；使用编辑页显示的自动链接（例如 `/news/news-0123456789abcdef`）查看公开内容。
-4. 修改标题并点击“保存草稿”：编辑页提示公开 revision 未改变，公开页面仍显示上一个已发布版本。
-5. 点击“发布草稿更新”：公开页面显示新标题；点击“查看 revision 历史”可以看到多条 revision。
-6. 点击“下线”：状态变为 `offline`，公开 URL 返回下线状态（HTTP 410）。
-7. 点击“重新发布”：内容重新公开。
-
-案例授权门禁可通过“管理案例”→“新建案例”验证。首次发布案例前必须勾选授权确认；未勾选时发布按钮不可用，发布后编辑页应显示案例授权记录。
-
-Session 可通过以下操作验证：
-
-- 登录后刷新页面，仍然保持登录状态。
-- 登录后直接访问 `/admin/news`，可以正常进入。
-- 点击退出后再次访问 `/admin`，应返回登录页。
-- 清除 `localhost` 的站点 Cookie 后刷新后台，应要求重新登录。
-
-SQLite 模式的发布/purge 只写入本地任务和审计记录，不访问 ESA、RDS 或其他云服务，也不能作为 Production 通过证据。
-
-### 重置本地测试数据
-
-先停止 `pnpm dev`，然后在仍保留上述 SQLite 环境变量的 PowerShell 中执行：
-
-```powershell
-pnpm db:sqlite:reset
-pnpm db:sqlite:migrate
-
-$env:ADMIN_USERNAME='admin@example.test'
-$env:ADMIN_PASSWORD=Read-Host '请输入新的本地管理员密码（至少14字符）'
-$env:ADMIN_OPERATION_REASON_CODE='LOCAL_SQLITE_BOOTSTRAP'
-pnpm admin:bootstrap
-Remove-Item Env:ADMIN_PASSWORD
-
-pnpm dev
-```
-
-`pnpm db:sqlite:reset` 只允许删除项目 `.local-data` 内选定的 `.sqlite` 文件及同 basename 的 `-wal`、`-shm`、`-journal` sidecar，不会访问或修改 MySQL/RDS。
-
-RDS MySQL 和开发机本地 MySQL 继续使用同一个 `mysql` adapter 与既有 `pnpm db:migrate`；只需通过 `DATABASE_URL` 指向不同服务器。
-
-## 品牌与转化边界
-
-- 全站主品牌是客来宝；K-Link 不建立第二站点，客来宝媒体不形成站中站。
-- “免费体验”只打开客来宝小程序二维码，不要求 Web 注册，也不进入询盘表单。
-- “咨询客来宝媒体”只打开企业微信二维码；失败时进入 `/about#contact` 联系区降级。
-- 两类二维码分别配置、分别提供替代文本和分析事件，不得互相替代。
-
-## 技术与业务边界
-
-- 与英文站完全隔离，不复用其源码、内容、账号、数据或部署。
-- 备用询盘提交到同域 `/api/inquiry`，由服务端调用 DirectMail，不保存线索。
-- 仅提供一个预创建的后台管理员，不提供公众账号、支付、自动报价、CRM、团队权限或产品 Dashboard。
-- CMS 只维护新闻和获授权案例；首页、功能、团队、媒体、关于和政策页面继续由代码维护。
-- Preview 默认阻止索引；只有真实主体、备案、二维码、DirectMail、云链路、专业审查、授权与恢复门禁全部通过后，才能配置 Production。
-
-当前需求见 [Kelaibao-Unified-Website-SRS.md](docs/1-Requirement/Kelaibao-Unified-Website-SRS.md)，视觉基线见 [Kelaibao-Unified-Website-Visual-Design-Spec.md](docs/2-Design/Kelaibao-Unified-Website-Visual-Design-Spec.md)，技术基线见 [Alibaba-Cloud-Fullstack-Architecture-Spec.md](docs/2-Design/Alibaba-Cloud-Fullstack-Architecture-Spec.md)，完整云资源与发布流程见 [Alibaba-Cloud-Deployment-Guide.md](docs/2-Design/Alibaba-Cloud-Deployment-Guide.md)，控制台上传 ZIP 的逐步操作见 [FC部署指南](FC部署指南.md)，实施顺序见 [Mainland-Website-Sprint-Index.md](docs/3-Plan/Mainland-Website-Sprint-Index.md)。
-
-## 新闻 CMS 图文操作（M5-04）
-
-新闻管理列表的“编辑”右侧提供“删除”。确认后文章从后台移除，已发布文章同时下线，旧公开链接返回 410；未发布草稿返回 404。删除为逻辑删除，修订、审计和图片保留，后台没有撤销/恢复入口。版本冲突时刷新列表再重试；案例不提供删除。
-
-删除功能上线前 MySQL 必须显式执行 `005_news_soft_delete.sql`（通过既有 `pnpm db:migrate`）。SQLite local-test 必须显式运行 `pnpm db:sqlite:migrate` 升级到 schema 3；迁移保留既有文章，不能在请求中自动运行。
-
-后台入口为 `/admin/login` → `/admin/news`。使用支持 Navigation API 的当前浏览器；不支持时后台保持只读并提示升级，以保证后退/前进不会静默丢稿。
-
-1. 新建新闻，填写标题、摘要，在“HTML 正文”中直接输入 HTML 源码；Slug 首次保存时自动生成。图片从下方选择并填写图片说明，上传确认成功后将 img 标签追加到 HTML 正文末尾。
-2. 可选封面支持 JPEG、PNG、WebP，至少 1200×630、约 1.90:1、最大 350 KB。上传自动绑定资源；显式点击“确认该媒体可公开使用”后保存。移除封面只解除绑定。
-3. 点击安全预览、保存草稿，再发布。未保存时发布/下线不可用；保存草稿不会修改公开版本。版本历史独立读取，不锁住正文。
-4. 正文只提供 HTML 编辑，无可视化/格式工具栏/模式切换；加载和粘贴按原始字符串保留，不执行 HTML。编辑后使用安全预览检查净化结果，图片继续通过下方上传添加。
-5. 网络错误或图片仍在确认时，保留本页并点击“重试确认”；也可显式放弃本次图片操作。待处理图片与未保存正文均受离开保护。新建文章需先完成或放弃待处理图片，才会跳转到已创建草稿。
-6. 登录过期时保留当前页，点击“在新标签页登录”，登录后返回点击“重新连接会话”，再保存或重试确认。正文不会写入浏览器 Web Storage。
-
-生产仍使用 MySQL 保存文章、修订和媒体元数据，私有 OSS 保存图片文件。本地 SQLite 测试不提供真实 OSS；存储配置缺失时纯文字新闻可正常使用，图片上传明确失败。详见 [运行手册](docs/2-Design/Admin-Security-and-Media-Runbook.md) 和 [M5-04 验收](docs/5-Evidence/m5-04/README.md)。
+生产迁移证据位于 `docs/5-Evidence/m5-05/static-migration.json`，应包含真实盘点完成状态、复核人/日期/证据、当前源码 digest，以及与本次 build manifest 完全一致的 200/410/308 URL 映射。空本地清单不会自动通过。

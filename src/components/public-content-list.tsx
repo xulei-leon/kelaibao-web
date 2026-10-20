@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import { PUBLIC_LIST_CONTENT } from "@/lib/public-list-content";
-import type { ContentType } from "@/server/content/domain";
-import type { PublicContentSnapshot } from "@/server/content/public-contract";
+import type { ContentType } from "@/content/article-types";
+import type { PublicArticle } from "@/content/article-types";
 
 function formatDate(value: Date) {
   return new Intl.DateTimeFormat("zh-CN", {
@@ -18,7 +18,7 @@ export function PublicContentList({
   items,
 }: {
   contentType: ContentType;
-  items: PublicContentSnapshot[];
+  items: PublicArticle[];
 }) {
   const config = PUBLIC_LIST_CONTENT[contentType];
   return (
@@ -43,7 +43,7 @@ export function PublicContentList({
             {items.map((item) => (
               <article
                 className="public-content-card rounded border border-[var(--line)] bg-[var(--surface)] p-6 sm:p-8"
-                key={`${item.contentType}:${item.id}`}
+                key={`${item.contentType}:${item.slug}`}
               >
                 <p className="text-sm text-[var(--muted)]">
                   <time dateTime={item.firstPublishedAt.toISOString()}>

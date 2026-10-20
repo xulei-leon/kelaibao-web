@@ -7,18 +7,15 @@ import {
   buildPublicListStructuredData,
   safeSerializeJsonLd,
 } from "@/server/discovery/metadata";
-import type { PublicContentSnapshot } from "@/server/content/public-contract";
+import type { PublicArticle } from "@/content/article-types";
 
-const item: PublicContentSnapshot = {
-  id: 104,
-  contentItemId: 12,
-  revisionNumber: 4,
+const item: PublicArticle = {
   contentType: "news",
   slug: "market-update",
   title: "市场更新",
   summary: "这是公开摘要。",
-  sanitizedHtml: "<p>公开正文</p>",
-  sanitizerPolicyVersion: "m2-html-v1",
+
+    body: [{ type: "paragraph", text: "公开正文" }],
   firstPublishedAt: new Date("2026-07-20T02:00:00.000Z"),
   publishedAt: new Date("2026-07-30T02:00:00.000Z"),
   updatedAt: new Date("2026-07-30T01:59:00.000Z"),

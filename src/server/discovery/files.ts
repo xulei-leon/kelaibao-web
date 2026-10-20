@@ -1,10 +1,8 @@
-import type { PublicContentSnapshot } from "@/server/content/public-contract";
-
-const CMS_DISCOVERY_LIMIT = 100;
+import type { PublicArticle } from "@/content/article-types";
 
 interface DiscoveryInput {
   siteUrl: string;
-  contents: PublicContentSnapshot[];
+  contents: PublicArticle[];
 }
 
 interface SitemapInput extends DiscoveryInput {
@@ -27,7 +25,7 @@ function canonicalUrl(siteUrl: string, path: string) {
   return url.toString();
 }
 
-function contentUrl(siteUrl: string, item: PublicContentSnapshot) {
+function contentUrl(siteUrl: string, item: PublicArticle) {
   const segment = item.contentType === "news" ? "news" : "cases";
   return canonicalUrl(
     siteUrl,
@@ -35,21 +33,20 @@ function contentUrl(siteUrl: string, item: PublicContentSnapshot) {
   );
 }
 
-function discoveryContents(contents: PublicContentSnapshot[]) {
+function discoveryContents(contents: PublicArticle[]) {
   const seen = new Set<string>();
   return [...contents]
     .sort(
       (left, right) =>
         right.publishedAt.getTime() - left.publishedAt.getTime() ||
-        right.contentItemId - left.contentItemId,
+        `${left.contentType}:${left.slug}`.localeCompare(`${right.contentType}:${right.slug}`, "en"),
     )
     .filter((item) => {
       const key = `${item.contentType}:${item.slug}`;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
-    })
-    .slice(0, CMS_DISCOVERY_LIMIT);
+    });
 }
 
 export function buildSitemapXml({

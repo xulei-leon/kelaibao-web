@@ -1,5 +1,7 @@
 # Sprint M2-02 管理员认证、媒体与 HTML 安全
 
+> **2026-10-20 规格覆盖：** 本文中 CMS 登录、编辑、上传与生命周期交付要求已被替代；保留旧实施事实，不作为后续开发任务。 现行依据为 [FR-25](../1-Requirement/Mainland-Website-FR/FR-25-static-news-and-cases.md)；M5-05 已完成静态代码与本地验证，真实内容迁移和 Production 证据仍待补齐。
+
 > **状态：** `CODE_READY_WITH_EXTERNAL_LEGACY`；M2-01 已以提交 `d53bec6` 完成全部本地门禁；M2-02 文档 review-confirm、实现、GPT-5.5-only 代码 review-confirm 和本地验证均已完成。`M2-LEGACY-01`、`M2-LEGACY-02` 仍使 Production Live 保持 `BLOCKED`。
 
 ## 1. Sprint 目标

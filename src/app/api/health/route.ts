@@ -1,4 +1,4 @@
-import { resolveServerConfig } from "@/server/config";
+import { resolveApplicationConfig } from "@/server/config";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -7,13 +7,13 @@ const headers = { "cache-control": "private, no-store, max-age=0" };
 
 export async function GET() {
   try {
-    const config = resolveServerConfig();
+    const config = resolveApplicationConfig();
     return Response.json(
       {
         status: "ok",
         runtimeMode: config.runtimeMode,
         version: config.appVersion,
-        database: { configured: Boolean(config.database) },
+        contentSource: config.contentSource,
         externalLegacy: ["M2-LEGACY-01", "M2-LEGACY-02"],
       },
       { headers },
@@ -22,7 +22,7 @@ export async function GET() {
     return Response.json(
       {
         status: "degraded",
-        database: { configured: false },
+        contentSource: "static",
         externalLegacy: ["M2-LEGACY-01", "M2-LEGACY-02"],
       },
       { status: 503, headers },

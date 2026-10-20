@@ -1,11 +1,13 @@
 # 客来宝统一中文官网 Sprint 索引
 
+> **当前变更（2026-10-20）：** [M5-05](sprint-m5-05-static-news-and-cases.md) 按 [FR-25](../1-Requirement/Mainland-Website-FR/FR-25-static-news-and-cases.md) 将新闻/案例改为代码维护的静态页面。旧 Sprint 中的 CMS 交付仅是历史事实，冲突的功能与回归要求被替代；M5-05 已完成代码、文档/代码实施者复核和本地验收；真实历史内容/URL 与云端发布仍待验证。
+
 | 字段 | 内容 |
 | --- | --- |
-| 文档版本 | `v1.1` |
-| 文档状态 | M5-04 Local Code Ready |
+| 文档版本 | `v1.2` |
+| 文档状态 | M5-05 Local Code Ready；真实内容迁移及 Production BLOCKED |
 | 实现状态 | M2/M3/M4/M5-01 已达到 Local Code Ready；Production 仍 `BLOCKED` |
-| 更新日期 | `2026-09-24` |
+| 更新日期 | `2026-10-20` |
 | 上游 SRS | `../1-Requirement/Kelaibao-Unified-Website-SRS.md` |
 | FR 索引 | `../1-Requirement/Mainland-Website-FR/Mainland-Website-FR-Index.md` |
 | 上游变更设计 | `../../../../docs/superpowers/specs/2026-07-31-kelaibao-unified-website-design.md` |
@@ -13,18 +15,18 @@
 ## 1. 路径与验证基线
 
 ```text
-FR_DIR=products/kelaibao/docs/1-Requirement/Mainland-Website-FR
-FR_DONE_DIR=products/kelaibao/docs/1-Requirement/Mainland-Website-FR/Done
-SPRINT_DIR=products/kelaibao/docs/3-Plan
-SPRINT_DONE_DIR=products/kelaibao/docs/3-Plan/Done
-REVIEW_DIR=products/kelaibao/docs/4-Reviews
-REVIEW_DONE_DIR=products/kelaibao/docs/4-Reviews/Done
+FR_DIR=docs/1-Requirement/Mainland-Website-FR
+FR_DONE_DIR=docs/1-Requirement/Mainland-Website-FR/Done
+SPRINT_DIR=docs/3-Plan
+SPRINT_DONE_DIR=docs/3-Plan/Done
+REVIEW_DIR=docs/4-Reviews
+REVIEW_DONE_DIR=docs/4-Reviews/Done
 VERIFICATION_COMMANDS=pnpm test && pnpm lint && pnpm build
 ```
 
 验证命令来自产品级 `AGENTS.md` 与 `package.json`。M2-01 已运行完整测试、类型检查、生产构建、standalone smoke 和客户端秘密扫描；后续 Sprint 不得静默降低验证范围。
 
-M3-01 已将整个工程迁移到 `products/kelaibao/`；当前及后续 Sprint 必须使用迁移后的路径。已完成的 M1/M2 Sprint、Review 和 Evidence 保留当时名称与路径作为审计事实，不作为当前运行说明。
+当前工程为独立仓库 `D:/code/kelaibao-web`，以上路径相对于仓库根目录；旧文档中的 `products/kelaibao/` 是历史位置。已完成的 M1/M2 Sprint、Review 和 Evidence 保留当时名称与路径作为审计事实，不作为当前运行说明。
 
 ## 2. 里程碑结构
 
@@ -38,7 +40,7 @@ M3-01 已将整个工程迁移到 `products/kelaibao/`；当前及后续 Sprint 
 | [M2-00](sprint-m2-00.md) | 架构与基础设施可行性门禁 | `FR-09` | 8 项链路与成本 PASS/BLOCKED；外部缺口条件接受 |
 | [M2-01](sprint-m2-01.md) | FC Next.js 与 MySQL 基础 | `FR-09` | 本地全栈制品与数据基础 Code Ready；真实云发布/回退 DEFERRED |
 | [M2-02](sprint-m2-02.md) | 管理员认证、媒体与 HTML 安全 | `FR-10`、`FR-11` | 安全后台基础 Ready |
-| [M2-03](sprint-m2-03.md) | 新闻与案例 CMS | `FR-12` | 内容维护闭环 Ready |
+| [M2-03](sprint-m2-03.md) | 新闻与案例 CMS（历史） | `FR-12` | 旧版已实现；目标要求由 FR-25 替代 |
 | [M2-04](sprint-m2-04.md) | 公开 SSR 与 SEO/GEO | `FR-13` | 公开发现技术基线 Ready |
 | [M2-05](sprint-m2-05.md) | 询盘、运行安全与生产上线 | `FR-14`、`FR-08` | 全部门禁后 Production Live |
 | [M3-01](Done/sprint-m3-01.md) | 客来宝工程与品牌基础迁移 | `FR-15` | 完成 / 新目录可构建，M2 能力无回归 |
@@ -53,7 +55,8 @@ M3-01 已将整个工程迁移到 `products/kelaibao/`；当前及后续 Sprint 
 | [M5-01](Done/sprint-m5-01.md) | SEO 结构化数据与响应式图片优化 | `FR-07`、`FR-11`、`FR-12`、`FR-13` 增量 | 完成 / Local Code Ready / Production BLOCKED |
 | [M5-02](Done/sprint-m5-02.md) | 核心页面搜索语义与站内链接优化 | `FR-07`、`FR-13` 增量 | 完成 / Local Code Ready / Production BLOCKED |
 | [M5-03](sprint-m5-03-v3-3-public-content-and-media-packages.md) | V3.3 公开内容与媒体套餐 | `FR-23` | 完成 / Local Code Ready / Production BLOCKED |
-| [M5-04](Done/sprint-m5-04.md) | 新闻 CMS 自主图文编辑 | `FR-24` | 完成 / Local Code Ready / Production BLOCKED |
+| [M5-04](Done/sprint-m5-04.md) | 新闻 CMS 自主图文编辑（历史） | `FR-24` | 旧版已实现；目标要求由 FR-25 替代 |
+| [M5-05](sprint-m5-05-static-news-and-cases.md) | 新闻与案例普通静态页面 | `FR-25`、`FR-13` 增量 | Local Code Ready / 真实内容迁移及 Production BLOCKED |
 
 ### 2.1 建议工期与容量假设
 
@@ -126,11 +129,11 @@ M1 Preview baseline
 
 ## 5. 全局技术边界
 
-- `products/kelaibao/` 独立使用 Next.js、React、TypeScript、Tailwind CSS、Vitest、Testing Library 与 jsdom；不导入英文站代码。
+- 当前独立仓库使用 Next.js、React、TypeScript、Tailwind CSS、Vitest、Testing Library 与 jsdom；不导入英文站代码。
 - 生产固定为 ESA→FC 全栈 Next.js→RDS MySQL + 私有 OSS；DirectMail 发送询盘通知。MySQL 以降低小型官网数据库成本为选型目标，M2-00 仍需确认实际总价。
 - RDS MySQL 与本地 MySQL 可共用 MySQL repository adapter；SQLite 仅作为显式 local-test adapter，不能成为生产部署选项。
-- 同域包含公开站、`/admin`、`/api`；不使用 ESA Pages 或 Vercel。
-- 只允许一个预创建管理员及新闻/案例 CMS；不引入公众账号、CRM、在线支付、小程序产品实现或微信 API。小程序只通过二维码引导体验。
+- 同域包含公开站与询盘 API；旧 CMS `/admin` 和 `/api/admin` 在 M5-05 中退场，不使用 ESA Pages 或 Vercel。
+- 全部公开内容由代码维护，FR-25 撤销新闻/案例 CMS 与专用管理员入口；不引入公众账号、CRM、在线支付、小程序产品实现或微信 API。小程序只通过二维码引导体验。
 - `/api/inquiry` 只调用 DirectMail，不建立线索数据库；个人信息不得进入 URL、浏览器存储、分析或日志。
 - 所有外部集成直接使用明确 HTTP(S) API，不创建通用 webservice。
 - SEO/GEO 只交付 SSR、metadata、JSON-LD、RSS、sitemap 和实验性 `llms.txt`，不承诺结果。
@@ -146,8 +149,8 @@ M1 Preview baseline
 | 线索转化 | 企业微信主入口与直接 HTTPS 备用表单均可用且互相降级 |
 | Preview Ready | 政策、metadata、响应式、可访问性、匿名分析与自动测试全部通过 |
 | 架构可行 | ESA/FC/RDS/OSS/DirectMail/purge/成本 8 项门禁通过 |
-| 后台安全 | 单管理员、Session、HTML 净化和私有媒体边界通过 |
-| 内容维护 | 新闻/案例生命周期、修订、授权与刷新可用 |
+| 旧后台安全（历史） | 仅适用于 CMS 退场前；FR-25 迁移验证入口关闭、正文安全和秘密隔离 |
+| 内容维护（FR-25 现行） | 静态新闻/案例、同源发现文件、授权与旧 URL 核对通过；代码部署和缓存刷新可用，CMS 退场 |
 | SEO/GEO 基线 | SSR、metadata、JSON-LD、RSS、sitemap、`llms.txt` 可验证 |
 | Production Live | 大陆部署、备案、正式二维码、DirectMail、专业审查、恢复和回退证据全部完成 |
 | M3 工程迁移 | `products/kelaibao/` 可独立构建，M2 全栈能力无回归 |

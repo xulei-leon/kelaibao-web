@@ -654,6 +654,13 @@
     transform var(--motion-standard) ease;
 }
 
+/* Static articles may contain long names and unbroken product identifiers. */
+.public-content-detail,
+.public-content-card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 @media (hover: hover) {
   .public-content-card:hover {
     border-color: #91a8c8;

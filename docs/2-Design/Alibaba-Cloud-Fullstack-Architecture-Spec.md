@@ -2,18 +2,22 @@
 
 | 字段 | 内容 |
 | --- | --- |
-| 文档版本 | `v0.2` |
-| 文档状态 | M2 架构基线已实现；M3 品牌与信息架构迁移不改变运行协议；真实云与成本门禁仍为 `BLOCKED/DEFERRED` |
-| 更新日期 | `2026-07-31` |
+| 文档版本 | `v0.3` |
+| 文档状态 | FR-25 静态代码与本地验收完成；真实云与成本门禁仍为 `BLOCKED/DEFERRED` |
+| 更新日期 | `2026-10-20` |
 | 架构决策 | `ESA + Function Compute 全栈 Next.js + RDS MySQL + OSS + DirectMail` |
-| 适用代码 | `products/kelaibao/` |
+| 适用代码 | 当前独立仓库根目录 |
+
+## 2026-10-20 规格优先级与实现状态
+
+本文的新闻/案例静态内容要求覆盖旧 CMS 设计，实施计划为 [M5-05](../3-Plan/sprint-m5-05-static-news-and-cases.md)。分析基线 HEAD `f4cfea3` 为旧 CMS；当前工作区的 M5-05 静态代码和本地验收已完成，真实历史内容与部署仍未验证；下文 M2 门禁与历史执行结论保留其原时点，不表示旧 CMS 必须继续作为目标功能。现有生产安全和未完成外部门禁继续有效。
 
 ## 1. 目标与决策
 
-本规格定义客来宝统一中文官网的中国大陆全栈运行架构。Function Compute（FC）是唯一 Next.js 运行时；ESA Pages 与 Vercel 不在目标架构内。客来宝、K-Link 和客来宝媒体共享一个应用、域名、管理后台、数据库和 CMS；不得增加第二应用、双二级域名、`site_key` 或按 Host 切换品牌。
+本规格定义客来宝统一中文官网的中国大陆全栈运行架构。Function Compute（FC）是唯一 Next.js 运行时；ESA Pages 与 Vercel 不在目标架构内。客来宝、K-Link 和客来宝媒体共享一个应用和域名，公开内容由代码维护；不得增加第二应用、双二级域名、`site_key` 或按 Host 切换品牌。
 
 ```text
-访客/管理员
+访客
     |
     v
 Alibaba Cloud ESA
@@ -21,10 +25,11 @@ TLS / CDN / WAF / 限频 / 缓存 / 回源
     |
     v
 Function Compute：全栈 Next.js
-公开 SSR + /admin + /api
+构建生成的公开页面 + /api/inquiry
     |
-    +--> RDS MySQL：管理员、内容、修订、会话、审计
-    +--> 私有 OSS：新闻/案例图片
+    +--> 构建制品：新闻、案例与发现文件
+    +--> RDS MySQL：保留旧 CMS 数据供迁移核对与回退，静态内容不查询
+    +--> 私有 OSS：保留既有媒体，静态素材按交付方案处理
     +--> DirectMail HTTPS API：询盘通知
 ```
 
@@ -32,74 +37,46 @@ FC、RDS 与 OSS 默认统一使用华南 1（深圳）。RDS 使用 MySQL 基�
 
 ## 2. 域名与路由
 
-公开站、管理后台与 API 使用同一正式域名：
+公开站与 API 使用同一正式域名；旧 CMS 入口在迁移完成后移除：
 
 | 路径 | 运行位置 | 缓存 |
 | --- | --- | --- |
 | `/`、`/features`、`/team`、`/media`、`/about`、`/contact`、政策页 | FC Next.js | ESA 长缓存或按发布版本刷新 |
-| `/news`、`/news/[slug]` | FC Next.js SSR | 最长 60 秒 |
-| `/cases`、`/cases/[slug]` | FC Next.js SSR | 最长 60 秒 |
+| `/news`、`/news/[slug]` | FC 制品中的静态页面 | 随发布版本刷新 |
+| `/cases`、`/cases/[slug]` | FC 制品中的静态页面 | 随发布版本刷新 |
 | `/services`、`/for/*`、`/method` | FC/Next.js 永久重定向 | 指向 `/media` 对应锚点，不生成旧 canonical |
-| `/admin/*` | FC Next.js | 禁止共享缓存 |
-| `/api/admin/*` | FC Route Handler | 禁止缓存，WAF/限频 |
+| `/admin/*`（旧 CMS） | 迁移后移除 | 退场前禁止共享缓存 |
+| `/api/admin/*`（旧 CMS） | 迁移后移除 | 退场前禁止缓存并保留鉴权/WAF/限频 |
 | `/api/inquiry` | FC Route Handler | 禁止缓存，WAF/限频 |
-| `/feed.xml`、`/sitemap.xml`、`/llms.txt` | FC Next.js | 最长 60 秒或发布后精确清除 |
+| `/feed.xml`、`/sitemap.xml`、`/llms.txt` | 同一静态公开清单生成 | 随发布版本刷新，无内容数据库查询 |
 
 媒体由 ESA 控制的 `assets` 域名或路径公开分发，源站为私有 OSS Bucket。不得暴露 OSS 公共读权限，也不得让浏览器持有长期 AccessKey。
 
-## 3. 内容边界
+## 3. 静态内容边界
 
-- 代码管理：首页、核心功能、团队方案、客来宝媒体、关于、联系、隐私、条款与免责声明。
-- CMS 管理：新闻与案例。
-- 内容状态：`draft | published | offline`。
-- 草稿及未知内容对公众返回 `404`；已下线内容返回 `410`。
-- slug 在首次发布后不可修改，避免 canonical 漂移。
-- 发布和下线后清除列表、详情、sitemap、RSS 和 `llms.txt` 的精确 ESA URL。
-- 公开缓存可短暂陈旧，但不得超过 60 秒。
-- 客来宝媒体只是站内子业务，不创建独立内容类型、数据库表、Organization 实体、origin 或缓存命名空间。
+- 所有公开页面，包括新闻/案例列表与详情，均由代码维护；新增、修改和撤回需审查、构建及部署。
+- 正文构建期生成；请求时不访问内容数据库、CMS API 或客户端取数，不引入第二应用或通用页面编辑系统。
+- 新闻/案例标题、摘要、正文、稳定 slug、日期与静态图片由类型明确的公开模块维护；列表、详情、摘要和发现文件使用同一来源。
+- 未知 URL 为 404；曾公开后撤回的历史路径由代码清单返回真实 410；路径迁移登记永久跳转。已有文章保持原 slug 与首次发布日期。
+- 案例与素材授权在代码发布前审查并留存非公开证据，不以旧后台勾选代替，不打包私人草稿。
+- 发布精确刷新详情、列表、首页/关于页摘要、发现文件与撤回/跳转 URL；失败停止切流或回退，不使用 CMS outbox 或 60 秒即时更新契约。
+- 客来宝媒体仍是站内子业务，不增加独立 origin、Organization 或内容 API。
 
-建议数据表：
+详细字段、404/410、迁移、缓存与验收以 [FR-25](../1-Requirement/Mainland-Website-FR/FR-25-static-news-and-cases.md) 和[静态内容设计](Static-News-and-Cases-Spec.md)为准。静态页面仍由 FC 全栈 Next.js 提供，不改为 ESA Pages、Vercel 或整站静态导出。
 
-```text
-admins
-admin_sessions
-content_items
-content_revisions
-media_assets
-audit_logs
-```
+## 4. 旧 CMS 与数据迁移
 
-MySQL 数据基线：
+FR-10/FR-11/FR-12/FR-24 中仅服务 CMS 的管理员登录、Session、在线编辑、上传、修订、审计与发布接口不再是目标功能，按 M5-05 移除入口及专用代码。切换前仍须保持鉴权，不能将旧接口改为匿名访问。共享的询盘、配置、静态资源与发布能力按实际调用关系保留。
 
-- 目标兼容 MySQL 8.0；最终可购版本由 M2-00 锁定。
-- 表使用 InnoDB 与 `utf8mb4`，时间统一保存为 UTC。
-- 启用严格 SQL 模式；迁移不得依赖宽松类型转换或静默截断。
-- slug 在写入前规范化为小写，并使用唯一索引保证内容类型内唯一。
-- FC 使用受限数据库账号、连接池和连接上限，避免弹性实例耗尽 RDS 连接。
+先核对实际公开 snapshot、草稿、下线/删除状态、旧 URL、图片和授权，再冻结写入、备份与迁移；数据库不可访问时记录缺口，不假定无历史内容。保留旧表、migration、修订、审计和媒体供回退，不 DROP 或清库。
 
-`content_items` 统一承载 `news | case`，内容源和服务端净化后的 HTML 分开保存。案例首次发布前必须勾选人工授权确认，并记录确认时间、操作者和审计事件；本阶段不建设授权文件上传或审批流。
+RDS/私有 OSS 的原平台选型与现有资源暂保留；公开静态内容不得以其作为请求依赖。资源采购、退役、总成本与其他剩余用途另行评估，不因本次规格修订自动取消原云安全或恢复门禁。部署配置和 release validator 在实施阶段按实际依赖同步更新。
 
-## 4. 管理员认证与安全
+## 5. 正文与静态媒体安全
 
-- 仅一个预创建超级管理员，不提供注册与公众重置页面。
-- 密码使用 Argon2id，最少 14 个字符。
-- Session 最长 8 小时，随机 Session ID 仅写入 `HttpOnly; Secure; SameSite=Strict` Cookie。
-- 15 分钟内连续失败 5 次，锁定 30 分钟。
-- 密码重置为受控运维动作，必须撤销既有 Session 并写入审计日志。
-- `/admin/*` 与 `/api/admin/*` 同时使用服务端鉴权、ESA WAF 与限频；固定办公出口可额外配置 IP 白名单，但不能替代登录认证。
-- 凭据只存于阿里云受控秘密/环境配置中，不进入 Git、客户端 bundle、URL 或日志。
+正文采用代码维护的受控组件，不提供在线 HTML 编辑器。迁入旧 HTML 必须先按允许策略清理并审查，拒绝脚本、事件、危险协议和不受控嵌入。
 
-## 5. 编辑、净化与媒体
-
-编辑器允许自由 HTML，但原始 HTML 永远不得直接发布。服务端必须净化并保存 source/sanitized 两种形式；预览在 sandbox iframe 中展示净化结果。
-
-至少阻止：
-
-- `script`、事件处理属性、`iframe`、`form`、SVG 与危险 URL scheme；
-- 可执行或可逃逸的样式、外链脚本、内联事件和未知嵌入；
-- 未列入允许集合的标签、属性和协议。
-
-媒体仅接受 JPEG、PNG、WebP，单文件最大 10 MB。管理员先向 `/api/admin/media/presign` 申请短期、限定对象键与 MIME 的上传授权，浏览器再通过 HTTPS 直传私有 OSS；FC 记录最终媒体元数据。上传完成后仍需校验 MIME、大小和对象键。
+图片走静态资源构建与现有交付流程，保留 alt、宽高、格式/体积预算与授权记录，不通过浏览器 CMS 上传或媒体表取得绑定。已有 OSS 图片逐个验证授权与可达性，不开放公共读或删除旧对象；秘密、签名与内部授权材料不得打入公开制品。
 
 ## 6. 公开渲染与 SEO/GEO 技术基线
 

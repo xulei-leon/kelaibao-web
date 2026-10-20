@@ -1,3 +1,4 @@
+import { ContentTeasers } from "@/components/content-teasers";
 import Link from "next/link";
 
 import { MiniProgramTrialButton } from "@/components/mini-program-trial";
@@ -202,6 +203,9 @@ export default function HomePage() {
         </div>
         <Link className="context-link" href="/media">查看媒体发稿</Link>
       </Section>
+
+      <ContentTeasers contentType="news" />
+      <ContentTeasers contentType="case" />
 
       <Section tone="navy" className="home-final-cta">
         <div className="home-final-cta__layout">

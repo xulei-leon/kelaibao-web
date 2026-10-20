@@ -6,7 +6,7 @@ import {
   deserializePublicContent,
   type PublicDetailPageProps,
   type PublicListPageProps,
-} from "@/server/content/public-page";
+} from "@/lib/content-pages";
 import {
   buildPublicContentMetadata,
   buildPublicContentStructuredData,

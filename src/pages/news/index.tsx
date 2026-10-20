@@ -1,12 +1,5 @@
 import { PublicListPage } from "@/components/public-content-pages";
-import {
-  type PublicListPageProps,
-} from "@/server/content/public-page";
-import { createPublicListServerSideProps } from "@/server/content/public-page-server";
+import { staticListProps } from "@/lib/static-content-pages";
 
-export const getServerSideProps =
-  createPublicListServerSideProps("news");
-
-export default function NewsPage(props: PublicListPageProps) {
-  return <PublicListPage {...props} />;
-}
+export function getStaticProps() { return staticListProps("news"); }
+export default PublicListPage;

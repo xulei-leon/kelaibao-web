@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "sourceMode": "local-unverified",
+  "inventoryComplete": false,
+  "reviewedBy": "",
+  "reviewedAt": "",
+  "evidencePath": "",
+  "sourceDigest": "",
+  "routes": [],
+  "blockers": ["Historical live CMS content, withdrawn/deleted URLs and media authorization have not been inventoried. An empty local catalogue does not prove an empty production database."]
+}

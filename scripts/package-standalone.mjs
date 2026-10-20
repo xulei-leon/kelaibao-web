@@ -79,6 +79,7 @@ await rm(resolve(standaloneRoot, ".local-data"), {
   recursive: true,
   force: true,
 });
+await cp(resolve(root, ".next/static-content-manifest.json"), resolve(standaloneRoot, "static-content-manifest.json"));
 await repairWindowsDirectoryLinks(standaloneRoot);
 await assertNoSqliteData(standaloneRoot);
 

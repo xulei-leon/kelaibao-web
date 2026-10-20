@@ -114,6 +114,7 @@ unzip -Z1 "$ZIP_PATH" > "$FILES_PATH"
 
 grep -qx 'server.js' "$FILES_PATH" || die 'ZIP root is missing server.js.'
 grep -qx 'package.json' "$FILES_PATH" || die 'ZIP root is missing package.json.'
+grep -qx 'static-content-manifest.json' "$FILES_PATH" || die 'ZIP root is missing static content release manifest.'
 grep -q '^node_modules/' "$FILES_PATH" || die 'ZIP is missing node_modules/.'
 grep -q '^\.next/server/' "$FILES_PATH" || die 'ZIP is missing .next/server/.'
 grep -q '^\.next/static/' "$FILES_PATH" || die 'ZIP is missing .next/static/.'

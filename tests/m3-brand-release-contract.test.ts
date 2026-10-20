@@ -10,8 +10,6 @@ import HealthPage from "@/app/health/page";
 import NotFound from "@/app/not-found";
 import PrivacyPage from "@/app/privacy/page";
 import TermsPage from "@/app/terms/page";
-import AdminLoginPage from "@/app/admin/login/page";
-import AdminHomePage from "@/app/admin/(protected)/page";
 import GlobalError from "@/app/global-error";
 import {
   INTERNAL_COMPATIBILITY_ALLOWLIST,
@@ -32,10 +30,8 @@ describe("M3-05 public brand release contract", () => {
     }
   });
 
-  it("uses the current brand in admin, health, and error-facing output", () => {
+  it("uses the current brand in health, and error-facing output", () => {
     const outputs = [
-      renderToStaticMarkup(createElement(AdminLoginPage)),
-      renderToStaticMarkup(createElement(AdminHomePage)),
       renderToStaticMarkup(createElement(HealthPage)),
       renderToStaticMarkup(createElement(NotFound)),
       renderToStaticMarkup(

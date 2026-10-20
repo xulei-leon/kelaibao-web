@@ -7,6 +7,8 @@ import {
 } from "./lib/release-validator.mjs";
 import { validateM3ReleaseEvidence } from "./lib/m3-release-evidence.mjs";
 
+import { validateStaticReleaseEvidence } from "./lib/static-release-evidence.mjs";
+
 function argumentValue(name) {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : undefined;
@@ -26,27 +28,31 @@ try {
       ? validateM3ReleaseEvidence({ packageRoot: process.cwd(), input })
       : undefined;
   const result = evaluateRelease(input);
+  const staticEvidence = validateStaticReleaseEvidence(process.cwd(), resolve(process.cwd(), argumentValue("--static-migration") ?? "docs/5-Evidence/m5-05/static-migration.json"));
   const sqliteLocalTest = process.env.DATABASE_ADAPTER === "sqlite";
   if (sqliteLocalTest && process.env.SINO_RUNTIME_MODE === "production") {
     throw new Error("SQLite is not allowed in production runtime.");
   }
-  const productionBlockers = sqliteLocalTest
-    ? [...new Set([...result.productionBlockers, "m4_01_sqlite_local_test_active"])]
-    : result.productionBlockers;
-  const productionReady = result.productionReady && !sqliteLocalTest;
+  // The static migration gate supersedes the retired online CMS migration gate.
+  // Infrastructure, claims and all other production evidence stay mandatory.
+  const productionBlockers = [...new Set([
+    ...result.productionBlockers.filter((id) => id !== "production_cms_brand_migration"),
+    ...staticEvidence.blockers,
+    ...(sqliteLocalTest ? ["m4_01_sqlite_local_test_active"] : []),
+  ])];
+  const productionReady = result.localReady && productionBlockers.length === 0;
   process.stdout.write(
     `${JSON.stringify(
       {
-        status: sqliteLocalTest
-          ? "CODE_READY_WITH_EXTERNAL_LEGACY"
-          : result.status,
+        status: !result.localReady ? "LOCAL_NOT_READY" : productionReady ? "PRODUCTION_LIVE_READY" : "CODE_READY_WITH_EXTERNAL_LEGACY",
         localReady: result.localReady,
         productionReady,
         localBlockers: result.localBlockers,
         productionBlockers,
         databaseEvidence: sqliteLocalTest
           ? "SQLITE_LOCAL_PASS_ONLY"
-          : "DEPLOYMENT_DATABASE_UNCHANGED",
+          : "STATIC_CONTENT_NO_RUNTIME_DATABASE",
+        staticEvidence,
         ...(m3Evidence ? { m3Evidence } : {}),
       },
       null,

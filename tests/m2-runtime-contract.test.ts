@@ -163,7 +163,7 @@ describe("M2 full-stack runtime contract", () => {
     expect(body).toEqual(
       expect.objectContaining({
         status: "ok",
-        database: { configured: false },
+        contentSource: "static",
       }),
     );
     expect(JSON.stringify(body)).not.toMatch(/password|DATABASE_URL/i);

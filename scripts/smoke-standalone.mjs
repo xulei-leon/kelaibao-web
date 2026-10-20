@@ -64,7 +64,11 @@ const server = spawn(
       ...process.env,
       HOSTNAME: "127.0.0.1",
       PORT: String(port),
-      SINO_RUNTIME_MODE: "preview",
+      SINO_RUNTIME_MODE: "production",
+      DATABASE_URL: "",
+      DATABASE_ADAPTER: "",
+      ADMIN_CSRF_SECRET: "",
+      ADMIN_DUMMY_PASSWORD_HASH: "",
       SINO_APP_VERSION: "m2-01-local-smoke",
     },
     stdio: "ignore",
@@ -98,22 +102,22 @@ try {
   }
   assertPublicShellAbsent(ssrHtml, "/health");
 
-  const adminLogin = await waitFor(`${origin}/admin/login`);
-  const adminLoginHtml = await adminLogin.text();
-  if (!adminLoginHtml.includes("管理员登录")) {
-    throw new Error("Administrator login page is missing from standalone output.");
+  for (const pathname of ["/admin", "/admin/login", "/api/admin/content", "/api/internal/cache-purge"]) {
+    const retired = await fetch(`${origin}${pathname}`, { redirect: "manual" });
+    if (retired.status !== 404) throw new Error(`Retired CMS route remains available: ${pathname}`);
   }
-  assertPublicShellAbsent(adminLoginHtml, "/admin/login");
-
-  const protectedAdmin = await fetch(`${origin}/admin`, {
-    cache: "no-store",
-    redirect: "manual",
-  });
-  if (
-    ![303, 307, 308].includes(protectedAdmin.status) ||
-    !protectedAdmin.headers.get("location")?.includes("/admin/login")
-  ) {
-    throw new Error("Unauthenticated administrator route did not fail closed.");
+  for (const [pathname, marker] of [["/news", "新闻动态"], ["/cases", "案例"], ["/sitemap.xml", "<urlset"], ["/feed.xml", "<rss"], ["/llms.txt", "实验性"]]) {
+    const response = await waitFor(`${origin}${pathname}`);
+    if (!(await response.text()).includes(marker)) throw new Error(`Static content missing: ${pathname}`);
+  }
+  for (const pathname of ["/news/unknown-static-smoke", "/cases/unknown-static-smoke"]) {
+    if ((await fetch(`${origin}${pathname}`)).status !== 404) throw new Error("Unknown static article must be 404.");
+  }
+  const manifest = JSON.parse(await readFile(resolve(process.cwd(), ".next/standalone/static-content-manifest.json"), "utf8"));
+  for (const route of manifest.routes) {
+    const response = await fetch(`${origin}${route.path}`, { redirect: "manual" });
+    if (response.status !== route.status) throw new Error(`Static route status mismatch: ${route.path}`);
+    if (route.status === 308 && response.headers.get("location") !== `${origin}${route.to}`) throw new Error("Content redirect destination mismatch.");
   }
 
   const home = await waitFor(`${origin}/`);
