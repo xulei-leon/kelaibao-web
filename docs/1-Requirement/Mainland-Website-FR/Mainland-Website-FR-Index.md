@@ -75,6 +75,7 @@ VERIFICATION_COMMANDS=pnpm test && pnpm lint && pnpm build
 | 23 | [FR-23](FR-23-v3-3-public-content-and-media-packages.md) | V3.3 公开内容与媒体套餐 | P0 | `sprint-m5-03` | 完成 / Local Code Ready / Production BLOCKED |
 | 24 | [FR-24](Done/FR-24-news-cms-authoring.md) | 新闻 CMS 自主图文编辑（历史） | P0 | `sprint-m5-04` | 旧版已实现；目标要求由 FR-25 替代 |
 | 25 | [FR-25](FR-25-static-news-and-cases.md) | 新闻与案例普通静态页面 | P0 | `sprint-m5-05` | Local Code Ready / 真实内容迁移及 Production BLOCKED |
+| 26 | [FR-26](FR-26-operations-prototype-refresh.md) | 运营原型内容、图片与配色改版 | P0 | `sprint-m5-06` | Local Code Ready / 未发布 / Production BLOCKED |
 
 ## 4. 依赖与建议实施顺序
 

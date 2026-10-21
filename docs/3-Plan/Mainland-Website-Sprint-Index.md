@@ -1,5 +1,7 @@
 # 客来宝统一中文官网 Sprint 索引
 
+> **运营改版：** [M5-06](sprint-m5-06-operations-prototype-refresh.md) 按 [FR-26](../1-Requirement/Mainland-Website-FR/FR-26-operations-prototype-refresh.md) 迁入用户提供的 `var/web` 原型；2026-10-21 本地实现、文档/代码复核与验收完成，未部署。保留 FR-25 静态内容与既有生产门禁。[验收记录](../5-Evidence/m5-06/README.md)。
+
 > **当前变更（2026-10-20）：** [M5-05](sprint-m5-05-static-news-and-cases.md) 按 [FR-25](../1-Requirement/Mainland-Website-FR/FR-25-static-news-and-cases.md) 将新闻/案例改为代码维护的静态页面。旧 Sprint 中的 CMS 交付仅是历史事实，冲突的功能与回归要求被替代；M5-05 已完成代码、文档/代码实施者复核和本地验收；真实历史内容/URL 与云端发布仍待验证。
 
 | 字段 | 内容 |

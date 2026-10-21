@@ -166,6 +166,7 @@ export function PublicContentDetail(props: PublicDetailPageProps) {
         <div className="content-rich mt-10">
           <ArticleBody blocks={props.item.body} />
         </div>
+        <a className="article-return" href={label.href}>返回{label.plural}列表 →</a>
       </div>
     </article>
   );

@@ -4,6 +4,7 @@ import Head from "next/head";
 import "@/app/globals.css";
 import "@/app/visual-refresh.css";
 import "@/app/m4-03-visual-system.css";
+import "@/app/operations-refresh.css";
 import { MiniProgramTrialProvider } from "@/components/mini-program-trial";
 import { MobileContactBar } from "@/components/mobile-contact-bar";
 import { SiteFooter } from "@/components/site-footer";

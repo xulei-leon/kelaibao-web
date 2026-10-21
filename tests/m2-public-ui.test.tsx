@@ -24,16 +24,16 @@ describe("M2-04 public content lists", () => {
     );
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "新闻动态",
+      "先看懂，再决定。",
     );
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(
       screen.getByText(
-        "查看客来宝、K-Link 产品、媒体服务及数字化展业相关的新闻、方法说明与行业观察",
+        "深度长文与官方公告——所有你想问的，这里都有答案。",
       ),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 2, name: "市场更新" }),
+      screen.getByRole("heading", { level: 3, name: "市场更新" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "市场更新" })).toHaveAttribute(
       "href",

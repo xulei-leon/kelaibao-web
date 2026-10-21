@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { readFileSync, existsSync } from "node:fs";
 import type { ArticleSource } from "@/content/article-types";
-import { createStaticCatalogue } from "@/lib/static-content";
+import { createStaticCatalogue, STATIC_CONTENT } from "@/lib/static-content";
 import { ArticleBody, PublicContentDetail, serializePublicContent } from "@/lib/content-pages";
 import { buildPublicContentMetadata } from "@/server/discovery/metadata";
 import { buildSitemapXml, buildRssXml } from "@/server/discovery/files";
@@ -18,6 +18,23 @@ const article = (overrides: Partial<ArticleSource> = {}): ArticleSource => ({
 afterEach(() => { vi.unstubAllEnvs(); vi.resetModules(); vi.doUnmock("@/content/articles"); });
 
 describe("FR-25 static catalogue", () => {
+  it("imports operations stories as public text with unique local images and discoverable paths", () => {
+    const items = STATIC_CONTENT.list("news");
+    expect(items).toHaveLength(5);
+    const sitemap = buildSitemapXml({ contents: items, siteUrl: "https://site.example", coreRoutes: ["/news"] });
+    for (const item of items) {
+      expect(sitemap).toContain(`/news/${item.slug}`);
+      const images = item.body.filter((block) => block.type === "image").map((block) => block.image);
+      expect(new Set(images.map((image) => image.url)).size).toBe(images.length);
+      for (const image of images) {
+        expect(image.width).toBeGreaterThan(0);
+        expect(image.height).toBeGreaterThan(0);
+        expect(existsSync(`public${image.url}`)).toBe(true);
+      }
+      const html = renderToStaticMarkup(<ArticleBody blocks={item.body} />);
+      expect(html).not.toMatch(/<script|待提供|<iframe/);
+    }
+  });
   it("preserves public paths/dates and deterministically sorts ties across both types", () => {
     const catalogue = createStaticCatalogue([article({ slug: "z" }), article({ slug: "a" }), article({ contentType: "case", slug: "a", authorizationReviewedAt: "2026-10-01T00:00:00Z" })]);
     expect(catalogue.list("news").map((item) => item.slug)).toEqual(["a", "z"]);

@@ -181,26 +181,26 @@ describe("M4-03 VisualAssetSlot", () => {
 
 describe("M4-03 public page wiring", () => {
   it.each([
-    ["@/app/page", 5],
+    ["@/app/page", 1],
     ["@/app/features/page", 1],
     ["@/app/team/page", 1],
     ["@/app/media/page", 1],
     ["@/app/about/page", 1],
-  ] as const)("wires %s to %i registered visual slots", async (moduleId, count) => {
+  ] as const)("wires %s to %i art-directed hero pictures", async (moduleId, count) => {
     const html = await renderPage(moduleId);
     const root = document.createElement("div");
     root.innerHTML = html;
 
-    expect(root.querySelectorAll("[data-visual-asset-id]")).toHaveLength(count);
+    expect(root.querySelectorAll("picture.hero-picture")).toHaveLength(count);
     expect(root.querySelector(".visual-asset-slot__size")).toBeNull();
     expect(root.querySelector(".feature-visual__topline")).toBeNull();
   });
 
-  it("keeps the homepage aside before the new visual slot in DOM and mobile reading order", async () => {
+  it("keeps the primary headline before the problem narrative in reading order", async () => {
     const html = await renderPage("@/app/page");
 
-    expect(html.indexOf("熟人名单总会用完，陌生人才是下一站")).toBeLessThan(
-      html.indexOf('data-visual-asset-id="home-hero"'),
+    expect(html.indexOf("你手机里有那么多微信群，有多少群友真正认识你？")).toBeLessThan(
+      html.indexOf("熟人名单总会用完，陌生人才是下一站"),
     );
   });
 

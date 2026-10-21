@@ -25,7 +25,7 @@ describe("M3-05 executable release evidence", () => {
 
     expect(result).toMatchObject({
       publicBrandFindingCount: 0,
-      claimsCount: 22,
+      claimsCount: 26,
       claimsGate: "BLOCKED",
       inventorySourceMode: "fixture",
       inventoryProductionGate: "BLOCKED",

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { OperationsNews } from "@/components/operations-news";
 
 import { PUBLIC_LIST_CONTENT } from "@/lib/public-list-content";
 import type { ContentType } from "@/content/article-types";
@@ -21,6 +22,7 @@ export function PublicContentList({
   items: PublicArticle[];
 }) {
   const config = PUBLIC_LIST_CONTENT[contentType];
+  if (contentType === "news") return <OperationsNews items={items} />;
   return (
     <section
       className={`public-content-list public-content-list--${contentType} px-4 py-14 sm:px-6 sm:py-20`}
@@ -65,7 +67,7 @@ export function PublicContentList({
                   className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4"
                   href={`/${config.segment}/${item.slug}`}
                 >
-                  阅读{contentType === "news" ? "新闻" : "案例"}
+                  阅读案例
                 </Link>
               </article>
             ))}

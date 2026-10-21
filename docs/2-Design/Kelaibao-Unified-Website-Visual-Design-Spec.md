@@ -1,5 +1,9 @@
 # 客来宝统一中文官网视觉设计规格
 
+## 2026-10-20 FR-26 运营原型覆盖
+
+本次公开页面以用户提供的 `var/web` 为内容和视觉参考：摄影 Hero（移动/桌面分别取图）、深蓝 `#004090` 行动色、`#153343` 正文、`#506772` 次级文字、`#F6F8FC` 浅底、17px 卡片圆角、1160px 内容宽度。导航为首页、试用会员、会员服务、团队效率、媒体服务、新闻动态、关于我们；`/features` 保留为会员服务路径，新增 `/trial`。原有政策与无障碍规则仍生效，正文/边界不照搬原型过小字号。详见 [FR-26](../1-Requirement/Mainland-Website-FR/FR-26-operations-prototype-refresh.md) 与 [review-confirm](../4-Reviews/sprint-m5-06-review-confirm.md)。下文相冲突的旧页面布局和具体文案由本覆盖替代。
+
 > **2026-10-20 规格覆盖：** 新闻/案例沿用公开视觉，改为代码维护的普通静态页面；本文后台按钮等补充仅为旧实现记录。 现行依据为 [FR-25](../1-Requirement/Mainland-Website-FR/FR-25-static-news-and-cases.md)；M5-05 已完成静态代码与本地验证，真实内容迁移和 Production 证据仍待补齐。
 
 | 字段 | 内容 |

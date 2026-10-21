@@ -225,6 +225,10 @@ describe("M3-05 claims validator", () => {
       "v3-3-media-package-brand-project-price",
       "v3-3-media-package-offline-event-price",
       "v3-3-media-member-subsidy-50-percent",
+      "operations-user-count",
+      "operations-team-testimonials",
+      "operations-investment-story",
+      "operations-market-price-comparison",
     ];
 
     expect(input.claims.map((claim: { id: string }) => claim.id)).toEqual(
@@ -234,7 +238,7 @@ describe("M3-05 claims validator", () => {
       expect(Object.keys(claim).sort()).toEqual([...FIELD_NAMES].sort());
     }
     expect(input.claims.filter((claim: { disposition: string }) => claim.disposition === "approved")).toHaveLength(15);
-    expect(input.claims.filter((claim: { disposition: string }) => claim.disposition === "accepted-blocked")).toHaveLength(5);
+    expect(input.claims.filter((claim: { disposition: string }) => claim.disposition === "accepted-blocked")).toHaveLength(9);
     expect(input.claims.filter((claim: { disposition: string }) => claim.disposition === "weakened")).toHaveLength(2);
     expect(validateClaimsRegister(input, { now: new Date("2026-09-15T00:30:00+08:00") })).toBe(input);
     expect(() => validateClaimsRegister(input, { now: new Date("2026-12-14T00:00:00+08:00") })).toThrow(/expiresAt|expired/i);

@@ -45,13 +45,13 @@ export function SiteHeader() {
           <Image
             alt="客来宝 K-Link"
             className="wordmark__logo"
-            height={72}
+            height={518}
             priority
-            src="/brand/kelaibao-k-link-logo.png"
+            src="/brand/kelaibao-operations-logo.png"
             unoptimized
-            width={240}
+            width={1218}
           />
-          <small>{BRAND.descriptor}</small>
+          <span className="sr-only">{BRAND.descriptor}</span>
         </Link>
         <button
           aria-controls="primary-navigation"

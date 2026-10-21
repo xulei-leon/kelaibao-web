@@ -4,6 +4,7 @@ import { SITE_URL } from "@/lib/site-config";
 
 export const PUBLIC_ROUTES = [
   "/",
+  "/trial",
   "/features",
   "/team",
   "/media",
@@ -26,8 +27,13 @@ interface RouteMetadataEntry {
 }
 
 export const ROUTE_METADATA: Record<PublicRoute, RouteMetadataEntry> = {
+  "/trial": {
+    title: "先免费试试，1分钟就知道好不好用。｜客来宝 K-Link",
+    description: "打开发现页，挑一篇你愿意读的内容，先免费体验 K-Link，并比较免费试用与年费会员权益。",
+    canonical: "/trial",
+  },
   "/": {
-    title: "客来宝 K-Link｜团队内容协同与微信社群获客工具",
+    title: "你手机里有那么多微信群，有多少群友真正认识你？｜客来宝 K-Link",
     description: "客来宝 K-Link（klinktool.com）由小未来商务服务（深圳）有限公司技术运营，为带团队的经营者提供内容与工具服务：每天更新的内容库，转发时带上自己的数字名片，团队内容实时同步；以及人物专访、团队报道、活动发布等媒体发稿服务。系统坚守不采集隐私、不触碰团队、不干预业务三项中立原则，让每个人体面地持续被看见、被信任、被找到。",
     canonical: "/",
     keywords: [
@@ -47,18 +53,18 @@ export const ROUTE_METADATA: Record<PublicRoute, RouteMetadataEntry> = {
     ],
   },
   "/features": {
-    title: "K-Link 核心功能｜内容工具、数字名片与团队小程序",
-    description: "了解 K-Link 从曝光、获客、信任、成交到沉淀的五阶段路径，扫码体验小程序，并查看九项会员权益。",
+    title: "会员服务｜每天有现成内容，转发就带上你。｜客来宝 K-Link",
+    description: "客来宝年费会员599元/年：现成内容、数字名片、访客轨迹、团队小程序等九项权益。先免费试用，再决定。",
     canonical: "/features",
   },
   "/team": {
-    title: "团队小程序与数智化赋能方案｜K-Link",
-    description: "了解 K-Link 如何通过品牌专刊、团队小程序、成员分享归属和三类交付保障支持团队经验复制。",
+    title: "团队效率｜一个人会卖货，不代表整个团队都会。｜客来宝 K-Link",
+    description: "团队长整理一次，队员一键取用统一内容，各自带自己的二维码。了解 K-Link 团队小程序的内容复制与成员分享归属。",
     canonical: "/team",
   },
   "/media": {
-    title: "媒体发稿与团队 IP 内容服务｜客来宝媒体",
-    description: "了解客来宝媒体如何通过专业表达、新闻稿、公开传播与持续内容沉淀，帮助个人和团队建立可信的公开信息。",
+    title: "媒体服务｜发一篇，能用很久。｜客来宝媒体",
+    description: "个人专访、团队报道、活动发布：从选题沟通、专业表达、撰稿审稿到协调发布，了解客来宝媒体服务与四档咨询套餐。",
     canonical: "/media",
   },
   "/media/packages": {
@@ -72,7 +78,7 @@ export const ROUTE_METADATA: Record<PublicRoute, RouteMetadataEntry> = {
     canonical: "/news",
   },
   "/about": {
-    title: "关于客来宝｜客来宝",
+    title: "关于客来宝｜我们提供工具，连接由你决定。",
     description: "了解客来宝、K-Link 与客来宝媒体的工作原则、合作方式、适用情况与服务边界。",
     canonical: "/about",
   },

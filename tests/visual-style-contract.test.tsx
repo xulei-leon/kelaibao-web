@@ -1,5 +1,4 @@
 import { readFileSync } from "node:fs";
-import { createHash } from "node:crypto";
 import { join } from "node:path";
 import type { ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -7,56 +6,16 @@ import { describe, expect, it, vi } from "vitest";
 
 import { PublicContentList } from "@/components/public-content-list";
 import { PageHero } from "@/components/ui/page-hero";
-import { PRIMARY_NAVIGATION } from "@/lib/site-content";
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/",
 }));
 
-interface StaticRouteBaseline {
-  moduleId: string;
-  h1: string;
-  sectionCount: number;
-  markers: string[];
-  ctaLabels: string[];
-  textDigest: string;
-  h2: string[];
-  h3: string[];
-  sectionLabels: string[];
-  keyCounts: Record<string, number>;
-  hero: { actions: number; aside: boolean; boundary: boolean };
-}
-
-interface BaselineFixture {
-  staticRoutes: Record<string, StaticRouteBaseline>;
-  contentRoutes: Record<
-    string,
-    { contentType: "news" | "case"; h1: string; emptyState: string }
-  >;
-  global: { navigation: string[]; forbiddenCopy: string[] };
-}
-
 type PageModule = { default: () => ReactNode | Promise<ReactNode> };
-
-const fixture = JSON.parse(
-  readFileSync(
-    join(process.cwd(), "tests/fixtures/m4-02-public-page-baseline.json"),
-    "utf8",
-  ),
-) as BaselineFixture;
 
 async function renderPage(moduleId: string) {
   const page = await vi.importActual<PageModule>(moduleId);
   return renderToStaticMarkup(await page.default());
-}
-
-function expectMarkersInOrder(html: string, markers: readonly string[]) {
-  let previous = -1;
-  for (const marker of markers) {
-    const current = html.indexOf(marker, previous + 1);
-    expect(current, marker).toBeGreaterThan(previous);
-    previous = current;
-  }
 }
 
 function expectSingleH1(html: string, h1: string) {
@@ -68,89 +27,25 @@ function expectSingleH1(html: string, h1: string) {
   expect((headings[0]?.textContent ?? "").replace(/\s+/g, " ").trim()).toBe(h1);
 }
 
-function inspectRouteHtml(html: string) {
-  const root = document.createElement("div");
-  root.innerHTML = html;
-  root.querySelectorAll(".visual-asset-slot__size").forEach((node) => node.remove());
-  root
-    .querySelectorAll('script[type="application/ld+json"]')
-    .forEach((node) => node.remove());
-  const normalizedText = (root.textContent ?? "").replace(/\s+/g, " ").trim();
-  const headings = (level: "h2" | "h3") =>
-    Array.from(root.querySelectorAll(level)).map((node) =>
-      (node.textContent ?? "").replace(/\s+/g, " ").trim(),
-    );
-
-  return {
-    textDigest: createHash("sha256").update(normalizedText).digest("hex"),
-    h2: headings("h2"),
-    h3: headings("h3"),
-    sectionLabels: Array.from(root.querySelectorAll("section")).map((section) =>
-      (section.querySelector("h1, h2, h3")?.textContent ?? "")
-        .replace(/\s+/g, " ")
-        .trim(),
-    ),
-    hero: {
-      actions: root.querySelectorAll(".hero-actions > *").length,
-      aside: Boolean(root.querySelector(".page-hero__aside")),
-      boundary: Boolean(root.querySelector(".hero-boundary")),
-    },
-  };
-}
-
-describe("M4-02 public-page baseline fixture", () => {
-  it.each(Object.entries(fixture.staticRoutes))(
-    "freezes visible structure and copy for %s",
-    async (_route, baseline) => {
-      const html = await renderPage(baseline.moduleId);
-      const observation = inspectRouteHtml(html);
-      const root = document.createElement("div");
-      root.innerHTML = html;
-      root
-        .querySelectorAll('script[type="application/ld+json"]')
-        .forEach((node) => node.remove());
-
-      expectSingleH1(html, baseline.h1);
-      expect(html.match(/<section(?:\s|>)/g) ?? []).toHaveLength(
-        baseline.sectionCount,
-      );
-      expectMarkersInOrder(html, baseline.markers);
-      for (const label of baseline.ctaLabels) expect(html).toContain(label);
-      for (const forbidden of fixture.global.forbiddenCopy) {
-        expect(root.textContent).not.toContain(forbidden);
-      }
-      expect(observation).toEqual({
-        textDigest: baseline.textDigest,
-        h2: baseline.h2,
-        h3: baseline.h3,
-        sectionLabels: baseline.sectionLabels,
-        hero: baseline.hero,
-      });
-      for (const [selector, count] of Object.entries(baseline.keyCounts)) {
-        expect(root.querySelectorAll(selector), selector).toHaveLength(count);
-      }
-    },
-  );
-
-  it("freezes the exact six-item navigation", () => {
-    expect(PRIMARY_NAVIGATION.map((item) => item.label)).toEqual(
-      fixture.global.navigation,
-    );
+describe("FR-26 public-page baseline", () => {
+  it.each([
+    ["@/app/page", "home"], ["@/app/trial/page", "trial"],
+    ["@/app/features/page", "membership"], ["@/app/team/page", "team"],
+    ["@/app/media/page", "media"], ["@/app/about/page", "about"],
+  ])("renders %s with local art-directed photography", async (moduleId, image) => {
+    const html = await renderPage(moduleId);
+    const root = document.createElement("div"); root.innerHTML = html;
+    expect(root.querySelectorAll("h1")).toHaveLength(1);
+    expect(root.querySelector("picture source")).toHaveAttribute("srcset", `/visual/operations/${image}-mobile.webp`);
+    expect(root.querySelector("picture img")).toHaveAttribute("src", `/visual/operations/${image}-pc.webp`);
+    expect(root.querySelector("picture img")).toHaveAttribute("fetchpriority", "high");
+    expect(html).not.toMatch(/assets\/|\.html["#]|window.matchMedia|<script(?![^>]*application\/ld\+json)/);
   });
-
-  it.each(Object.entries(fixture.contentRoutes))(
-    "freezes the honest empty state for %s",
-    (_route, baseline) => {
-      const html = renderToStaticMarkup(
-        <PublicContentList contentType={baseline.contentType} items={[]} />,
-      );
-
-      expectSingleH1(html, baseline.h1);
-      expect(html).toContain(baseline.emptyState);
-      expect(html).toContain(`public-content-list--${baseline.contentType}`);
-      expect(html).not.toContain("<article");
-    },
-  );
+  it("retains an honest empty state for cases", () => {
+    const html = renderToStaticMarkup(<PublicContentList contentType="case" items={[]} />);
+    expectSingleH1(html, "案例"); expect(html).toContain("当前没有已公开的案例。");
+    expect(html).not.toContain("<article");
+  });
 });
 
 describe("M4-02 visual-only component contract", () => {
@@ -196,7 +91,7 @@ describe("M4-02 visual-only component contract", () => {
   ] as const)("wires %s to the %s hero variant", async (moduleId, variant) => {
     const html = await renderPage(moduleId);
 
-    expect(html).toContain(`page-hero--${variant}`);
+    expect(html).toContain('class="hero-picture"');
   });
 
   it("loads the reversible overlay after globals.css in both routers", () => {

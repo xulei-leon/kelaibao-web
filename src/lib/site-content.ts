@@ -12,7 +12,7 @@ export const BRAND = {
   productName: "K-Link",
   mediaName: "客来宝媒体",
   descriptor: "K-Link 一站式拓客工具系统",
-  promise: "内容赋能 · 资源链接 · 商机互联",
+  promise: "让好内容，帮你认识更多人。",
   primaryAudience: "希望长期建设个人专业表达的合法直销从业者",
   secondaryAudience: "其他需要审慎表达的个人专业人士",
   positioning:
@@ -21,8 +21,9 @@ export const BRAND = {
 
 export const PRIMARY_NAVIGATION = [
   { label: "首页", href: "/" },
-  { label: "核心工具", href: "/features" },
-  { label: "团队方案", href: "/team" },
+  { label: "试用会员", href: "/trial" },
+  { label: "会员服务", href: "/features" },
+  { label: "团队效率", href: "/team" },
   { label: "媒体服务", href: "/media" },
   { label: "新闻动态", href: "/news" },
   { label: "关于我们", href: "/about" },

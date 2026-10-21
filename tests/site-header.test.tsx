@@ -10,14 +10,15 @@ vi.mock("next/navigation", () => ({
 }));
 
 describe("site header navigation state", () => {
-  it("renders the exact six-item public navigation and product trial CTA", () => {
+  it("renders the exact seven-item public navigation and product trial CTA", () => {
     render(<SiteHeader />);
 
     const navigation = within(screen.getByRole("navigation", { name: "主导航" }));
     const expectedNavigation = [
       ["首页", "/"],
-      ["核心工具", "/features"],
-      ["团队方案", "/team"],
+      ["试用会员", "/trial"],
+      ["会员服务", "/features"],
+      ["团队效率", "/team"],
       ["媒体服务", "/media"],
       ["新闻动态", "/news"],
       ["关于我们", "/about"],
@@ -61,7 +62,7 @@ describe("site header navigation state", () => {
     expect(menuButton).toHaveFocus();
 
     await user.click(menuButton);
-    const routeLink = screen.getByRole("link", { name: "核心工具" });
+    const routeLink = screen.getByRole("link", { name: "会员服务" });
     routeLink.addEventListener("click", (event) => event.preventDefault(), {
       once: true,
     });

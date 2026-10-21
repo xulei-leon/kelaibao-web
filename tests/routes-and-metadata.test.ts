@@ -12,6 +12,7 @@ describe("public route and metadata contract", () => {
   it("keeps the approved public route inventory complete", () => {
     expect(PUBLIC_ROUTES).toEqual([
       "/",
+      "/trial",
       "/features",
       "/team",
       "/media",
@@ -26,6 +27,7 @@ describe("public route and metadata contract", () => {
 
     const pageFiles = [
       "src/app/page.tsx",
+      "src/app/trial/page.tsx",
       "src/app/features/page.tsx",
       "src/app/team/page.tsx",
       "src/app/media/page.tsx",
@@ -57,6 +59,7 @@ describe("public route and metadata contract", () => {
   it("gives every primary navigation route canonical and Open Graph metadata", () => {
     const primaryRoutes = [
       "/",
+      "/trial",
       "/features",
       "/team",
       "/media",
@@ -97,8 +100,8 @@ describe("public route and metadata contract", () => {
 
   it("gives every product decision page independent metadata and canonical", () => {
     const expected = {
-      "/features": /K-Link 核心功能/,
-      "/team": /团队小程序与数智化赋能方案/,
+      "/features": /会员服务/,
+      "/team": /团队效率/,
       "/about": /关于客来宝|关于我们/,
     } as const;
 
@@ -132,7 +135,7 @@ describe("public route and metadata contract", () => {
     expect(media).toEqual(
       expect.objectContaining({
         canonical: "/media",
-        title: expect.stringMatching(/媒体发稿与团队 IP 内容服务/),
+        title: expect.stringMatching(/媒体服务/),
         description: expect.stringMatching(/专业表达|内容顾问/),
       }),
     );

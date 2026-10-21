@@ -31,20 +31,8 @@ describe("M3-03 media page and legacy route migration", () => {
   it("renders the V3.3 media narrative, packages entry and five stable anchors", async () => {
     const html = await renderMediaPage();
 
-    expect(html).toContain("媒体发稿与团队 IP 内容服务");
-    expect(html).toContain("发一篇，能用很久");
-    expect(html).toContain("你为什么需要媒体背书？");
-    expect(html).toContain("为什么带团队的人需要媒体发稿");
-    expect(html).toContain("不是广告，是第三方说你");
-    expect(html).not.toContain("不只是简单发稿，而是建立长期影响力");
-    expect(html).not.toContain("从“社交曝光”到“媒体背书”的转变");
-    expect(html).not.toContain("核心价值");
-    expect(html).toContain("让个人和团队一起被看见");
-    expect(html).toContain("一站式发稿服务");
-    expect(html).toContain("四套会员专享套餐");
+    for (const value of ["发一篇，能用很久", "四档套餐", "聊方向", "给素材", "审稿子", "等发布"]) expect(html).toContain(value);
     expect(html).toContain('href="/media/packages"');
-    expect(html).toContain("开启你的媒体背书之路");
-    expect(html).not.toMatch(/专业定位与个人形象|内容资产建设|持续推广顾问|90 天内容主题图/);
 
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(
       ([, id]) => id,
@@ -64,7 +52,7 @@ describe("M3-03 media page and legacy route migration", () => {
     const html = await renderMediaPage();
 
     expect(html).toContain("客来宝媒体");
-    expect(html).toContain("咨询媒体报道");
+    expect(html).toContain("咨询媒体服务");
     expect(html).not.toMatch(
       /aria-label="[^"]*客来宝媒体[^"]*导航"|class="[^"]*media-(?:nav|logo)/i,
     );

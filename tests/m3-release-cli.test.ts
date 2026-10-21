@@ -28,7 +28,7 @@ describe("M3-05 release validation CLI", () => {
       productionReady: false,
       m3Evidence: {
         publicBrandFindingCount: 0,
-        claimsCount: 22,
+        claimsCount: 26,
         inventoryProductionGate: "BLOCKED",
       },
     });

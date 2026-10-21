@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 import "./visual-refresh.css";
 import "./m4-03-visual-system.css";
+import "./operations-refresh.css";
 import { PublicAppShell } from "@/components/public-app-shell";
 import { BRAND } from "@/lib/site-content";
 import { SITE_URL } from "@/lib/site-config";
@@ -15,7 +16,7 @@ import {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#F5F8FC",
+  themeColor: "#004090",
   colorScheme: "light",
 };
 

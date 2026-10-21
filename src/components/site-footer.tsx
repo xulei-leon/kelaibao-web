@@ -20,9 +20,11 @@ export function SiteFooter() {
           <div className="site-footer__nav">
             <div>
               <h3>产品与服务</h3>
-              <Link href="/features">K-Link 产品功能</Link>
-              <Link href="/team">团队方案</Link>
-              <Link href="/media">团队方案</Link>
+              <Link href="/trial">试用会员</Link>
+              <Link href="/features">会员服务</Link>
+              <Link href="/team">团队效率</Link>
+              <Link href="/media">媒体服务</Link>
+              <Link href="/media/packages">媒体套餐</Link>
             </div>
             <div>
               <h3>了解客来宝</h3>

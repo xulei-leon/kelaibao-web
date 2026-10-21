@@ -26,8 +26,9 @@ describe("central site content", () => {
     expect(BRAND.descriptor).toContain("拓客");
     expect(PRIMARY_NAVIGATION).toEqual([
       { label: "首页", href: "/" },
-      { label: "核心工具", href: "/features" },
-      { label: "团队方案", href: "/team" },
+      { label: "试用会员", href: "/trial" },
+      { label: "会员服务", href: "/features" },
+      { label: "团队效率", href: "/team" },
       { label: "媒体服务", href: "/media" },
       { label: "新闻动态", href: "/news" },
       { label: "关于我们", href: "/about" },
