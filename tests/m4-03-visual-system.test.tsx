@@ -199,7 +199,8 @@ describe("M4-03 public page wiring", () => {
   it("keeps the primary headline before the problem narrative in reading order", async () => {
     const html = await renderPage("@/app/page");
 
-    expect(html.indexOf("你手机里有那么多微信群，有多少群友真正认识你？")).toBeLessThan(
+    expect(html.indexOf("你手机里躺着几百个微信群、几万个陌生群友——真正认识你的，有几个？")).toBeGreaterThanOrEqual(0);
+    expect(html.indexOf("你手机里躺着几百个微信群、几万个陌生群友——真正认识你的，有几个？")).toBeLessThan(
       html.indexOf("熟人名单总会用完，陌生人才是下一站"),
     );
   });

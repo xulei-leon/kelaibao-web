@@ -246,92 +246,9 @@ export const ARTICLES: readonly ArticleSource[] = [
         }
       }
     ]
-  },
-  {
-    "contentType": "news",
-    "slug": "article-e2",
-    "title": "客来宝K-Link媒体服务官宣：四档套餐与会员补贴",
-    "summary": "349元起四档套餐明细，会员专享补贴价。",
-    "firstPublishedAt": "2026-10-20T23:50:00+08:00",
-    "publishedAt": "2026-10-20T23:50:00+08:00",
-    "updatedAt": "2026-10-20T23:50:00+08:00",
-    "coverImage": null,
-    "body": [
-      {
-        "type": "paragraph",
-        "text": "客来宝K-Link媒体服务四档套餐即日起接受咨询，会员专享补贴价。"
-      },
-      {
-        "type": "heading",
-        "text": "四档套餐"
-      },
-      {
-        "type": "paragraph",
-        "text": "一、个人形象与人物专访：会员价349元/次（平台价698元）。1家主流门户作新闻源，1家地方媒体，3家行业媒体，5家转载渠道。适合团队负责人、个人创业者。"
-      },
-      {
-        "type": "paragraph",
-        "text": "二、团队形象与发展报道：会员价399元/次（平台价798元）。1家财经或创业媒体，1家地方新闻网，10家转载。适合团队招商、成员成长记录。"
-      },
-      {
-        "type": "paragraph",
-        "text": "三、品牌与项目传播：会员价449元/次（平台价898元）。12至15家相关媒体与内容渠道。适合品牌主理人、创业项目。"
-      },
-      {
-        "type": "image",
-        "image": {
-          "url": "/visual/operations/articles/art-e1.webp",
-          "width": 1200,
-          "height": 800,
-          "alt": "客来宝K-Link媒体服务官宣：四档套餐与会员补贴配图",
-          "mimeType": "image/webp"
-        }
-      },
-      {
-        "type": "paragraph",
-        "text": "四、线下活动与阶段成果：会员价888元/次（平台价1776元）。20家以上媒体与渠道。适合周年庆、交流会、表彰活动。"
-      },
-      {
-        "type": "paragraph",
-        "text": "套餐价格与媒体组合有效期至2026年12月13日，具体以确认方案为准。"
-      },
-      {
-        "type": "heading",
-        "text": "包含什么服务"
-      },
-      {
-        "type": "paragraph",
-        "text": "不是只\"发一篇文章\"。包含：选题沟通、素材整理、专业撰稿、审稿确认、媒体组合发布、链接反馈。全程你只花聊天的功夫，不需要会写稿。"
-      },
-      {
-        "type": "heading",
-        "text": "两句实话"
-      },
-      {
-        "type": "image",
-        "image": {
-          "url": "/visual/operations/articles/art-e2.webp",
-          "width": 1200,
-          "height": 800,
-          "alt": "客来宝K-Link媒体服务官宣：四档套餐与会员补贴配图",
-          "mimeType": "image/webp"
-        }
-      },
-      {
-        "type": "paragraph",
-        "text": "媒体服务可单独咨询，不必先买团队小程序；但349元是\"年费会员专享价\"。是否刊发取决于选题与媒体审核，我们按确认的媒体组合尽力协调——这是行业的实话，签约前请先了解。"
-      },
-      {
-        "type": "paragraph",
-        "text": "咨询入口：官网媒体服务页，或扫码添加企业微信。"
-      },
-      {
-        "type": "paragraph",
-        "text": "客来宝K-Link由小未来商务服务（深圳）有限公司运营，官网klinktool.com。"
-      }
-    ]
   }
 ];
 
-export const WITHDRAWN_CONTENT: readonly string[] = [];
+// FR-27: the official announcement was withdrawn; keep its URL as a tombstone.
+export const WITHDRAWN_CONTENT: readonly string[] = ["/news/article-e2"];
 export const CONTENT_REDIRECTS: readonly ContentRedirect[] = [];

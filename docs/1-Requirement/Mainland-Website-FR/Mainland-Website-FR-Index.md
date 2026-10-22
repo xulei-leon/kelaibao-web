@@ -1,5 +1,7 @@
 # 客来宝统一中文官网 FR 索引
 
+> **当前细节优化（2026-10-22）：** [FR-27](FR-27-website-detail-refinements.md) / M5-07按review1调整首页、试用、新闻和关于；今日内容橱窗为静态介绍条，公告article-e2撤回410。本地实现、评审和验收完成，未部署；[验收记录](../../5-Evidence/m5-07/README.md)。
+
 > **当前内容维护决策（2026-10-20）：** [FR-25](FR-25-static-news-and-cases.md) 是新闻/案例的现行需求，替代 FR-12/FR-24 及 CMS 补充；FR-10/FR-11/FR-19 仅服务 CMS 的能力不再是目标要求。下列旧顺序与完成状态保留历史含义，新任务为 M5-05；首响应 HTML、询盘、授权及 Production 门禁继续有效。
 
 | 字段 | 内容 |
@@ -76,6 +78,7 @@ VERIFICATION_COMMANDS=pnpm test && pnpm lint && pnpm build
 | 24 | [FR-24](Done/FR-24-news-cms-authoring.md) | 新闻 CMS 自主图文编辑（历史） | P0 | `sprint-m5-04` | 旧版已实现；目标要求由 FR-25 替代 |
 | 25 | [FR-25](FR-25-static-news-and-cases.md) | 新闻与案例普通静态页面 | P0 | `sprint-m5-05` | Local Code Ready / 真实内容迁移及 Production BLOCKED |
 | 26 | [FR-26](FR-26-operations-prototype-refresh.md) | 运营原型内容、图片与配色改版 | P0 | `sprint-m5-06` | Local Code Ready / 未发布 / Production BLOCKED |
+| 27 | [FR-27](FR-27-website-detail-refinements.md) | 官网细节优化 | P1 | `sprint-m5-07` | Local Code Ready / 未部署 / Production BLOCKED |
 
 ## 4. 依赖与建议实施顺序
 

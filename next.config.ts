@@ -1,8 +1,12 @@
 import type { NextConfig } from "next";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { WITHDRAWN_CONTENT } from "./src/content/articles";
 
 const applicationRoot = dirname(fileURLToPath(import.meta.url));
+const withdrawnPathsPattern = WITHDRAWN_CONTENT
+  .map((path) => path.slice(1).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+  .join("|");
 
 const nextConfig: NextConfig = {
   // Keep development artifacts separate so `next build` cannot invalidate a
@@ -11,11 +15,21 @@ const nextConfig: NextConfig = {
   output: "standalone",
   outputFileTracingRoot: applicationRoot,
   poweredByHeader: false,
+  // Next's built-in slash redirect runs before middleware. Let withdrawn URLs
+  // reach the 410 handler directly, retaining normalization for every other URL.
+  skipTrailingSlashRedirect: true,
   images: {
     unoptimized: true,
   },
   async redirects() {
     return [
+      {
+        source: withdrawnPathsPattern
+          ? `/:path((?!(?:${withdrawnPathsPattern})/$).+)/`
+          : "/:path+/",
+        destination: "/:path",
+        permanent: true,
+      },
       {
         source: "/contact",
         destination: "/about#contact",

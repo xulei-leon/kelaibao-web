@@ -8,7 +8,7 @@ export const metadata = createPageMetadata("/");
 
 export default function HomePage() {
   return (
-    <div className="ops-page">
+    <div className="ops-page ops-home">
       <StaticPageStructuredData route="/" />
       <OperationsHero image="home">
         <div className="shell hero-inner">
@@ -16,7 +16,7 @@ export default function HomePage() {
             {"一站式拓客与团队效率工具系统"}
           </div>
           <h1>
-            {"你手机里有那么多微信群，有多少群友真正认识你？"}
+            {"你手机里躺着几百个微信群、几万个陌生群友——真正认识你的，有几个？"}
           </h1>
           <p>
             {"客来宝每天给你现成的好内容，转发就带上你。1分钟挑一条，让群里的陌生人记住你、找到你。"}
@@ -26,6 +26,21 @@ export default function HomePage() {
           </div>
         </div>
       </OperationsHero>
+      <section className="content-showcase" aria-labelledby="content-showcase-title">
+        <div className="shell content-showcase__inner">
+          <div>
+            <h2 id="content-showcase-title">今日内容橱窗</h2>
+            <p>每天真实更新的一篇早报+一条有趣话题+一张每日一图+多个发群发圈可用的好内容，可直接使用。</p>
+            <ul className="content-showcase__types">
+              <li>早报</li>
+              <li>有趣话题</li>
+              <li>每日一图</li>
+              <li>发群发圈好内容</li>
+            </ul>
+          </div>
+          <MiniProgramTrialButton className="btn" label="打开小程序查看" source="index" />
+        </div>
+      </section>
       <section className="area" id="pain">
         <div className="shell">
           <div className="area-kicker">
@@ -35,7 +50,7 @@ export default function HomePage() {
             {"熟人名单总会用完，陌生人才是下一站"}
           </h2>
           <p className="intro">
-            {"你手机里有上百到数百个微信群，常打开的可能不到20个。99%的群都是别人的——发广告被踢，不发没人认识。加群容易，加好友难。"}
+            {"你手机里有上百到数百个微信群。按一个群平均100人算，200个群就是约2万个陌生群友——可99%的群都是别人的：发广告被踢，不发，没人认识。加群容易，加好友难。"}
           </p>
           <div className="cards">
             <article className="card">
@@ -134,7 +149,7 @@ export default function HomePage() {
             {"已经有不少人在用"}
           </div>
           <h2>
-            {"数字不说谎，方式很诚实"}
+            {"通过微信拓客的人，她们先开始了"}
           </h2>
           <div className="cards">
             <article className="card">
@@ -288,7 +303,7 @@ export default function HomePage() {
             </article>
             <article className="card">
               <h3>
-                {"媒体服务5折"}
+                {"媒体全程服务与补贴"}
               </h3>
               <p>
                 {"人物专访、团队报道，会员专享补贴。"}

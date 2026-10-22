@@ -33,7 +33,7 @@ export const ROUTE_METADATA: Record<PublicRoute, RouteMetadataEntry> = {
     canonical: "/trial",
   },
   "/": {
-    title: "你手机里有那么多微信群，有多少群友真正认识你？｜客来宝 K-Link",
+    title: "你手机里躺着几百个微信群、几万个陌生群友——真正认识你的，有几个？｜客来宝 K-Link",
     description: "客来宝 K-Link（klinktool.com）由小未来商务服务（深圳）有限公司技术运营，为带团队的经营者提供内容与工具服务：每天更新的内容库，转发时带上自己的数字名片，团队内容实时同步；以及人物专访、团队报道、活动发布等媒体发稿服务。系统坚守不采集隐私、不触碰团队、不干预业务三项中立原则，让每个人体面地持续被看见、被信任、被找到。",
     canonical: "/",
     keywords: [

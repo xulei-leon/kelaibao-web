@@ -183,6 +183,21 @@
 .ops-page .news-item time { color:#506772; font-size:14px; }
 .ops-page .news-item img { width:100%; height:auto; border-radius:10px; margin-bottom:16px; }
 .ops-page .contact-qr img { width:170px; height:170px; max-width:100%; object-fit:contain; margin:auto; }
+.ops-page .contact-qr .card { text-align:center; }
+.ops-page .contact-qr img { display:block; }
+.ops-page .about-story .shell { max-width:760px; }
+.ops-page .about-story .intro { text-align:left; }
+.ops-page .about-story .intro:last-child { margin-bottom:0; }
+/* FR-27: let the longer homepage headline determine the hero height. */
+.ops-home .hero { height:auto; min-height:590px; padding-block:64px; }
+.ops-home .content-showcase { padding-block:30px; background:var(--mint); border-bottom:1px solid var(--line); }
+.ops-home .content-showcase__inner { display:flex; align-items:center; gap:28px; }
+.ops-home .content-showcase__inner > div { flex:1; min-width:0; }
+.ops-home .content-showcase h2 { font-size:22px; margin-bottom:10px; }
+.ops-home .content-showcase p { font-size:16px; }
+.ops-home .content-showcase__types { display:flex; flex-wrap:wrap; gap:8px; list-style:none; padding:0; margin:16px 0 0; }
+.ops-home .content-showcase__types li { background:#fff; border:1px solid #b9cde8; border-radius:8px; padding:5px 12px; font-size:14px; color:var(--teal); }
+.ops-home .content-showcase .btn { flex-shrink:0; }
 .public-content-detail { color:#153343; background:#fff; }
 .public-content-detail h1 { color:#153343; font-size:clamp(27px,3vw,40px); line-height:1.4; }
 .public-content-detail .content-rich img { max-width:100%; height:auto; border-radius:14px; }
@@ -217,6 +232,8 @@
   .primary-nav { top:64px; padding:15px 18px 22px; }
   .site-footer__nav { gap:25px; }
   .ops-page .hero { height:auto; min-height:620px; padding-bottom:35px; }
+  .ops-home .hero { padding-block:0 35px; }
+  .ops-home .content-showcase__inner { flex-direction:column; align-items:flex-start; gap:20px; }
   .ops-page .hero p { font-size:15px; line-height:1.75; }
   .ops-page .hero .tag, .ops-page .area-kicker { font-size:12px; }
   .ops-page .btn { font-size:14px; padding:11px 15px; white-space:normal; }

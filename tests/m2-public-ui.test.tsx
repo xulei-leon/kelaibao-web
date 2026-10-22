@@ -29,7 +29,7 @@ describe("M2-04 public content lists", () => {
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(
       screen.getByText(
-        "深度长文与官方公告——所有你想问的，这里都有答案。",
+        "深度长文——所有你想问的，这里都有答案。",
       ),
     ).toBeInTheDocument();
     expect(

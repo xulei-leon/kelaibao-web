@@ -33,7 +33,7 @@ export default function AboutPage() {
           </div>
         </div>
       </OperationsHero>
-      <section className="area" id="story">
+      <section className="area about-story" id="story">
         <div className="shell">
           <div className="area-kicker">
             {"关于客来宝"}
@@ -42,13 +42,16 @@ export default function AboutPage() {
             {"专注私域经营工具的研发"}
           </h2>
           <p className="intro">
-            {"客来宝专注私域经营工具的研发，为带团队的经营者、大健康与成长型销售团队提供内容协同与客户经营工具。由资深互联网软件技术专家与长期深耕微信社群经营场景的顾问联合打造。"}
+            {"客来宝K-Link是由小未来商务服务（深圳）有限公司运营的数字化经营服务品牌，面向自雇经营者、业务人员与团队负责人，提供内容供应、个人展示、团队内容协同与媒体传播服务。"}
           </p>
           <p className="intro">
-            {"客来宝旗下小程序K-Link（K-Link Future）将内容、数据与团队运营能力深度结合，帮助个人提升专业度与拓客效率，帮助团队建立统一、可复制、可沉淀的运营体系。从个人拓客到团队运营，从内容传播到客户沉淀，客来宝始终坚持：让每一次连接都能体现专业、建立人设。"}
+            {"我们关注日常经营中的真实需要：如何持续分享有价值的内容，如何清楚地介绍自己的专业，如何让团队成员更容易开始。客来宝将这些需要做进产品——每天更新的内容、数字名片、行业专刊、团队小程序，让个人更容易展示自己、建立连接；让团队统一整理资料、便捷取用，每位成员使用各自的联系入口开展经营。"}
           </p>
           <p className="intro">
-            {"运营主体：小未来商务服务（深圳）有限公司。平台引入行业资深创投基金共同投资，成立深圳小未来数字信息有限公司，负责后续的工具平台服务。官网：www.klinktool.com（粤ICP备2025362743号）。"}
+            {"客来宝媒体提供人物专访、团队报道、品牌与活动传播服务，把真实经历与专业经验整理成清晰、正式、便于分享的内容，为个人介绍、团队展示与商务沟通提供支持。"}
+          </p>
+          <p className="intro">
+            {"我们相信，长期的经营建立在真实表达、持续服务与相互信任之上。客来宝坚持0隐私采集、0业务干预、100%私域归属：不读取通讯录，不干预你的业务，你的客户永远是你的。让每一位认真经营的人，更容易表达专业、积累信任、建立合作，是客来宝长期坚持的方向。"}
           </p>
         </div>
       </section>
@@ -178,14 +181,14 @@ export default function AboutPage() {
           <h2>
             {"扫码找到我们"}
           </h2>
-          <div className="cards two">
+          <div className="cards two contact-qr">
             <article className="card" style={{"textAlign": "center"}}>
               <img src="/wechat/k-link-mini-program-qr.png" alt="K-Link小程序二维码" style={{"width": "170px", "height": "170px", "objectFit": "contain"}} width="750" height="750" decoding="async" loading="lazy" />
               <h3 style={{"marginTop": "12px"}}>
                 {"小程序"}
               </h3>
               <p>
-                {"微信扫码体验K-Link；移动端可长按识别。"}
+                {"微信扫码体验K-Link。"}
               </p>
             </article>
             <article className="card" style={{"textAlign": "center"}}>

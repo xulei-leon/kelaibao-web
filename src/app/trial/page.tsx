@@ -157,7 +157,7 @@ export default function TrialPage() {
               </tr>
               <tr>
                 <td>
-                  {"会员专区8+内容模块（日更/周更）"}
+                  {"会员专区9+内容模块（日更/周更）"}
                 </td>
                 <td>
                   {"—"}
@@ -254,10 +254,10 @@ export default function TrialPage() {
             {"给谨慎的你"}
           </div>
           <h2>
-            {"你不需要向任何人推销客来宝"}
+            {"先感受，再决定"}
           </h2>
           <p className="intro">
-            {"你只是在分享一篇值得读的内容。有人感兴趣，自然会通过页面找到你。"}
+            {"不用先交钱，也不用先听完所有介绍。打开发现页，挑一篇你愿意读的，读完再决定分不分享。觉得顺手，你自然会每天打开它。"}
           </p>
           <div className="inline-action">
             <MiniProgramTrialButton className="btn" label="打开免费发现页 →" source="trial" />
@@ -270,7 +270,7 @@ export default function TrialPage() {
             {"下一步"}
           </div>
           <h2>
-            {"当你发现每天都需要它，再看年费不迟。"}
+            {"先免费用着。觉得值，再开通，不迟。"}
           </h2>
           <div className="inline-action">
             <Link className="btn" href="/features">

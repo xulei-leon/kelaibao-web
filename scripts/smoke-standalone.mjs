@@ -113,10 +113,23 @@ try {
   for (const pathname of ["/news/unknown-static-smoke", "/cases/unknown-static-smoke"]) {
     if ((await fetch(`${origin}${pathname}`)).status !== 404) throw new Error("Unknown static article must be 404.");
   }
+  for (const pathname of ["/trial/", "/about/", "/news/article-a/", "/news/unknown-static-smoke/"]) {
+    const response = await fetch(`${origin}${pathname}?smoke=slash`, { redirect: "manual" });
+    const location = response.headers.get("location");
+    if (response.status !== 308 || !location || new URL(location, origin).href !== `${origin}${pathname.slice(0, -1)}?smoke=slash`) {
+      throw new Error(`Non-withdrawn URL must retain trailing-slash normalization and query: ${pathname}`);
+    }
+  }
   const manifest = JSON.parse(await readFile(resolve(process.cwd(), ".next/standalone/static-content-manifest.json"), "utf8"));
   for (const route of manifest.routes) {
     const response = await fetch(`${origin}${route.path}`, { redirect: "manual" });
     if (response.status !== route.status) throw new Error(`Static route status mismatch: ${route.path}`);
+    if (route.status === 410) {
+      const trailing = await fetch(`${origin}${route.path}/`, { redirect: "manual" });
+      if (trailing.status !== 410 || !trailing.headers.get("x-robots-tag")?.includes("noindex")) {
+        throw new Error(`Withdrawn route with trailing slash must return 410 and noindex: ${route.path}/`);
+      }
+    }
     if (route.status === 308 && response.headers.get("location") !== `${origin}${route.to}`) throw new Error("Content redirect destination mismatch.");
   }
 

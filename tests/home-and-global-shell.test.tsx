@@ -8,7 +8,7 @@ vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
 describe("FR-26 homepage and global shell", () => {
   it("renders the operations headline with trial, team and media paths", () => {
     const html = renderToStaticMarkup(<HomePage />);
-    expect(html).toContain("你手机里有那么多微信群，有多少群友真正认识你？");
+    expect(html).toContain("你手机里躺着几百个微信群、几万个陌生群友——真正认识你的，有几个？");
     for (const path of ["/trial", "/team", "/media", "/about#contact"]) expect(html).toContain(`href="${path}"`);
     expect(html).toContain("免费体验K-Link");
   });

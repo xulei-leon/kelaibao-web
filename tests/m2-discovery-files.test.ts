@@ -139,7 +139,7 @@ describe("M2-04 discovery files", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("cache-control")).toContain("s-maxage=86400");
     const items = await response.json();
-    expect(items).toHaveLength(5);
+    expect(items).toHaveLength(4);
     expect(items.map((item: { slug: string }) => item.slug)).toContain("article-a");
     const broken = createDiscoveryHandler({ contentType: "text/plain", build() { throw new Error("invalid content"); } });
     expect(broken).toThrow("invalid content");

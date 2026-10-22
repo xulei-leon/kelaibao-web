@@ -6,7 +6,8 @@ import type { ArticleSource } from "@/content/article-types";
 import { createStaticCatalogue, STATIC_CONTENT } from "@/lib/static-content";
 import { ArticleBody, PublicContentDetail, serializePublicContent } from "@/lib/content-pages";
 import { buildPublicContentMetadata } from "@/server/discovery/metadata";
-import { buildSitemapXml, buildRssXml } from "@/server/discovery/files";
+import { buildSitemapXml, buildRssXml, buildLlmsText } from "@/server/discovery/files";
+import { OperationsNews } from "@/components/operations-news";
 import { GET as getHealth } from "@/app/api/health/route";
 
 const article = (overrides: Partial<ArticleSource> = {}): ArticleSource => ({
@@ -18,9 +19,31 @@ const article = (overrides: Partial<ArticleSource> = {}): ArticleSource => ({
 afterEach(() => { vi.unstubAllEnvs(); vi.resetModules(); vi.doUnmock("@/content/articles"); });
 
 describe("FR-25 static catalogue", () => {
+  it("withdraws the official announcement from every public surface while retaining its 410 URL", async () => {
+    const items = STATIC_CONTENT.list("news");
+    expect(items.map((item) => item.slug).sort()).toEqual(["article-a", "article-b", "article-d1", "article-d2"]);
+    expect(STATIC_CONTENT.find("news", "article-e2")).toBeUndefined();
+    expect(STATIC_CONTENT.disposition("/news/article-e2")).toEqual({ status: 410 });
+    const input = { contents: items, siteUrl: "https://site.example", coreRoutes: ["/news"] };
+    const html = renderToStaticMarkup(<OperationsNews items={items} />);
+    for (const output of [html, buildSitemapXml(input), buildRssXml(input), buildLlmsText(input)]) {
+      expect(output).not.toMatch(/article-e2|官方公告|官网独家发布|四档套餐与会员补贴/);
+      for (const item of items) expect(output).toContain(`/news/${item.slug}`);
+    }
+    const { middleware } = await import("@/middleware");
+    for (const path of ["/news/article-e2", "/news/article-e2/"]) {
+      const response = middleware(new NextRequest(`https://site.example${path}`));
+      expect(response.status).toBe(410);
+      expect(response.headers.get("x-robots-tag")).toBe("noindex, nofollow");
+      expect(response.headers.get("cache-control")).toContain("no-store");
+      const body = await response.text();
+      expect(body).toContain("该新闻已下线");
+      expect(body).not.toContain("四档套餐与会员补贴");
+    }
+  });
   it("imports operations stories as public text with unique local images and discoverable paths", () => {
     const items = STATIC_CONTENT.list("news");
-    expect(items).toHaveLength(5);
+    expect(items).toHaveLength(4);
     const sitemap = buildSitemapXml({ contents: items, siteUrl: "https://site.example", coreRoutes: ["/news"] });
     for (const item of items) {
       expect(sitemap).toContain(`/news/${item.slug}`);
