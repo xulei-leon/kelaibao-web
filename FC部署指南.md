@@ -20,7 +20,7 @@ pnpm package:fc
 
 FC Web 函数使用 `custom.debian10`、x86_64、启动命令 `node server.js`、监听 `0.0.0.0:9000`、Handler 留空。PATH 包含 `/var/fc/lang/nodejs20/bin`。运行配置见 [FC 模板](deploy/fc-runtime.example.json) 和[环境变量模板](deploy/fc-production-env.example.json)。并发、实例上限、预算、日志、告警与 WAF/限频须以真实测试确定，不能用本地占位值视为启用。
 
-正式域名、站点环境、二维码、索引开关和公开口径在构建前确认；这些是静态输出的构建输入。构建使用正式 HTTPS canonical origin；`PUBLIC_CRAWL_STATUS` 在门禁未通过时保持 blocked。改变索引或页面配置需要重建，不能只改 FC 环境变量。运行时注入版本、DirectMail、询盘限频 HMAC 等秘密；不将秘密放入构建命令、Git、浏览器或 ZIP。
+正式域名、站点环境、二维码和公开口径在构建前确认；这些是静态输出的构建输入。构建使用正式 HTTPS canonical origin；公开页面始终允许搜索抓取与索引，旧 `PUBLIC_CRAWL_STATUS` 已移除。修正线上 robots/metadata 必须重新构建和发布，不能只改 FC 环境变量；部署后刷新相关 ESA 缓存并复核正式域名。运行时注入版本、DirectMail、询盘限频 HMAC 等秘密；不将秘密放入构建命令、Git、浏览器或 ZIP。
 
 ## 迁移与旧资源
 

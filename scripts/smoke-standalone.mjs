@@ -133,6 +133,36 @@ try {
     if (route.status === 308 && response.headers.get("location") !== `${origin}${route.to}`) throw new Error("Content redirect destination mismatch.");
   }
 
+  const robotsResponse = await waitFor(`${origin}/robots.txt`);
+  const robotsText = await robotsResponse.text();
+  if (
+    !/^Allow: \/$/m.test(robotsText) ||
+    /^Disallow:\s*\/\s*$/m.test(robotsText) ||
+    !/^Sitemap: https?:\/\//m.test(robotsText)
+  ) {
+    throw new Error("Public robots policy must allow crawling and advertise the sitemap.");
+  }
+  const sitemapResponse = await waitFor(`${origin}/sitemap.xml`);
+  const sitemapText = await sitemapResponse.text();
+  const publicPaths = [...sitemapText.matchAll(/<loc>([^<]+)<\/loc>/g)]
+    .map((match) => new URL(match[1]).pathname);
+  if (!publicPaths.includes("/") || !publicPaths.includes("/news")) {
+    throw new Error("Sitemap is missing core public routes.");
+  }
+  for (const pathname of publicPaths) {
+    const response = await waitFor(`${origin}${pathname}`);
+    const html = await response.text();
+    const robotsTags = html.match(/<meta\b[^>]*name=["'](?:robots|googlebot)["'][^>]*>/gi) ?? [];
+    if (
+      robotsTags.length === 0 ||
+      robotsTags.some((tag) => /noindex|nofollow|none/i.test(tag)) ||
+      /noindex|nofollow|none/i.test(response.headers.get("x-robots-tag") ?? "")
+    ) {
+      throw new Error(`Public route must allow indexing and link following: ${pathname}`);
+    }
+  }
+  console.log(`Public search crawl HTTP checks: PASS (${publicPaths.length} sitemap pages).`);
+
   const home = await waitFor(`${origin}/`);
   const homeHtml = await home.text();
   if (!homeHtml.includes("客来宝")) {

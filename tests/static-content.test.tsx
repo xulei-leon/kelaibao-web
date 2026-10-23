@@ -64,7 +64,7 @@ describe("FR-25 static catalogue", () => {
     expect(catalogue.list("case")).toHaveLength(1);
     const item = catalogue.find("news", "a")!;
     expect(item.firstPublishedAt.toISOString()).toBe("2026-10-01T01:00:00.000Z");
-    expect(buildPublicContentMetadata(item, "https://site.example", false).alternates?.canonical).toBe("https://site.example/news/a");
+    expect(buildPublicContentMetadata(item, "https://site.example").alternates?.canonical).toBe("https://site.example/news/a");
     const input = { contents: catalogue.articles, siteUrl: "https://site.example", coreRoutes: ["/news", "/cases"] };
     expect(buildSitemapXml(input)).toContain("https://site.example/cases/a");
     expect(buildRssXml(input)).toContain(item.firstPublishedAt.toUTCString());
@@ -94,7 +94,7 @@ describe("FR-25 static catalogue", () => {
 
   it("emits complete HTML and treats pasted HTML as text", () => {
     const item = createStaticCatalogue([article()]).articles[0];
-    const html = renderToStaticMarkup(<PublicContentDetail state="published" contentType="news" crawlEnabled={false} item={serializePublicContent(item)} />);
+    const html = renderToStaticMarkup(<PublicContentDetail state="published" contentType="news" item={serializePublicContent(item)} />);
     expect(html).toContain("无需客户端脚本即可阅读。");
     expect(html).toContain("2026-10-01T01:00:00.000Z");
     const unsafe = renderToStaticMarkup(<ArticleBody blocks={[{ type: "paragraph", text: '<script>alert("x")</script>' }]} />);
@@ -129,7 +129,7 @@ describe("FR-25 static catalogue", () => {
   it("uses absolute canonical image URLs for local static media", () => {
     const image = { url: "/brand/office-scenes.png", alt: "办公室", width: 1435, height: 1456, mimeType: "image/png" as const };
     const item = createStaticCatalogue([article({ coverImage: image })]).articles[0];
-    expect(buildPublicContentMetadata(item, "https://site.example", false).openGraph?.images).toEqual([
+    expect(buildPublicContentMetadata(item, "https://site.example").openGraph?.images).toEqual([
       expect.objectContaining({ url: "https://site.example/brand/office-scenes.png" }),
     ]);
   });

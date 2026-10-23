@@ -32,12 +32,17 @@ describe("FR-26 public-page baseline", () => {
     ["@/app/page", "home"], ["@/app/trial/page", "trial"],
     ["@/app/features/page", "membership"], ["@/app/team/page", "team"],
     ["@/app/media/page", "media"], ["@/app/about/page", "about"],
-  ])("renders %s with local art-directed photography", async (moduleId, image) => {
+  ])("renders %s with local hero photography", async (moduleId, image) => {
     const html = await renderPage(moduleId);
     const root = document.createElement("div"); root.innerHTML = html;
     expect(root.querySelectorAll("h1")).toHaveLength(1);
-    expect(root.querySelector("picture source")).toHaveAttribute("srcset", `/visual/operations/${image}-mobile.webp`);
-    expect(root.querySelector("picture img")).toHaveAttribute("src", `/visual/operations/${image}-pc.webp`);
+    if (image === "home") {
+      expect(root.querySelector("picture source")).toBeNull();
+      expect(root.querySelector("picture img")).toHaveAttribute("src", "/visual/operations/home-banner.webp");
+    } else {
+      expect(root.querySelector("picture source")).toHaveAttribute("srcset", `/visual/operations/${image}-mobile.webp`);
+      expect(root.querySelector("picture img")).toHaveAttribute("src", `/visual/operations/${image}-pc.webp`);
+    }
     expect(root.querySelector("picture img")).toHaveAttribute("fetchpriority", "high");
     expect(html).not.toMatch(/assets\/|\.html["#]|window.matchMedia|<script(?![^>]*application\/ld\+json)/);
   });

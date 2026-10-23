@@ -48,11 +48,9 @@ interface PublicHeadMetadata {
 
 function PublicHead({
   metadata,
-  crawlEnabled,
   jsonLd,
 }: {
   metadata: PublicHeadMetadata;
-  crawlEnabled: boolean;
   jsonLd: string | null;
 }) {
   return (
@@ -60,14 +58,7 @@ function PublicHead({
       <title>{metadata.title}</title>
       <meta content={metadata.description} name="description" />
       <link href={metadata.alternates.canonical} rel="canonical" />
-      <meta
-        content={
-          crawlEnabled
-            ? "index,follow"
-            : "noindex,nofollow,noarchive,nosnippet"
-        }
-        name="robots"
-      />
+      <meta content="index,follow" name="robots" />
       <meta content={metadata.openGraph.type} property="og:type" />
       <meta content={metadata.openGraph.locale} property="og:locale" />
       <meta content={metadata.openGraph.siteName} property="og:site_name" />
@@ -148,7 +139,6 @@ export function PublicDetailPage(props: PublicDetailPageProps) {
   const metadata = buildPublicContentMetadata(
     item,
     SITE_URL,
-    props.crawlEnabled,
   ) as PublicHeadMetadata;
   const jsonLd = safeSerializeJsonLd(() =>
     buildPublicContentStructuredData(item, SITE_URL),
@@ -156,7 +146,6 @@ export function PublicDetailPage(props: PublicDetailPageProps) {
   return (
     <>
       <PublicHead
-        crawlEnabled={props.crawlEnabled}
         jsonLd={jsonLd}
         metadata={metadata}
       />
@@ -169,7 +158,6 @@ export function PublicListPage(props: PublicListPageProps) {
   const metadata = buildPublicListMetadata(
     props.contentType,
     SITE_URL,
-    props.crawlEnabled,
   ) as PublicHeadMetadata;
   const jsonLd = safeSerializeJsonLd(() =>
     buildPublicListStructuredData(props.contentType, SITE_URL),
@@ -177,7 +165,6 @@ export function PublicListPage(props: PublicListPageProps) {
   return (
     <>
       <PublicHead
-        crawlEnabled={props.crawlEnabled}
         jsonLd={jsonLd}
         metadata={metadata}
       />

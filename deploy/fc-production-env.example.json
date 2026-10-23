@@ -6,7 +6,6 @@
   "TZ": "Asia/Shanghai",
   "NEXT_PUBLIC_SITE_URL": "https://www.klinktool.com",
   "NEXT_PUBLIC_SITE_ENV": "production",
-  "PUBLIC_CRAWL_STATUS": "blocked",
   "NEXT_PUBLIC_CONTACT_FORM_STATUS": "preview-only",
   "NEXT_PUBLIC_WECHAT_DISPLAY_NAME": "客来宝顾问",
   "NEXT_PUBLIC_WECHAT_SERVICE_HOURS": "工作日 9:30–18:00（中国标准时间）",

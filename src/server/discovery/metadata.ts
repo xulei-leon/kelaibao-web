@@ -26,7 +26,6 @@ function absoluteUrl(siteUrl: string, path: string) {
 export function buildPublicContentMetadata(
   item: PublicArticle,
   siteUrl: string,
-  crawlEnabled: boolean,
 ): Metadata {
   const title = `${item.title}｜${ORGANIZATION_NAME}`;
   const canonical = absoluteUrl(siteUrl, contentPath(item));
@@ -51,9 +50,7 @@ export function buildPublicContentMetadata(
     title,
     description: item.summary,
     alternates: { canonical },
-    robots: crawlEnabled
-      ? { index: true, follow: true }
-      : { index: false, follow: false, nocache: true },
+    robots: { index: true, follow: true },
     openGraph: {
       type: "article",
       locale: "zh_CN",
@@ -77,7 +74,6 @@ export function buildPublicContentMetadata(
 export function buildPublicListMetadata(
   contentType: ContentType,
   siteUrl: string,
-  crawlEnabled: boolean,
 ): Metadata {
   const config = PUBLIC_LIST_CONTENT[contentType];
   const title = `${config.title}｜${ORGANIZATION_NAME}`;
@@ -86,9 +82,7 @@ export function buildPublicListMetadata(
     title,
     description: config.metadataDescription,
     alternates: { canonical },
-    robots: crawlEnabled
-      ? { index: true, follow: true }
-      : { index: false, follow: false, nocache: true },
+    robots: { index: true, follow: true },
     openGraph: {
       type: "website",
       locale: "zh_CN",

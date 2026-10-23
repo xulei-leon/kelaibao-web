@@ -8,8 +8,11 @@ import { buildLlmsText, buildSitemapXml } from "@/server/discovery/files";
 import { describe, expect, it } from "vitest";
 
 describe("indexing and public configuration", () => {
-  it("defaults preview robots to no indexing", () => {
-    expect(robots()).toEqual({ rules: { userAgent: "*", disallow: "/" } });
+  it("allows public crawling and advertises the sitemap by default", () => {
+    expect(robots()).toEqual({
+      rules: { userAgent: "*", allow: "/", disallow: ["/admin", "/api"] },
+      sitemap: new URL("/sitemap.xml", SITE_URL).toString(),
+    });
   });
 
   it("includes only approved routes in sitemap", () => {

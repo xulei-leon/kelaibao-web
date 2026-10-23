@@ -190,6 +190,7 @@
 .ops-page .about-story .intro:last-child { margin-bottom:0; }
 /* FR-27: let the longer homepage headline determine the hero height. */
 .ops-home .hero { height:auto; min-height:590px; padding-block:64px; }
+.ops-home .hero-picture img { object-position:center; }
 .ops-home .content-showcase { padding-block:30px; background:var(--mint); border-bottom:1px solid var(--line); }
 .ops-home .content-showcase__inner { display:flex; align-items:center; gap:28px; }
 .ops-home .content-showcase__inner > div { flex:1; min-width:0; }
@@ -223,6 +224,9 @@
   .primary-nav ul { display:grid; gap:0; }
   .primary-nav li a { min-height:46px; font-size:15px; }
   .primary-nav .cta { align-self:flex-start; }
+}
+@media (max-width:768px) {
+  .ops-home .hero-picture img { object-position:65% center; }
 }
 @media (max-width:760px) {
   .site-header { height:64px; min-height:64px; }

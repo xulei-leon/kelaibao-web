@@ -6,10 +6,6 @@ import {
   buildRssXml,
   buildSitemapXml,
 } from "@/server/discovery/files";
-import {
-  buildRobotsPolicy,
-  isPublicCrawlEnabled,
-} from "@/server/discovery/config";
 import { createDiscoveryHandler } from "@/server/discovery/runtime";
 
 function item(
@@ -34,30 +30,21 @@ function item(
   };
 }
 
-describe("M2-04 crawl gate", () => {
-  it("only opens crawling for an explicitly approved production environment", () => {
-    expect(isPublicCrawlEnabled("preview", "production-approved")).toBe(false);
-    expect(isPublicCrawlEnabled("production", "blocked")).toBe(false);
-    expect(isPublicCrawlEnabled("production", undefined)).toBe(false);
-    expect(
-      isPublicCrawlEnabled("production", "production-approved"),
-    ).toBe(true);
-
-    expect(
-      buildRobotsPolicy("https://www.example.cn", false),
-    ).toEqual({
-      rules: { userAgent: "*", disallow: "/" },
-    });
-    expect(
-      buildRobotsPolicy("https://www.example.cn", true),
-    ).toEqual({
-      rules: {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/admin", "/api"],
-      },
-      sitemap: "https://www.example.cn/sitemap.xml",
-    });
+describe("public crawl policy", () => {
+  it.each(["preview", "production"])("ignores the legacy block in %s", async (environment) => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_ENV", environment);
+    vi.stubEnv("PUBLIC_CRAWL_STATUS", "blocked");
+    vi.resetModules();
+    try {
+      const { buildRobotsPolicy } = await import("@/server/discovery/config");
+      expect(buildRobotsPolicy("https://www.example.cn")).toEqual({
+        rules: { userAgent: "*", allow: "/", disallow: ["/admin", "/api"] },
+        sitemap: "https://www.example.cn/sitemap.xml",
+      });
+    } finally {
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    }
   });
 });
 

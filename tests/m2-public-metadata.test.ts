@@ -27,7 +27,6 @@ describe("M2-04 public metadata and JSON-LD", () => {
     const metadata = buildPublicContentMetadata(
       item,
       "https://www.example.cn",
-      false,
     );
 
     expect(metadata.title).toBe("市场更新｜客来宝");
@@ -44,9 +43,8 @@ describe("M2-04 public metadata and JSON-LD", () => {
       modifiedTime: "2026-07-30T01:59:00.000Z",
     });
     expect(metadata.robots).toEqual({
-      index: false,
-      follow: false,
-      nocache: true,
+      index: true,
+      follow: true,
     });
   });
 
@@ -112,12 +110,11 @@ describe("M2-04 public metadata and JSON-LD", () => {
     const metadata = buildPublicListMetadata(
       "case",
       "https://www.example.cn",
-      false,
     );
     expect(metadata).toMatchObject({
       title: "案例｜客来宝",
       alternates: { canonical: "https://www.example.cn/cases" },
-      robots: { index: false, follow: false, nocache: true },
+      robots: { index: true, follow: true },
       openGraph: {
         type: "website",
         url: "https://www.example.cn/cases",
@@ -141,7 +138,6 @@ describe("M2-04 public metadata and JSON-LD", () => {
     const metadata = buildPublicListMetadata(
       "news",
       "https://www.example.cn",
-      false,
     );
     expect(metadata.title).toBe("新闻动态｜客来宝");
     expect(metadata.description).toBe(

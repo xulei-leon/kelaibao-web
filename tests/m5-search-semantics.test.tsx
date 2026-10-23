@@ -96,7 +96,6 @@ describe("M5-02 search semantics and contextual links", () => {
     const metadata = buildPublicListMetadata(
       "news",
       "https://www.example.cn",
-      false,
     );
     expect(metadata).toMatchObject({
       title: "新闻动态｜客来宝",

@@ -73,7 +73,6 @@ describe("M5-01 responsive images and structured data", () => {
     const metadata = buildPublicContentMetadata(
       publicItem,
       "https://www.example.cn",
-      true,
     );
     expect(metadata.openGraph?.images).toEqual([
       expect.objectContaining({
@@ -102,7 +101,6 @@ describe("M5-01 responsive images and structured data", () => {
     const metadata = buildPublicContentMetadata(
       { ...publicItem, coverImage: null },
       "https://www.example.cn",
-      true,
     );
     expect(metadata.openGraph?.images).toEqual([
       expect.objectContaining({

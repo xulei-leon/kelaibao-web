@@ -23,7 +23,7 @@ pnpm dev
 
 新闻与案例保留 `/news/[slug]`、`/cases/[slug]`。修改标题不改 slug；撤回已公开文章时从 `ARTICLES` 移除并将原路径加入 `WITHDRAWN_CONTENT`（真实 410）；路径迁移加入 `CONTENT_REDIRECTS`（308，目标必须是当前公开文章）。未知路径为 404。不能同时公开、撤回或重定向同一路径。
 
-列表、详情、首页/关于页摘要、metadata、结构化数据、sitemap、RSS 和实验性 llms 使用同一静态内容源，构建部署后才更新。没有文章时保留空状态。Preview 继续禁止索引。
+列表、详情、首页/关于页摘要、metadata、结构化数据、sitemap、RSS 和实验性 llms 使用同一静态内容源，构建部署后才更新。没有文章时保留空状态。所有环境的公开页面均允许搜索抓取与索引；不使用 PUBLIC_CRAWL_STATUS 开关。
 
 ## 质量与制品
 

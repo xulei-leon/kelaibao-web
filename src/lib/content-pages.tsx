@@ -17,7 +17,6 @@ export type PublicDetailPageProps =
   | {
       state: "published";
       contentType: ContentType;
-      crawlEnabled: boolean;
       item: SerializedPublicArticle;
     }
   | {
@@ -28,7 +27,6 @@ export type PublicDetailPageProps =
 
 export interface PublicListPageProps {
   contentType: ContentType;
-  crawlEnabled: boolean;
   items: SerializedPublicArticle[];
 }
 

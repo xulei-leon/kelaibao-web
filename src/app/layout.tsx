@@ -7,7 +7,6 @@ import "./operations-refresh.css";
 import { PublicAppShell } from "@/components/public-app-shell";
 import { BRAND } from "@/lib/site-content";
 import { SITE_URL } from "@/lib/site-config";
-import { isPublicCrawlEnabled } from "@/server/discovery/config";
 import {
   buildGlobalStructuredData,
   safeSerializeJsonLd,
@@ -28,9 +27,7 @@ export const metadata: Metadata = {
   },
   description: BRAND.promise,
   applicationName: BRAND.name,
-  robots: isPublicCrawlEnabled()
-    ? { index: true, follow: true }
-    : { index: false, follow: false, nocache: true },
+  robots: { index: true, follow: true },
 };
 
 const globalJsonLd = safeSerializeJsonLd(() =>

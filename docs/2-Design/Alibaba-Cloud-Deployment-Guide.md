@@ -266,7 +266,7 @@ RDS 白名单应加入 FC 实际交换机网段，不要加入 DMS 请求来源�
 2. 依据中国大陆实际接入方式完成 ICP 备案；正式上线后按适用要求处理公安备案。
 3. 在 ESA 配置正式证书、强制 HTTPS 和安全响应头。
 4. 上线切换前降低 DNS TTL，验证完成后再恢复合理 TTL。
-5. Preview 域名保持不可索引；只有全部 Production 门禁通过后，才将 `PUBLIC_CRAWL_STATUS` 改为允许公开抓取的生产值。
+5. 按 2026-10-23 用户要求，公开页面在各环境均允许抓取与索引，取消 `PUBLIC_CRAWL_STATUS`；构建发布后复核 robots、公开页面 metadata 及 ESA 缓存。其他 Production 门禁继续有效。
 
 备案和合规要求可能随主体、地域和产品接入方式变化，必须以阿里云备案系统和适用监管要求的实时结论为准。
 
@@ -339,7 +339,7 @@ pnpm db:migrate
 
 | 类别 | 主要变量 | 注意事项 |
 | --- | --- | --- |
-| 站点 | `NEXT_PUBLIC_SITE_URL`、`NEXT_PUBLIC_SITE_ENV`、`PUBLIC_CRAWL_STATUS` | 正式 URL 必须唯一；抓取开关最后开启 |
+| 站点 | `NEXT_PUBLIC_SITE_URL`、`NEXT_PUBLIC_SITE_ENV` | 正式 URL 必须唯一；公开页面允许抓取，移除旧抓取开关 |
 | 运行时 | `SINO_RUNTIME_MODE`、`SINO_APP_VERSION` | 用于运行协议和健康检查，不用于品牌文案 |
 | MySQL | `DATABASE_URL`、连接池和连接预算变量 | 全部为服务端变量；URL 不进入日志 |
 | 管理员安全 | `ADMIN_DUMMY_PASSWORD_HASH`、`ADMIN_CSRF_SECRET`、Argon2 参数 | 不使用 `NEXT_PUBLIC_` 前缀 |
